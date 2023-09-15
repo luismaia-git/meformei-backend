@@ -132,7 +132,7 @@ export class AuthController {
 
   @Get('admin/check/email')
   @ApiResponse({ type: Boolean })
-  async checkEmailAdmin(@Request() req: CheckEmailAdminBody) {
+  async checkEmailAdmin(@Body() req: CheckEmailAdminBody) {
     const adminAlreadyExists = this.checkAdminAccountEmail.execute({
       email: req.email,
     });
@@ -145,7 +145,7 @@ export class AuthController {
 
   @Get('admin/check/username')
   @ApiResponse({ type: Boolean })
-  async checkUsernameAdmin(@Request() req: CheckUsernameAdminBody) {
+  async checkUsernameAdmin(@Body() req: CheckUsernameAdminBody) {
     const adminAlreadyExists = this.checkAdminAccountUsername.execute({
       username: req.username,
     });
@@ -199,7 +199,7 @@ export class AuthController {
 
   @Get('student/check/email')
   @ApiResponse({ type: Boolean })
-  async checkEmailStudent(@Request() req: CheckEmailStudentBody) {
+  async checkEmailStudent(@Body() req: CheckEmailStudentBody) {
     const studentAlreadyExists = this.checkStudentAccountEmail.execute({
       email: req.email,
     });
@@ -212,7 +212,7 @@ export class AuthController {
 
   @Get('student/check/username')
   @ApiResponse({ type: Boolean })
-  async checkUsernameStudent(@Request() req: CheckUsernameStudentBody) {
+  async checkUsernameStudent(@Body() req: CheckUsernameStudentBody) {
     const studentAlreadyExists = this.checkStudentAccountUsername.execute({
       username: req.username,
     });
