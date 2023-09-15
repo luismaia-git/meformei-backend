@@ -1,3 +1,7 @@
+import { CheckAdminAccountEmail } from '@application/use-cases/authentication/check-admin-account-email';
+import { CheckAdminAccountUsername } from '@application/use-cases/authentication/check-admin-account-username';
+import { CheckStudentAccountEmail } from '@application/use-cases/authentication/check-student-account-email';
+import { CheckStudentAccountUsername } from '@application/use-cases/authentication/check-student-account-username';
 import { Login } from '@application/use-cases/authentication/login';
 import { RegisterAccountAdmin } from '@application/use-cases/authentication/register-admin';
 import { RegisterAccountStudent } from '@application/use-cases/authentication/register-student';
@@ -6,12 +10,17 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   Get,
   Post,
   Request,
 } from '@nestjs/common';
 import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request as RequestE } from 'express';
+import { CheckEmailAdminBody } from '../dto/auth/check-email-admin.dto';
+import { CheckEmailStudentBody } from '../dto/auth/check-email-student.dto';
+import { CheckUsernameAdminBody } from '../dto/auth/check-username-admin.dto';
+import { CheckUsernameStudentBody } from '../dto/auth/check-username-student.dto';
 import { LoginBody } from '../dto/auth/login.dto';
 import { RegisterAccountAdminBody } from '../dto/auth/register-account-admin.dto';
 import { RegisterAccountStudentBody } from '../dto/auth/register-account-student.dto';
@@ -54,6 +63,10 @@ export class AuthController {
     private registerAdmin: RegisterAccountAdmin,
     private registerStudent: RegisterAccountStudent,
     private validToken: ValidToken,
+    private checkAdminAccountEmail: CheckAdminAccountEmail,
+    private checkAdminAccountUsername: CheckAdminAccountUsername,
+    private checkStudentAccountEmail: CheckStudentAccountEmail,
+    private checkStudentAccountUsername: CheckStudentAccountUsername,
   ) {}
 
   @Post('signin')
@@ -84,7 +97,7 @@ export class AuthController {
     };
   }
 
-  @Post('signup/admin')
+  @Post('admin/signup')
   // @UseGuards(AuthGuard)
   @ApiResponse({ type: 'messagem' })
   async signupAdmin(@Body() request: RegisterAccountAdminBody) {
@@ -117,7 +130,33 @@ export class AuthController {
     };
   }
 
-  @Post('signup/student')
+  @Get('admin/check/email')
+  @ApiResponse({ type: Boolean })
+  async checkEmailAdmin(@Request() req: CheckEmailAdminBody) {
+    const adminAlreadyExists = this.checkAdminAccountEmail.execute({
+      email: req.email,
+    });
+
+    if (adminAlreadyExists) {
+      throw new ForbiddenException('Email already used');
+    }
+    return true;
+  }
+
+  @Get('admin/check/username')
+  @ApiResponse({ type: Boolean })
+  async checkUsernameAdmin(@Request() req: CheckUsernameAdminBody) {
+    const adminAlreadyExists = this.checkAdminAccountUsername.execute({
+      username: req.username,
+    });
+
+    if (adminAlreadyExists) {
+      throw new ForbiddenException('Username already used');
+    }
+    return true;
+  }
+
+  @Post('student/signup')
   @ApiResponse({ type: 'messagem' })
   async signupStudent(@Body() request: RegisterAccountStudentBody) {
     const {
@@ -156,6 +195,32 @@ export class AuthController {
     return {
       message: 'Registrado com sucesso',
     };
+  }
+
+  @Get('student/check/email')
+  @ApiResponse({ type: Boolean })
+  async checkEmailStudent(@Request() req: CheckEmailStudentBody) {
+    const studentAlreadyExists = this.checkStudentAccountEmail.execute({
+      email: req.email,
+    });
+
+    if (studentAlreadyExists) {
+      throw new ForbiddenException('Email already used');
+    }
+    return true;
+  }
+
+  @Get('student/check/username')
+  @ApiResponse({ type: Boolean })
+  async checkUsernameStudent(@Request() req: CheckUsernameStudentBody) {
+    const studentAlreadyExists = this.checkStudentAccountUsername.execute({
+      username: req.username,
+    });
+
+    if (studentAlreadyExists) {
+      throw new ForbiddenException('Username already used');
+    }
+    return true;
   }
 
   @Get('session')

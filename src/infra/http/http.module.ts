@@ -1,3 +1,7 @@
+import { CheckAdminAccountEmail } from '@application/use-cases/authentication/check-admin-account-email';
+import { CheckAdminAccountUsername } from '@application/use-cases/authentication/check-admin-account-username';
+import { CheckStudentAccountEmail } from '@application/use-cases/authentication/check-student-account-email';
+import { CheckStudentAccountUsername } from '@application/use-cases/authentication/check-student-account-username';
 import { EncriptionPassword } from '@application/use-cases/authentication/encription-password';
 import { Login } from '@application/use-cases/authentication/login';
 import { RegisterAccountAdmin } from '@application/use-cases/authentication/register-admin';
@@ -97,6 +101,10 @@ import { UniversitiesController } from './controllers/university.controller';
     FindExtraCurricularActivityByStudent,
     ListDisciplinesHistoryTodo,
     FindUniversitiesByCityAndState,
+    CheckAdminAccountEmail,
+    CheckAdminAccountUsername,
+    CheckStudentAccountEmail,
+    CheckStudentAccountUsername,
   ], // casos de uso
 })
 export class HttpModule {}

@@ -1,4 +1,3 @@
-import { FindByEmailAndUserNameRequest } from '@infra/database/prisma/repositories/prisma-students-repository';
 import { Admin } from '../entities/admin/admin';
 
 export abstract class AdminsRepository {
@@ -12,7 +11,13 @@ export abstract class AdminsRepository {
     request: FindByEmailAndUserNameRequest,
   ): Promise<Admin | null>;
   abstract findByUserId(userId: string): Promise<Admin | null>;
+  abstract findByEmail(email: string): Promise<Admin | null>;
 
   // abstract countManyByAnyId(anyId: string): Promise<number>;
   // abstract findManyByAnyId(anyId: string): Promise<Admin[]>;
+}
+
+interface FindByEmailAndUserNameRequest {
+  email: string;
+  username: string;
 }

@@ -4,7 +4,6 @@ import { Admin } from 'src/application/entities/admin/admin';
 import { AdminsRepository } from 'src/application/repositories/admins-repository';
 import { PrismaAdminMapper } from '../mappers/prisma-admin-mapper';
 import { PrismaService } from '../prisma.service';
-import { FindByEmailAndUserNameRequest } from './prisma-students-repository';
 
 @Injectable()
 export class PrismaAdminsRepository implements AdminsRepository {
@@ -141,4 +140,23 @@ export class PrismaAdminsRepository implements AdminsRepository {
 
     return PrismaAdminMapper.toDomain(admin);
   }
+
+  async findByEmail(email: string): Promise<Admin | null> {
+    const admin = await this.prisma.admin.findFirst({
+      where: { user: { email } },
+      include: {
+        user: true,
+      },
+    });
+
+    if (!admin) {
+      return null;
+    }
+
+    return PrismaAdminMapper.toDomain(admin);
+  }
+}
+interface FindByEmailAndUserNameRequest {
+  email: string;
+  username: string;
 }
