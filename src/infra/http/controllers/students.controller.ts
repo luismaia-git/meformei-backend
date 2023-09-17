@@ -17,6 +17,7 @@ import { DeleteStudent } from '@application/use-cases/student/delete-student';
 import { FindStudent } from '@application/use-cases/student/find-student';
 import { ListStudents } from '@application/use-cases/student/list-students';
 import { UpdateStudent } from '@application/use-cases/student/update-student';
+import { ROLES } from '@config/constants';
 import {
   Body,
   Controller,
@@ -26,8 +27,12 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/auth-guard';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 import { AssociateDisciplineInStudentSemesterBody } from '../dto/course-history/associate-discipline-in-student-semester.dto';
 import { FindDisciplinesTodoBody } from '../dto/course-history/findDisciplinesTodo.dto';
 import { CreateExtraCurricularActivityBody } from '../dto/extra-curricular-activity/create-extra-curricular-activity.dto';
@@ -72,6 +77,8 @@ export class ExtraCurricularActivityResponse extends ResponseWithMessage {
 
 @Controller('students')
 @ApiTags('Estudantes')
+@UseGuards(AuthGuard, RolesGuard)
+@Roles(ROLES.ADMIN)
 export class StudentsController {
   constructor(
     private createStudent: CreateStudent,
@@ -145,6 +152,7 @@ export class StudentsController {
   //semester
 
   @Post(':studentRegistration/semester/:semester')
+  @Roles(ROLES.STUDENT, ROLES.ADMIN)
   @ApiResponse({ type: CourseHistoryToFrontResponse })
   async addDisciplineInSemester(
     @Body() request: AssociateDisciplineInStudentSemesterBody,
@@ -171,6 +179,7 @@ export class StudentsController {
   }
 
   @Delete(':studentRegistration/semester/:semester/disciplines/:disciplineId')
+  @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async disassociateDisciplineInSemester(
     @Param('studentRegistration') studentRegistration: string,
     @Param('semester') semester: number,
@@ -192,6 +201,7 @@ export class StudentsController {
   }
 
   @Get(':studentRegistration/semester/:semester/disciplines')
+  @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async findDisciplinesBySemester(
     @Param('studentRegistration') studentRegistration: string,
     @Param('semester') semester: number,
@@ -208,7 +218,8 @@ export class StudentsController {
   }
 
   @Get(':studentRegistration/disciplines')
-  async findDisciplinesByStudents(
+  @Roles(ROLES.STUDENT, ROLES.ADMIN)
+  async findDisciplinesByStudent(
     @Param('studentRegistration') studentRegistration: string,
   ) {
     const { courseHistories } =
@@ -222,7 +233,7 @@ export class StudentsController {
   }
 
   @Post(':studentRegistration/disciplines/todo')
-  async findDisciplinesTodoByStudents(
+  async findDisciplinesTodoByStudent(
     @Param('studentRegistration') studentRegistration: string,
     @Body() body: FindDisciplinesTodoBody,
   ) {
@@ -237,6 +248,7 @@ export class StudentsController {
   }
 
   @Get(':studentRegistration/disciplines/status/:status')
+  @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async findDisciplinesByStatusAndStudent(
     @Param('studentRegistration') studentRegistration: string,
     @Param('status') status: StatusType,
@@ -265,6 +277,7 @@ export class StudentsController {
   //extracurricularactivity
 
   @Post(':studentRegistration/extracurricular')
+  @Roles(ROLES.STUDENT, ROLES.ADMIN)
   @ApiResponse({ type: ExtraCurricularActivityResponse })
   async addExtracurricularActivity(
     @Body() body: CreateExtraCurricularActivityBody,
@@ -285,6 +298,7 @@ export class StudentsController {
   }
 
   @Delete(':studentRegistration/extracurricular/:extracurricularId')
+  @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async removeExtracurricularActivity(
     @Param('extracurricularId') extracurricularId: string,
   ) {
@@ -299,6 +313,7 @@ export class StudentsController {
   }
 
   @Get(':studentRegistration/extracurricular')
+  @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async findExtracurricularActivitiesBySemester(
     @Param('studentRegistration') studentRegistration: string,
   ) {

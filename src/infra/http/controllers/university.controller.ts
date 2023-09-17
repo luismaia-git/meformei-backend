@@ -13,8 +13,12 @@ import { FindUniversitiesByCityAndState } from '@application/use-cases/universit
 import { FindUniversitiesByState } from '@application/use-cases/university/find-universities-by-state';
 import { FindUniversity } from '@application/use-cases/university/find-university';
 import { ListUniversities } from '@application/use-cases/university/list-universities';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { ROLES } from '@config/constants';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/auth-guard';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 import { CreateCurriculumBody } from '../dto/curriculum/create-curriculum.dto';
 import { CreateManyDisciplineBody } from '../dto/discipline/create-discipline.dto';
 import { FindDisciplineByCodsBody } from '../dto/discipline/find-discipline-by-cods.dto';
@@ -50,6 +54,7 @@ export abstract class DisciplineToFrontResponse {
 
 @Controller('universities')
 @ApiTags('Universidades')
+@UseGuards(AuthGuard, RolesGuard)
 export class UniversitiesController {
   constructor(
     private createUniversity: CreateUniversity,
@@ -69,6 +74,7 @@ export class UniversitiesController {
   ) {}
 
   @Get()
+  @Roles(ROLES.ADMIN)
   @ApiResponse({
     type: UniversityHttp,
     isArray: true,
@@ -83,6 +89,7 @@ export class UniversitiesController {
   }
 
   @Get('/state/:state/city/:city')
+  @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
     type: UniversityHttp,
     isArray: true,
@@ -103,6 +110,7 @@ export class UniversitiesController {
   }
 
   @Get('/state/:state')
+  @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
     type: UniversityHttp,
     isArray: true,
@@ -119,6 +127,7 @@ export class UniversitiesController {
   }
 
   @Get('/city/:city')
+  @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
     type: UniversityHttp,
     isArray: true,
@@ -135,6 +144,7 @@ export class UniversitiesController {
   }
 
   @Get(':id')
+  @Roles(ROLES.ADMIN)
   @ApiResponse({
     type: UniversityResponse,
     description: 'Busca Universidade pelo id',
@@ -150,6 +160,7 @@ export class UniversitiesController {
   }
 
   @Post()
+  @Roles(ROLES.ADMIN)
   @ApiResponse({
     type: UniversityResponse,
     description: 'Registra uma Universidade',
@@ -166,6 +177,7 @@ export class UniversitiesController {
   }
 
   @Get(':id/courses')
+  @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
     type: IGetCurriculumsCoursesByUniversityIdResponse,
     isArray: true,
@@ -195,6 +207,7 @@ export class UniversitiesController {
   }
 
   @Post(':id/courses')
+  @Roles(ROLES.ADMIN)
   @ApiResponse({
     type: CreateCurriculumResponse,
     description: 'Registra uma matriz curricular (Curso) na Universidade',
@@ -216,6 +229,7 @@ export class UniversitiesController {
   }
 
   @Get(':id/courses/:curriculumId')
+  @Roles(ROLES.ADMIN, ROLES.STUDENT)
   async getCurriculumCourseByCurriculumId(
     @Param('id') universityId: string,
     @Param('curriculumId') curriculumId: string,
@@ -232,6 +246,7 @@ export class UniversitiesController {
   }
 
   @Post(':id/courses/:curriculumId/disciplines')
+  @Roles(ROLES.ADMIN)
   async associateDisciplineInCurriculum(
     @Param('curriculumId') curriculumId: string,
     @Body() disciplineBody: CreateManyDisciplineBody,
@@ -269,6 +284,7 @@ export class UniversitiesController {
   }
 
   @Get(':id/courses/:curriculumId/disciplines')
+  @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
     type: DisciplineToFrontResponse,
     description: 'Busca as disciplinas de uma matriz curricular',
@@ -285,6 +301,7 @@ export class UniversitiesController {
   }
 
   @Get(':id/courses/:curriculumId/disciplines/cod')
+  @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
     type: DisciplineToFrontResponse,
     description: 'Busca as disciplinas por codigo',
@@ -299,6 +316,7 @@ export class UniversitiesController {
   }
 
   @Get(':id/courses/:curriculumId/disciplines/required')
+  @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
     type: DisciplineToFrontResponse,
     description: 'Busca as disciplinas de uma matriz curricular',
@@ -317,6 +335,7 @@ export class UniversitiesController {
   }
 
   @Get(':id/courses/:curriculumId/disciplines/:disciplineId')
+  @Roles(ROLES.ADMIN, ROLES.STUDENT)
   async findDisciplineById(@Param('disciplineId') disciplineId: string) {
     const { discipline } = await this.findDiscipline.execute({
       disciplineId,

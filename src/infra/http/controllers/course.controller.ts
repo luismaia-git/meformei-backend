@@ -2,8 +2,20 @@ import { CreateCourse } from '@application/use-cases/course/create-course';
 import { FindCourse } from '@application/use-cases/course/find-course';
 import { ListCourses } from '@application/use-cases/course/list-courses';
 import { UpdateCourse } from '@application/use-cases/course/update-course';
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { ROLES } from '@config/constants';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/auth-guard';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 import { CreateCourseBody } from '../dto/course/create-course.dto';
 import { UpdateCourseBody } from '../dto/course/update-course.dto';
 import { ResponseWithMessage } from '../dto/response-message';
@@ -17,6 +29,8 @@ abstract class CourseResponse {
 
 @Controller('courses')
 @ApiTags('Cursos')
+@Roles(ROLES.ADMIN)
+@UseGuards(AuthGuard, RolesGuard)
 export class CoursesController {
   constructor(
     private createCourse: CreateCourse,

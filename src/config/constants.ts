@@ -8,6 +8,6 @@ export const jwtOptions = {
 };
 
 export enum ROLES {
-  ADMIN,
-  STUDENT,
+  ADMIN = 'admin',
+  STUDENT = 'student',
 }

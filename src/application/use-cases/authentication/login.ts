@@ -4,9 +4,11 @@ import { UsersRepository } from '@application/repositories/users-repository';
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { ROLES, jwtOptions } from '@config/constants';
+import { StudentViewModel } from '@infra/http/view-models/student-view-model';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserNotFound } from '../errors/user-not-found';
+import { AdminViewModel } from './../../../infra/http/view-models/admin-view-model';
 interface LoginRequest {
   username: string;
   password: string;
@@ -41,7 +43,11 @@ export class Login {
 
       delete student.password;
 
-      const jwtPayload = { ...student, loginAt: new Date(), role: ROLES.ADMIN };
+      const jwtPayload = {
+        ...StudentViewModel.toHTTP(student),
+        loginAt: new Date(),
+        roles: [ROLES.STUDENT],
+      };
 
       const token = this.jwtService.sign(jwtPayload, jwtOptions);
 
@@ -62,7 +68,11 @@ export class Login {
 
       delete admin.password;
 
-      const jwtPayload = { ...admin, loginAt: new Date(), role: ROLES.ADMIN };
+      const jwtPayload = {
+        ...AdminViewModel.toHTTP(admin),
+        loginAt: new Date(),
+        roles: [ROLES.ADMIN],
+      };
 
       const token = this.jwtService.sign(jwtPayload, jwtOptions);
 

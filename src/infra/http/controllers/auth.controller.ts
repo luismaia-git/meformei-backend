@@ -98,7 +98,6 @@ export class AuthController {
   }
 
   @Post('admin/signup')
-  // @UseGuards(AuthGuard)
   @ApiResponse({ type: 'messagem' })
   async signupAdmin(@Body() request: RegisterAccountAdminBody) {
     const {
