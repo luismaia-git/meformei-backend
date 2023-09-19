@@ -2,10 +2,19 @@ import { Admin } from '@application/entities/admin/admin';
 import { User } from '@application/entities/user/user';
 import { AdminsRepository } from '@application/repositories/admins-repository';
 import { UsersRepository } from '@application/repositories/users-repository';
-import { CreateAdminBody } from '@infra/http/dto/admin/create-admin.dto';
 import { Injectable } from '@nestjs/common';
 import { UserAlreadyExists } from '../errors/user-already-exists';
 import { EncriptionPassword } from './encription-password';
+
+interface RequestBody {
+  name: string;
+  lastname: string;
+  username: string;
+  email: string;
+  password: string;
+  city: string;
+  state: string;
+}
 
 @Injectable()
 export class RegisterAccountAdmin {
@@ -15,7 +24,7 @@ export class RegisterAccountAdmin {
     private encriptionPassword: EncriptionPassword,
   ) {}
 
-  async execute(request: CreateAdminBody) {
+  async execute(request: RequestBody) {
     const { lastname, username, email, name, password, city, state } = request;
 
     const adminAlreadyExists = await this.adminsRepository.findByUsername(

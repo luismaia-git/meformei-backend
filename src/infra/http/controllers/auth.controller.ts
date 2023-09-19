@@ -109,8 +109,12 @@ export class AuthController {
       lastname,
       name,
       passwordConfirmation,
+      hash,
     } = request;
 
+    if (hash != process.env.HASH_ADMIN) {
+      throw new BadRequestException('hash is invalid');
+    }
     if (passwordConfirmation != password) {
       throw new BadRequestException('password confirmation error');
     }

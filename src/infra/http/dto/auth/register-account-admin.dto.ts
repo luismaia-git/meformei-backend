@@ -34,4 +34,8 @@ export class RegisterAccountAdminBody {
   @ApiProperty()
   @IsNotEmpty()
   state: string;
+
+  @ApiProperty({ description: 'hash code ' })
+  @IsNotEmpty()
+  hash: string;
 }
