@@ -89,7 +89,6 @@ export class UniversitiesController {
   }
 
   @Get('/state/:state/city/:city')
-  @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
     type: UniversityHttp,
     isArray: true,
@@ -110,7 +109,6 @@ export class UniversitiesController {
   }
 
   @Get('/state/:state')
-  @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
     type: UniversityHttp,
     isArray: true,
@@ -127,7 +125,6 @@ export class UniversitiesController {
   }
 
   @Get('/city/:city')
-  @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
     type: UniversityHttp,
     isArray: true,
@@ -177,7 +174,6 @@ export class UniversitiesController {
   }
 
   @Get(':id/courses')
-  @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
     type: IGetCurriculumsCoursesByUniversityIdResponse,
     isArray: true,
