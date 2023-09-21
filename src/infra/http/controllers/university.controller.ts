@@ -54,7 +54,6 @@ export abstract class DisciplineToFrontResponse {
 
 @Controller('universities')
 @ApiTags('Universidades')
-@UseGuards(AuthGuard, RolesGuard)
 export class UniversitiesController {
   constructor(
     private createUniversity: CreateUniversity,
@@ -74,6 +73,7 @@ export class UniversitiesController {
   ) {}
 
   @Get()
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(ROLES.ADMIN)
   @ApiResponse({
     type: UniversityHttp,
@@ -140,6 +140,7 @@ export class UniversitiesController {
     };
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
   @Get(':id')
   @Roles(ROLES.ADMIN)
   @ApiResponse({
@@ -156,6 +157,7 @@ export class UniversitiesController {
     };
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
   @Post()
   @Roles(ROLES.ADMIN)
   @ApiResponse({
@@ -202,6 +204,7 @@ export class UniversitiesController {
     };
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
   @Post(':id/courses')
   @Roles(ROLES.ADMIN)
   @ApiResponse({
@@ -224,6 +227,7 @@ export class UniversitiesController {
     };
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
   @Get(':id/courses/:curriculumId')
   @Roles(ROLES.ADMIN, ROLES.STUDENT)
   async getCurriculumCourseByCurriculumId(
@@ -241,6 +245,7 @@ export class UniversitiesController {
     };
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
   @Post(':id/courses/:curriculumId/disciplines')
   @Roles(ROLES.ADMIN)
   async associateDisciplineInCurriculum(
@@ -279,6 +284,7 @@ export class UniversitiesController {
     };
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
   @Get(':id/courses/:curriculumId/disciplines')
   @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
@@ -296,6 +302,7 @@ export class UniversitiesController {
     };
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
   @Get(':id/courses/:curriculumId/disciplines/cod')
   @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
@@ -311,6 +318,7 @@ export class UniversitiesController {
     };
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
   @Get(':id/courses/:curriculumId/disciplines/required')
   @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
@@ -330,6 +338,7 @@ export class UniversitiesController {
     };
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
   @Get(':id/courses/:curriculumId/disciplines/:disciplineId')
   @Roles(ROLES.ADMIN, ROLES.STUDENT)
   async findDisciplineById(@Param('disciplineId') disciplineId: string) {
