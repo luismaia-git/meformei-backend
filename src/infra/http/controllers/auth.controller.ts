@@ -1,12 +1,12 @@
 import { CheckAdminAccountEmail } from '@application/use-cases/authentication/check-admin-account-email';
 import { CheckAdminAccountUsername } from '@application/use-cases/authentication/check-admin-account-username';
 import { CheckStudentAccountEmail } from '@application/use-cases/authentication/check-student-account-email';
+import { CheckStudentAccountByRegistration } from '@application/use-cases/authentication/check-student-account-registration';
 import { CheckStudentAccountUsername } from '@application/use-cases/authentication/check-student-account-username';
 import { Login } from '@application/use-cases/authentication/login';
 import { RegisterAccountAdmin } from '@application/use-cases/authentication/register-admin';
 import { RegisterAccountStudent } from '@application/use-cases/authentication/register-student';
 import { ValidToken } from '@application/use-cases/authentication/valid-token';
-import { FindStudent } from '@application/use-cases/student/find-student';
 import {
   BadRequestException,
   Body,
@@ -65,7 +65,7 @@ export class AuthController {
     private checkAdminAccountUsername: CheckAdminAccountUsername,
     private checkStudentAccountEmail: CheckStudentAccountEmail,
     private checkStudentAccountUsername: CheckStudentAccountUsername,
-    private checkStudentByRegistration: FindStudent,
+    private checkStudentByRegistration: CheckStudentAccountByRegistration,
   ) {}
 
   @Post('signin')
@@ -231,7 +231,7 @@ export class AuthController {
   @ApiResponse({ type: Boolean })
   async checkRegistrationStudent(@Param('registration') registration: string) {
     const studentAlreadyExists = await this.checkStudentByRegistration.execute({
-      studentId: registration,
+      registration: registration,
     });
 
     if (studentAlreadyExists) {
