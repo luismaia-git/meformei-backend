@@ -12,15 +12,12 @@ import {
   Controller,
   ForbiddenException,
   Get,
+  Param,
   Post,
   Request,
 } from '@nestjs/common';
 import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request as RequestE } from 'express';
-import { CheckEmailAdminBody } from '../dto/auth/check-email-admin.dto';
-import { CheckEmailStudentBody } from '../dto/auth/check-email-student.dto';
-import { CheckUsernameAdminBody } from '../dto/auth/check-username-admin.dto';
-import { CheckUsernameStudentBody } from '../dto/auth/check-username-student.dto';
 import { LoginBody } from '../dto/auth/login.dto';
 import { RegisterAccountAdminBody } from '../dto/auth/register-account-admin.dto';
 import { RegisterAccountStudentBody } from '../dto/auth/register-account-student.dto';
@@ -133,11 +130,11 @@ export class AuthController {
     };
   }
 
-  @Get('admin/check/email')
+  @Get('admin/check/email/:email')
   @ApiResponse({ type: Boolean })
-  async checkEmailAdmin(@Body() req: CheckEmailAdminBody) {
+  async checkEmailAdmin(@Param('email') email: string) {
     const adminAlreadyExists = await this.checkAdminAccountEmail.execute({
-      email: req.email,
+      email: email,
     });
 
     if (adminAlreadyExists) {
@@ -146,11 +143,11 @@ export class AuthController {
     return true;
   }
 
-  @Get('admin/check/username')
+  @Get('admin/check/username/:username')
   @ApiResponse({ type: Boolean })
-  async checkUsernameAdmin(@Body() req: CheckUsernameAdminBody) {
+  async checkUsernameAdmin(@Param('username') username: string) {
     const adminAlreadyExists = await this.checkAdminAccountUsername.execute({
-      username: req.username,
+      username: username,
     });
 
     if (adminAlreadyExists) {
@@ -200,11 +197,11 @@ export class AuthController {
     };
   }
 
-  @Get('student/check/email')
+  @Get('student/check/email/:email')
   @ApiResponse({ type: Boolean })
-  async checkEmailStudent(@Body() req: CheckEmailStudentBody) {
+  async checkEmailStudent(@Param('email') email: string) {
     const studentAlreadyExists = await this.checkStudentAccountEmail.execute({
-      email: req.email,
+      email: email,
     });
 
     if (studentAlreadyExists) {
@@ -213,12 +210,12 @@ export class AuthController {
     return true;
   }
 
-  @Get('student/check/username')
+  @Get('student/check/username/:username')
   @ApiResponse({ type: Boolean })
-  async checkUsernameStudent(@Body() req: CheckUsernameStudentBody) {
+  async checkUsernameStudent(@Param('username') username: string) {
     const studentAlreadyExists = await this.checkStudentAccountUsername.execute(
       {
-        username: req.username,
+        username: username,
       },
     );
 
