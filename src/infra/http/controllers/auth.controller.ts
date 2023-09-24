@@ -6,6 +6,7 @@ import { Login } from '@application/use-cases/authentication/login';
 import { RegisterAccountAdmin } from '@application/use-cases/authentication/register-admin';
 import { RegisterAccountStudent } from '@application/use-cases/authentication/register-student';
 import { ValidToken } from '@application/use-cases/authentication/valid-token';
+import { FindStudent } from '@application/use-cases/student/find-student';
 import {
   BadRequestException,
   Body,
@@ -64,6 +65,7 @@ export class AuthController {
     private checkAdminAccountUsername: CheckAdminAccountUsername,
     private checkStudentAccountEmail: CheckStudentAccountEmail,
     private checkStudentAccountUsername: CheckStudentAccountUsername,
+    private checkStudentByRegistration: FindStudent,
   ) {}
 
   @Post('signin')
@@ -221,6 +223,19 @@ export class AuthController {
 
     if (studentAlreadyExists) {
       throw new ForbiddenException('Username already used');
+    }
+    return true;
+  }
+
+  @Get('student/check/registration/:registration')
+  @ApiResponse({ type: Boolean })
+  async checkRegistrationStudent(@Param('registration') registration: string) {
+    const studentAlreadyExists = await this.checkStudentByRegistration.execute({
+      studentId: registration,
+    });
+
+    if (studentAlreadyExists) {
+      throw new ForbiddenException('Registration already used');
     }
     return true;
   }
