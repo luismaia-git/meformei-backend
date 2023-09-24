@@ -37,7 +37,7 @@ import { DeleteUniversity } from '@application/use-cases/university/delete-unive
 
 abstract class IGetCurriculumsCoursesByUniversityIdResponse extends CourseHttp {
   @ApiProperty()
-  curriculumId: string;
+  curriculum: CurriculumHttp;
 }
 
 abstract class CreateCurriculumResponse extends ResponseWithMessage {
@@ -235,16 +235,16 @@ export class UniversitiesController {
 
     const curriculumsHttp = curriculums.map(CurriculumViewModel.toHTTP);
 
-    const courses = curriculumsHttp.map((curriculum) => {
-      return {
-        course: {
-          ...curriculum.curriculumCourse,
-          curriculumId: curriculum.id.toString(),
-        },
-      };
-    });
+    // const courses = curriculumsHttp.map((curriculum) => {
+    //   return {
+    //     course: {
+    //       ...curriculum.curriculumCourse,
+    //       curriculum: curriculum,
+    //     },
+    //   };
+    // });
     return {
-      courses,
+      courses: curriculumsHttp,
     };
   }
 
