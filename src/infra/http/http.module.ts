@@ -49,6 +49,8 @@ import { AuthController } from './controllers/auth.controller';
 import { CoursesController } from './controllers/course.controller';
 import { StudentsController } from './controllers/students.controller';
 import { UniversitiesController } from './controllers/university.controller';
+import { DeleteUniversity } from '@application/use-cases/university/delete-university';
+import { UpdateUniversity } from '@application/use-cases/university/update-university';
 
 @Module({
   imports: [
@@ -78,6 +80,8 @@ import { UniversitiesController } from './controllers/university.controller';
     FindCourse,
     UpdateCourse,
     CreateUniversity,
+    DeleteUniversity,
+    UpdateUniversity,
     ListUniversities,
     FindUniversity,
     FindCurriculumsByUniversityId,

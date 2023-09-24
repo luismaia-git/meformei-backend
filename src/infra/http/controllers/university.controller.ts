@@ -14,7 +14,7 @@ import { FindUniversitiesByState } from '@application/use-cases/university/find-
 import { FindUniversity } from '@application/use-cases/university/find-university';
 import { ListUniversities } from '@application/use-cases/university/list-universities';
 import { ROLES } from '@config/constants';
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth-guard';
 import { Roles } from '../auth/roles.decorator';
@@ -31,6 +31,9 @@ import { ToFront } from '../view-models/course-history-view-model';
 import { CurriculumViewModel } from '../view-models/curriculum-view-model';
 import { DisciplineViewModel } from '../view-models/discipline-view-model';
 import { UniversityViewModel } from '../view-models/university-view-model';
+import { UpdateUniversityBody } from '../dto/university/update-university.dto';
+import { UpdateUniversity } from '@application/use-cases/university/update-university';
+import { DeleteUniversity } from '@application/use-cases/university/delete-university';
 
 abstract class IGetCurriculumsCoursesByUniversityIdResponse extends CourseHttp {
   @ApiProperty()
@@ -58,6 +61,8 @@ export class UniversitiesController {
   constructor(
     private createUniversity: CreateUniversity,
     private listUniversities: ListUniversities,
+    private updateUniversity: UpdateUniversity,
+    private deleteUniversity: DeleteUniversity,
     private findUniversity: FindUniversity,
     private findCurriculumsByUniversityId: FindCurriculumsByUniversityId,
     private findUniversitiesByState: FindUniversitiesByState,
@@ -174,6 +179,45 @@ export class UniversitiesController {
       university: UniversityViewModel.toHTTP(university),
     };
   }
+
+  @UseGuards(AuthGuard, RolesGuard)
+  @Post(':id')
+  @Roles(ROLES.ADMIN)
+  @ApiResponse({
+    type: UniversityResponse,
+    description: 'Atualiza uma Universidade',
+  })
+  async patchUniversity(@Body() updateUniversityBody: UpdateUniversityBody, @Param('id') id: string ) {
+    const { university } = await this.updateUniversity.execute(
+      {id, university: updateUniversityBody}
+    );
+
+    return {
+      message: 'Universidade atualizada!',
+      university: UniversityViewModel.toHTTP(university),
+    };
+  }
+
+  
+  @UseGuards(AuthGuard, RolesGuard)
+  @Delete(':id')
+  @Roles(ROLES.ADMIN)
+  @ApiResponse({
+    type: UniversityResponse,
+    description: 'Deleta uma Universidade',
+  })
+  async removeUniversity(@Param('id') id: string ) {
+    const { university } = await this.deleteUniversity.execute(
+      {universityId: id}
+    );
+
+    return {
+      message: 'Universidade deletada!',
+      university: UniversityViewModel.toHTTP(university),
+    };
+  }
+
+  
 
   @Get(':id/courses')
   @ApiResponse({
