@@ -19,7 +19,6 @@ export class PrismaCurriculumsRepository implements CurriculumsRepository {
         id: curriculumId,
       },
       include: {
-        course: true,
         university: true,
         // disciplines: {
         //   include: {
@@ -78,7 +77,6 @@ export class PrismaCurriculumsRepository implements CurriculumsRepository {
         id: raw.id,
       },
       include: {
-        course: true,
         university: true,
       },
       data: raw,
@@ -90,14 +88,12 @@ export class PrismaCurriculumsRepository implements CurriculumsRepository {
   async list(): Promise<Curriculum[] | []> {
     const curriculums = await this.prisma.curriculum.findMany({
       include: {
-        course: true,
         university: true,
         disciplines: {
           include: {
             prerequisitesDisciplines: true,
             curriculum: {
               include: {
-                course: true,
                 university: true,
               },
             },
@@ -123,7 +119,6 @@ export class PrismaCurriculumsRepository implements CurriculumsRepository {
         universityId: universityId,
       },
       include: {
-        course: true,
         university: true,
       },
     });
@@ -145,7 +140,6 @@ export class PrismaCurriculumsRepository implements CurriculumsRepository {
         id: curriculumId,
       },
       include: {
-        course: true,
         university: true,
       },
     });
