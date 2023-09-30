@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CourseHttp } from './course-http';
 import { UniversityHttp } from './university-http';
 
 export class StudentHttp {
@@ -19,7 +18,7 @@ export class StudentHttp {
   curriculumId: string;
 
   @ApiProperty()
-  course: CourseHttp;
+  courseName: string;
 
   @ApiProperty({ example: 7 })
   currentSemester: number;

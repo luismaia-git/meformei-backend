@@ -1,13 +1,12 @@
 import { Curriculum } from '@application/entities/curriculum/curriculum';
 import { ApiProperty } from '@nestjs/swagger';
-import { CourseViewModel } from './course-view-model';
 import { UniversityViewModel } from './university-view-model';
 
 export class CurriculumViewModel {
   @ApiProperty()
   static toHTTP(curriculum: Curriculum) {
     const {
-      course,
+      courseName,
       description,
       extraCurricularHours,
       id,
@@ -18,7 +17,7 @@ export class CurriculumViewModel {
 
     return {
       id: id.toValue(),
-      curriculumCourse: CourseViewModel.toHTTP(course),
+      courseName,
       description,
       extraCurricularHours,
       optionalHours,

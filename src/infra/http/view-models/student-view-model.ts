@@ -1,6 +1,5 @@
 import { Student } from '@application/entities/student/student';
 import { ApiProperty } from '@nestjs/swagger';
-import { CourseViewModel } from './course-view-model';
 import { UniversityViewModel } from './university-view-model';
 
 export class StudentViewModel {
@@ -14,7 +13,7 @@ export class StudentViewModel {
       registration,
       city,
       state,
-      course,
+      courseName,
       currentSemester,
       enrollmentSemester,
       enrollmentYear,
@@ -38,7 +37,7 @@ export class StudentViewModel {
       currentSemester,
       enrollmentSemester,
       enrollmentYear,
-      course: CourseViewModel.toHTTP(course),
+      courseName,
       university: UniversityViewModel.toHTTP(university),
     };
   }

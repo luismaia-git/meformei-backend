@@ -1,8 +1,6 @@
-import { Course } from '@application/entities/curriculum/course';
 import { University } from '@application/entities/curriculum/university';
 import { UniqueEntityID } from '@core/entities/unique-entity-id';
 import {
-  Course as CoursePrisma,
   Curriculum as CurriculumPrisma,
   Student as RawStudentPrisma,
   University as UniversityPrisma,
@@ -34,12 +32,7 @@ export class PrismaStudentMapper {
         studentId: new UniqueEntityID(raw.id),
         city: raw.user.city,
         state: raw.user.state,
-        course: Course.create(
-          {
-            name: raw.curriculum.course.name,
-          },
-          new UniqueEntityID(raw.curriculum.course.id),
-        ),
+        courseName: raw.curriculum.courseName,
         university: University.create(
           {
             name: raw.curriculum.university.name,
@@ -63,7 +56,6 @@ export class PrismaStudentMapper {
 export type RawStudent = RawStudentPrisma & {
   user: User;
   curriculum: CurriculumPrisma & {
-    course: CoursePrisma;
     university: UniversityPrisma;
   };
 };

@@ -1,10 +1,9 @@
 import { Entity } from '@core/entities/entity';
 import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
-import { Course } from './course';
 import { University } from './university';
 
 export interface CurriculumProps {
-  course: Course;
+  courseName: string;
   description: string;
   university: University;
   requiredHours: number;
@@ -22,12 +21,12 @@ export class Curriculum extends Entity<CurriculumProps> {
     return this.props;
   }
 
-  public set course(course: Course) {
-    this.props.course = course;
+  public set courseName(course: string) {
+    this.props.courseName = course;
   }
 
-  public get course() {
-    return this.props.course;
+  public get courseName() {
+    return this.props.courseName;
   }
 
   public set description(description: string) {
