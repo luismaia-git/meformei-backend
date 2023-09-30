@@ -13,7 +13,6 @@ export class PrismaCourseMapper {
     return Course.create(
       {
         name: raw.name,
-        curriculums: raw?.curriculums?.map((curriculum) => curriculum.id),
       },
       new UniqueEntityID(raw.id),
     );
@@ -21,5 +20,5 @@ export class PrismaCourseMapper {
 }
 
 type RawCourse = RawCoursePrisma & {
-  curriculums: Curriculum[];
+  curriculums?: Curriculum[];
 };

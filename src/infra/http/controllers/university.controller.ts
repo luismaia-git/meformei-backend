@@ -8,13 +8,23 @@ import { FindDiscipline } from '@application/use-cases/discipline/find-disciplin
 import { FindDisciplineByCodArray } from '@application/use-cases/discipline/find-disciplines-by-cod-array';
 import { FindDisciplinesByCurriculum } from '@application/use-cases/discipline/find-disciplines-by-curriculum';
 import { CreateUniversity } from '@application/use-cases/university/create-university';
+import { DeleteUniversity } from '@application/use-cases/university/delete-university';
 import { FindUniversitiesByCity } from '@application/use-cases/university/find-universities-by-city';
 import { FindUniversitiesByCityAndState } from '@application/use-cases/university/find-universities-by-city-and-state';
 import { FindUniversitiesByState } from '@application/use-cases/university/find-universities-by-state';
 import { FindUniversity } from '@application/use-cases/university/find-university';
 import { ListUniversities } from '@application/use-cases/university/list-universities';
+import { UpdateUniversity } from '@application/use-cases/university/update-university';
 import { ROLES } from '@config/constants';
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth-guard';
 import { Roles } from '../auth/roles.decorator';
@@ -24,6 +34,7 @@ import { CreateManyDisciplineBody } from '../dto/discipline/create-discipline.dt
 import { FindDisciplineByCodsBody } from '../dto/discipline/find-discipline-by-cods.dto';
 import { ResponseWithMessage } from '../dto/response-message';
 import { CreateUniversityBody } from '../dto/university/create-university.dto';
+import { UpdateUniversityBody } from '../dto/university/update-university.dto';
 import { CourseHttp } from '../types-class-http/course-http';
 import { CurriculumHttp } from '../types-class-http/curriculum-http';
 import { UniversityHttp } from '../types-class-http/university-http';
@@ -31,9 +42,6 @@ import { ToFront } from '../view-models/course-history-view-model';
 import { CurriculumViewModel } from '../view-models/curriculum-view-model';
 import { DisciplineViewModel } from '../view-models/discipline-view-model';
 import { UniversityViewModel } from '../view-models/university-view-model';
-import { UpdateUniversityBody } from '../dto/university/update-university.dto';
-import { UpdateUniversity } from '@application/use-cases/university/update-university';
-import { DeleteUniversity } from '@application/use-cases/university/delete-university';
 
 abstract class IGetCurriculumsCoursesByUniversityIdResponse extends CourseHttp {
   @ApiProperty()
@@ -187,10 +195,14 @@ export class UniversitiesController {
     type: UniversityResponse,
     description: 'Atualiza uma Universidade',
   })
-  async patchUniversity(@Body() updateUniversityBody: UpdateUniversityBody, @Param('id') id: string ) {
-    const { university } = await this.updateUniversity.execute(
-      {id, university: updateUniversityBody}
-    );
+  async patchUniversity(
+    @Body() updateUniversityBody: UpdateUniversityBody,
+    @Param('id') id: string,
+  ) {
+    const { university } = await this.updateUniversity.execute({
+      id,
+      university: updateUniversityBody,
+    });
 
     return {
       message: 'Universidade atualizada!',
@@ -198,7 +210,6 @@ export class UniversitiesController {
     };
   }
 
-  
   @UseGuards(AuthGuard, RolesGuard)
   @Delete(':id')
   @Roles(ROLES.ADMIN)
@@ -206,18 +217,16 @@ export class UniversitiesController {
     type: UniversityResponse,
     description: 'Deleta uma Universidade',
   })
-  async removeUniversity(@Param('id') id: string ) {
-    const { university } = await this.deleteUniversity.execute(
-      {universityId: id}
-    );
+  async removeUniversity(@Param('id') id: string) {
+    const { university } = await this.deleteUniversity.execute({
+      universityId: id,
+    });
 
     return {
       message: 'Universidade deletada!',
       university: UniversityViewModel.toHTTP(university),
     };
   }
-
-  
 
   @Get(':id/courses')
   @ApiResponse({

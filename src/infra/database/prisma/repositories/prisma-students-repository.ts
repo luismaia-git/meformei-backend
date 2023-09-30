@@ -17,7 +17,6 @@ export class PrismaStudentsRepository implements StudentsRepository {
         user: true,
         curriculum: {
           include: {
-            course: true,
             university: true,
           },
         },
@@ -68,7 +67,7 @@ export class PrismaStudentsRepository implements StudentsRepository {
       },
       include: {
         user: true,
-        curriculum: { include: { university: true, course: true } },
+        curriculum: { include: { university: true } },
       },
       data: raw,
     });
@@ -82,7 +81,6 @@ export class PrismaStudentsRepository implements StudentsRepository {
         user: true,
         curriculum: {
           include: {
-            course: true,
             university: true,
           },
         },
@@ -117,7 +115,6 @@ export class PrismaStudentsRepository implements StudentsRepository {
         user: true,
         curriculum: {
           include: {
-            course: true,
             university: true,
           },
         },
@@ -138,7 +135,6 @@ export class PrismaStudentsRepository implements StudentsRepository {
         user: true,
         curriculum: {
           include: {
-            course: true,
             university: true,
           },
         },
@@ -159,7 +155,6 @@ export class PrismaStudentsRepository implements StudentsRepository {
         user: true,
         curriculum: {
           include: {
-            course: true,
             university: true,
           },
         },
@@ -180,7 +175,6 @@ export class PrismaStudentsRepository implements StudentsRepository {
         user: true,
         curriculum: {
           include: {
-            course: true,
             university: true,
           },
         },

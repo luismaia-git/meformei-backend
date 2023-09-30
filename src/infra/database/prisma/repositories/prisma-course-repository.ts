@@ -13,9 +13,6 @@ export class PrismaCoursesRepository implements CoursesRepository {
       where: {
         id: courseId,
       },
-      include: {
-        curriculums: true,
-      },
     });
 
     if (!course) {
@@ -58,9 +55,6 @@ export class PrismaCoursesRepository implements CoursesRepository {
     const courseUpdated = await this.prisma.course.update({
       where: {
         id: raw.id,
-      },
-      include: {
-        curriculums: true,
       },
       data: raw,
     });
