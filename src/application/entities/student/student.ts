@@ -1,5 +1,4 @@
 import { UniqueEntityID } from '@core/entities/unique-entity-id';
-import { Course } from '../curriculum/course';
 import { University } from '../curriculum/university';
 import { User, UserProps } from '../user/user';
 
@@ -10,7 +9,7 @@ export interface StudentProps extends UserProps {
   enrollmentYear: number;
   enrollmentSemester: number;
   currentSemester?: number;
-  course: Course;
+  courseName: string;
   university: University;
 }
 
@@ -82,12 +81,12 @@ export class Student extends User<StudentProps> {
     return this.props.currentSemester;
   }
 
-  public set course(course: Course) {
-    this.props.course = course;
+  public set courseName(course: string) {
+    this.props.courseName = course;
   }
 
-  public get course() {
-    return this.props.course;
+  public get courseName() {
+    return this.props.courseName;
   }
 
   public set university(university: University) {

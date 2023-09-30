@@ -67,7 +67,7 @@ export class RegisterAccountStudent {
         email,
         password: hashedPassword,
         city,
-        course: curriculum.course,
+        courseName: curriculum.courseName,
         enrollmentSemester,
         enrollmentYear,
         lastname,

@@ -4,7 +4,7 @@ import { IsNotEmpty } from 'class-validator';
 export class CreateCurriculumBody {
   @ApiProperty()
   @IsNotEmpty()
-  courseId: string;
+  courseName: string;
 
   @ApiProperty()
   @IsNotEmpty()

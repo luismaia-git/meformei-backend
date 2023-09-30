@@ -73,7 +73,7 @@ export class CreateStudent {
         email,
         password,
         city,
-        course: curriculum.course,
+        courseName: curriculum.courseName,
         enrollmentSemester,
         enrollmentYear,
         lastname,

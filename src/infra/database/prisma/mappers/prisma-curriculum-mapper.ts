@@ -1,9 +1,7 @@
-import { Course } from '@application/entities/curriculum/course';
 import { Curriculum } from '@application/entities/curriculum/curriculum';
 import { University } from '@application/entities/curriculum/university';
 import { UniqueEntityID } from '@core/entities/unique-entity-id';
 import {
-  Course as CoursePrisma,
   Curriculum as RawCurriculumPrisma,
   University as UniversityPrisma,
 } from '@prisma/client';
@@ -11,7 +9,7 @@ import {
 export class PrismaCurriculumMapper {
   static toPrisma(curriculum: Curriculum): RawCurriculumPrisma {
     const {
-      course,
+      courseName,
       description,
       id,
       extraCurricularHours,
@@ -21,7 +19,7 @@ export class PrismaCurriculumMapper {
     } = curriculum;
     return {
       id: id.toString(),
-      courseId: course.id.toString(),
+      courseName,
       description,
       extraCurricularHours,
       optionalHours,
@@ -32,7 +30,7 @@ export class PrismaCurriculumMapper {
 
   static toDomain(raw: RawCurriculum): Curriculum {
     const {
-      course,
+      courseName,
       description,
       extraCurricularHours,
       id,
@@ -43,10 +41,7 @@ export class PrismaCurriculumMapper {
 
     return Curriculum.create(
       {
-        course: Course.create(
-          { name: course.name },
-          new UniqueEntityID(course.id),
-        ),
+        courseName,
         description,
         // disciplines: MappingDiscipline(disciplines),
         extraCurricularHours,
@@ -97,7 +92,6 @@ export class PrismaCurriculumMapper {
 // }
 
 type RawCurriculum = RawCurriculumPrisma & {
-  course: CoursePrisma;
   university: UniversityPrisma;
   // disciplines: RawDisciplinesCurriculum;
 };
