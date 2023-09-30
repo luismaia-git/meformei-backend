@@ -8,7 +8,7 @@ Equipe:  <a href="https://github.com/Jportela4c">José Portela</a>, <a href="htt
 
 ## Compilação
 
-- Para compilar localmente, é necessário instalar o `<a href="https://nodejs.org/en/">`Node`</a>`.
+- Para compilar localmente, é necessário instalar o <a href="https://nodejs.org/en/">Node</a>.
 - Compile
 
 ```bash
