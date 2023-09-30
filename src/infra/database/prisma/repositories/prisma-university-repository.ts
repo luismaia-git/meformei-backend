@@ -91,12 +91,14 @@ export class PrismaUniversitiesRepository implements UniversitiesRepository {
   }
 
   async list(): Promise<University[]> {
+    console.log('cheguei aqui');
     const universities = await this.prisma.university.findMany({
       include: {
         curriculums: true,
       },
     });
 
+    //console.log('cheguei aqui');
     return universities.map(PrismaUniversityMapper.toDomain);
   }
 
