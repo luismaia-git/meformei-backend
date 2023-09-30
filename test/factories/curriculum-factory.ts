@@ -1,4 +1,3 @@
-import { Course } from '@application/entities/curriculum/course';
 import {
   Curriculum,
   CurriculumProps,
@@ -10,9 +9,7 @@ type Override = Partial<CurriculumProps>;
 
 export function makeCurriculum(override: Override = {}) {
   return Curriculum.create({
-    course: Course.create({
-      name: 'example-name',
-    }),
+    courseName: 'Course Name example',
     description: 'Example description',
     university: makeUniversity(),
     extraCurricularHours: 192,
