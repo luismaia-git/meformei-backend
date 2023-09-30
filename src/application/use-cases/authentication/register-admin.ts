@@ -27,11 +27,10 @@ export class RegisterAccountAdmin {
   async execute(request: RequestBody) {
     const { lastname, username, email, name, password, city, state } = request;
 
-    const adminAlreadyExists = await this.adminsRepository.findByUsername(
-      username,
-    );
+    const UserAlreadyExist = await this.usersRepository.findByUsername(username)
 
-    if (adminAlreadyExists) {
+    
+    if (UserAlreadyExist) {
       throw new UserAlreadyExists();
     }
 
