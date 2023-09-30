@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { Curriculum } from '@application/entities/curriculum/curriculum';
 import { CurriculumsRepository } from '@application/repositories/curriculums-repository';
@@ -21,6 +21,10 @@ export class FindCurriculumsByUniversityId {
     const curriculums = await this.curriculumsRepository.findByUniversityId(
       universityId,
     );
+
+    if(!curriculums) {
+      throw new NotFoundException()
+    }
 
     return {
       curriculums,

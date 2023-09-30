@@ -13,7 +13,7 @@ export class ListCurriculums {
 
   async execute(): Promise<ListCurriculumsResponse> {
     const curriculums = await this.curriculumsRepository.list();
-
+    
     return {
       curriculums,
     };

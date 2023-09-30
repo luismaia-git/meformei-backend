@@ -44,9 +44,8 @@ model Admin {
 }
 
 model Course {
-  id          String       @id @default(uuid())
-  name        String       @unique
-  curriculums Curriculum[]
+  id   String @id @default(uuid())
+  name String @unique
 }
 
 model University {
@@ -61,8 +60,7 @@ model University {
 model Curriculum {
   id                   String       @id @default(uuid())
   students             Student[]
-  course               Course       @relation(fields: [courseId], references: [id])
-  courseId             String
+  courseName           String
   description          String
   university           University   @relation(fields: [universityId], references: [id])
   universityId         String
