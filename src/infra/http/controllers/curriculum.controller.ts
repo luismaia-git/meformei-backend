@@ -169,7 +169,7 @@ export class CurriculumController {
       curriculumId,
     });
     return {
-      disciplines: disciplines.map(DisciplineViewModel.toHTTP),
+      disciplines: DisciplineViewModel.toFront(disciplines),
     };
   }
 
@@ -187,7 +187,7 @@ export class CurriculumController {
       curriculumId,
     });
     return {
-      disciplines: DisciplineViewModel.toFront(disciplines),
+      disciplines: disciplines.map(DisciplineViewModel.toHTTP) ,
     };
   }
 
