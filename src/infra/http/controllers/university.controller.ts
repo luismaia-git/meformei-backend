@@ -1,12 +1,5 @@
-import { Discipline } from '@application/entities/discipline/discipline';
 import { CreateCurriculum } from '@application/use-cases/curriculum/create-curriculum';
 import { FindCurriculumsByUniversityId } from '@application/use-cases/curriculum/find-by-universityId';
-import { FindCurriculumsByUniversityIdAndCurriculumId } from '@application/use-cases/curriculum/find-by-universityId-and-curriculumId';
-import { CreateDiscipline } from '@application/use-cases/discipline/create-discipline';
-import { CreateManyDiscipline } from '@application/use-cases/discipline/create-many-disciplines';
-import { FindDiscipline } from '@application/use-cases/discipline/find-discipline';
-import { FindDisciplineByCodArray } from '@application/use-cases/discipline/find-disciplines-by-cod-array';
-import { FindDisciplinesByCurriculum } from '@application/use-cases/discipline/find-disciplines-by-curriculum';
 import { CreateUniversity } from '@application/use-cases/university/create-university';
 import { DeleteUniversity } from '@application/use-cases/university/delete-university';
 import { FindUniversitiesByCity } from '@application/use-cases/university/find-universities-by-city';
@@ -30,8 +23,6 @@ import { AuthGuard } from '../auth/auth-guard';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { CreateCurriculumBody } from '../dto/curriculum/create-curriculum.dto';
-import { CreateManyDisciplineBody } from '../dto/discipline/create-discipline.dto';
-import { FindDisciplineByCodsBody } from '../dto/discipline/find-discipline-by-cods.dto';
 import { ResponseWithMessage } from '../dto/response-message';
 import { CreateUniversityBody } from '../dto/university/create-university.dto';
 import { UpdateUniversityBody } from '../dto/university/update-university.dto';
@@ -40,7 +31,6 @@ import { CurriculumHttp } from '../types-class-http/curriculum-http';
 import { UniversityHttp } from '../types-class-http/university-http';
 import { ToFront } from '../view-models/course-history-view-model';
 import { CurriculumViewModel } from '../view-models/curriculum-view-model';
-import { DisciplineViewModel } from '../view-models/discipline-view-model';
 import { UniversityViewModel } from '../view-models/university-view-model';
 
 abstract class IGetCurriculumsCoursesByUniversityIdResponse extends CourseHttp {
@@ -76,12 +66,6 @@ export class UniversitiesController {
     private findUniversitiesByState: FindUniversitiesByState,
     private findUniversitiesByCity: FindUniversitiesByCity,
     private createCurriculum: CreateCurriculum,
-    private findCurriculumsByUniversityIdAndCurriculumId: FindCurriculumsByUniversityIdAndCurriculumId,
-    private createDiscipline: CreateDiscipline,
-    private createManyDiscipline: CreateManyDiscipline,
-    private findDiscipline: FindDiscipline,
-    private findDisciplineByCodArray: FindDisciplineByCodArray,
-    private findDisciplineByCurriculum: FindDisciplinesByCurriculum,
     private findUniversitiesByCityAndState: FindUniversitiesByCityAndState,
   ) {}
 
@@ -280,126 +264,4 @@ export class UniversitiesController {
     };
   }
 
-  @UseGuards(AuthGuard, RolesGuard)
-  @Get(':id/courses/:curriculumId')
-  @Roles(ROLES.ADMIN, ROLES.STUDENT)
-  async getCurriculumCourseByCurriculumId(
-    @Param('id') universityId: string,
-    @Param('curriculumId') curriculumId: string,
-  ) {
-    const { curriculum } =
-      await this.findCurriculumsByUniversityIdAndCurriculumId.execute({
-        universityId,
-        curriculumId,
-      });
-
-    return {
-      course: CurriculumViewModel.toHTTP(curriculum),
-    };
-  }
-
-  @UseGuards(AuthGuard, RolesGuard)
-  @Post(':id/courses/:curriculumId/disciplines')
-  @Roles(ROLES.ADMIN)
-  async associateDisciplineInCurriculum(
-    @Param('curriculumId') curriculumId: string,
-    @Body() disciplineBody: CreateManyDisciplineBody,
-  ) {
-    const disciplines: Discipline[] = [];
-    const codErrors: string[] = [];
-    let message = '';
-    for (const discipline of disciplineBody.disciplines) {
-      const {
-        discipline: disciplineUseCase,
-        error,
-        cod,
-      } = await this.createDiscipline.execute({
-        ...discipline,
-        curriculumId,
-      });
-
-      if (!error) {
-        disciplines.push(disciplineUseCase);
-      }
-      if (cod) {
-        codErrors.push(cod);
-      }
-    }
-
-    if (codErrors.length > 0) {
-      message = 'Codigos de disciplinas que houve erro ao cadastra-la:';
-    }
-
-    return {
-      disciplines: DisciplineViewModel.toFront(disciplines),
-      message,
-      codErrors: codErrors,
-    };
-  }
-
-  @UseGuards(AuthGuard, RolesGuard)
-  @Get(':id/courses/:curriculumId/disciplines')
-  @Roles(ROLES.ADMIN, ROLES.STUDENT)
-  @ApiResponse({
-    type: DisciplineToFrontResponse,
-    description: 'Busca as disciplinas de uma matriz curricular',
-  })
-  async findDisciplinesByCurriculum(
-    @Param('curriculumId') curriculumId: string,
-  ) {
-    const { disciplines } = await this.findDisciplineByCurriculum.execute({
-      curriculumId,
-    });
-    return {
-      disciplines: DisciplineViewModel.toFront(disciplines),
-    };
-  }
-
-  @UseGuards(AuthGuard, RolesGuard)
-  @Get(':id/courses/:curriculumId/disciplines/cod')
-  @Roles(ROLES.ADMIN, ROLES.STUDENT)
-  @ApiResponse({
-    type: DisciplineToFrontResponse,
-    description: 'Busca as disciplinas por codigo',
-  })
-  async findDisciplinesByCods(@Body() body: FindDisciplineByCodsBody) {
-    const { disciplines } = await this.findDisciplineByCodArray.execute({
-      cods: body.cods,
-    });
-    return {
-      disciplines: disciplines.map(DisciplineViewModel.toHTTP),
-    };
-  }
-
-  @UseGuards(AuthGuard, RolesGuard)
-  @Get(':id/courses/:curriculumId/disciplines/required')
-  @Roles(ROLES.ADMIN, ROLES.STUDENT)
-  @ApiResponse({
-    type: DisciplineToFrontResponse,
-    description: 'Busca as disciplinas de uma matriz curricular',
-  })
-  async findDisciplinesRequiredByCurriculum(
-    @Param('curriculumId') curriculumId: string,
-  ) {
-    const { disciplines } = await this.findDisciplineByCurriculum.execute({
-      curriculumId,
-    });
-    return {
-      disciplines: DisciplineViewModel.toFront(
-        disciplines.filter((discipline) => discipline.optional === false),
-      ),
-    };
-  }
-
-  @UseGuards(AuthGuard, RolesGuard)
-  @Get(':id/courses/:curriculumId/disciplines/:disciplineId')
-  @Roles(ROLES.ADMIN, ROLES.STUDENT)
-  async findDisciplineById(@Param('disciplineId') disciplineId: string) {
-    const { discipline } = await this.findDiscipline.execute({
-      disciplineId,
-    });
-    return {
-      discipline: DisciplineViewModel.toHTTP(discipline),
-    };
-  }
 }
