@@ -156,6 +156,24 @@ export class CurriculumController {
   }
 
   @UseGuards(AuthGuard, RolesGuard)
+  @Get(':curriculumId/disciplines/to-student')
+  @Roles(ROLES.ADMIN, ROLES.STUDENT)
+  @ApiResponse({
+    type: DisciplineToFrontResponse,
+    description: 'Busca as disciplinas de uma matriz curricular',
+  })
+  async findDisciplinesToStudentByCurriculum(
+    @Param('curriculumId') curriculumId: string,
+  ) {
+    const { disciplines } = await this.findDisciplineByCurriculum.execute({
+      curriculumId,
+    });
+    return {
+      disciplines: disciplines.map(DisciplineViewModel.toHTTP),
+    };
+  }
+
+  @UseGuards(AuthGuard, RolesGuard)
   @Get(':curriculumId/disciplines')
   @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
