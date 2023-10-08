@@ -7,6 +7,7 @@ import { Login } from '@application/use-cases/authentication/login';
 import { RegisterAccountAdmin } from '@application/use-cases/authentication/register-admin';
 import { RegisterAccountStudent } from '@application/use-cases/authentication/register-student';
 import { ValidToken } from '@application/use-cases/authentication/valid-token';
+import { ROLES } from '@config/constants';
 import {
   BadRequestException,
   Body,
@@ -16,9 +17,14 @@ import {
   Param,
   Post,
   Request,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request as RequestE } from 'express';
+import { AuthGuard } from '../auth/auth-guard';
+import { GetUser } from '../auth/get-user.decorator';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 import { LoginBody } from '../dto/auth/login.dto';
 import { RegisterAccountAdminBody } from '../dto/auth/register-account-admin.dto';
 import { RegisterAccountStudentBody } from '../dto/auth/register-account-student.dto';
@@ -246,5 +252,12 @@ export class AuthController {
     const isValid = await this.validToken.execute(req);
 
     return isValid;
+  }
+
+  @Get('me')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(ROLES.ADMIN, ROLES.STUDENT)
+  async getMe(@GetUser() user: any) {
+    return user;
   }
 }
