@@ -47,7 +47,7 @@ export class PrismaAdminsRepository implements AdminsRepository {
   // }
 
   async create(admin: Admin): Promise<void> {
-    const raw = PrismaAdminMapper.toPrisma(admin);
+    const {admin: raw} = PrismaAdminMapper.toPrisma(admin);
 
     await this.prisma.admin.create({
       data: raw,
@@ -55,16 +55,16 @@ export class PrismaAdminsRepository implements AdminsRepository {
   }
 
   async update(admin: Admin): Promise<Admin> {
-    const raw = PrismaAdminMapper.toPrisma(admin);
+    const { user: rawUser, admin: rawAdmin} = PrismaAdminMapper.toPrisma(admin);
 
     const adminFinded = await this.prisma.admin.update({
       where: {
-        id: raw.id,
+        id: rawAdmin.id,
       },
       include: {
         user: true,
       },
-      data: raw,
+      data: { id: rawAdmin.id, user: {update: rawUser}},
     });
 
     return PrismaAdminMapper.toDomain(adminFinded);

@@ -29,8 +29,6 @@ export class UpdateStudent {
       studentFinded.id,
     );
     
-    console.log(data)
-    
     const studentUpdated = await this.studentsRepository.update(data);
 
     return {

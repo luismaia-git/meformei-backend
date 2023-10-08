@@ -11,13 +11,24 @@ import { Student } from 'src/application/entities/student/student';
 export class PrismaStudentMapper {
   static toPrisma(student: Student) {
     return {
-      id: student.studentId.toString(),
-      userId: student.id.toString(),
-      registration: student.registration,
-      curriculumId: student.curriculumId,
-      enrollmentYear: student.enrollmentYear,
-      enrollmentSemester: student.enrollmentSemester,
-      currentSemester: student.currentSemester,
+      student: {
+        id: student.studentId.toString(),
+        userId: student.id.toString(),
+        registration: student.registration,
+        curriculumId: student.curriculumId,
+        enrollmentYear: student.enrollmentYear,
+        enrollmentSemester: student.enrollmentSemester,
+        currentSemester: student.currentSemester,
+      },
+      user:{
+        id: student.id.toString(),
+        email: student.email,
+        name: student.name,
+        lastname: student.lastname,
+        password: student.password,
+        city: student.city,
+        state: student.state
+      }
     };
   }
 

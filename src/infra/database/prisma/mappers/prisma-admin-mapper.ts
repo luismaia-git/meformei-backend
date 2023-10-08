@@ -5,8 +5,20 @@ import { Admin } from 'src/application/entities/admin/admin';
 export class PrismaAdminMapper {
   static toPrisma(admin: Admin) {
     return {
-      userId: admin.id.toString(),
-      id: admin.adminId.toString(),
+      user: {
+        id: admin.id.toString(),
+        name: admin.name,
+        lastname: admin.lastname,
+        email: admin.email,
+        username: admin.username,
+        password: admin.password,
+        state: admin.state,
+        city: admin.city
+      },
+      admin:{
+        id: admin.adminId.toString(),
+        userId: admin.id.toString()
+      }
     };
   }
 
