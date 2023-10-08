@@ -20,7 +20,7 @@ describe('Create discipline', () => {
     const university = makeUniversity();
 
     const curriculum = makeCurriculum({
-      course: course,
+      courseName: "curso",
       university: university,
     });
 
@@ -41,6 +41,7 @@ describe('Create discipline', () => {
       curriculumId: curriculum.id.toString(),
       bibliography: ['livro tal'],
       prerequisites: [],
+      hours: 2
     });
 
     expect(disciplinesRepository.disciplines).toHaveLength(1);
@@ -59,7 +60,7 @@ describe('Create discipline', () => {
     const university = makeUniversity();
 
     const curriculum = makeCurriculum({
-      course: course,
+      courseName: "curso",
       university: university,
     });
 
@@ -81,6 +82,7 @@ describe('Create discipline', () => {
         description: 'Example description',
         bibliography: ['livro tal'],
         prerequisites: [],
+        hours: 2
       });
     }).rejects.toThrow(CurriculumNotFound);
   });
@@ -97,7 +99,7 @@ describe('Create discipline', () => {
     const university = makeUniversity();
 
     const curriculum = makeCurriculum({
-      course: course,
+      courseName: "curso",
       university: university,
     });
 
@@ -119,6 +121,7 @@ describe('Create discipline', () => {
         description: 'Example description',
         bibliography: ['livro tal'],
         prerequisites: ['example code'],
+        hours: 2
       });
     }).rejects.toThrow(CurriculumNotFound);
   });
@@ -135,7 +138,7 @@ describe('Create discipline', () => {
     const university = makeUniversity();
 
     const curriculum = makeCurriculum({
-      course: course,
+      courseName: "curso",
       university: university,
     });
 
@@ -155,6 +158,7 @@ describe('Create discipline', () => {
       curriculumId: curriculum.id.toString(),
       bibliography: ['livro tal'],
       prerequisites: [],
+      hours: 2
     });
 
     const { discipline: discipline2 } = await createDiscipline.execute({
@@ -167,6 +171,7 @@ describe('Create discipline', () => {
       curriculumId: curriculum.id.toString(),
       bibliography: ['livro tal'],
       prerequisites: [discipline1.cod],
+      hours:2
     });
 
     expect(disciplinesRepository.disciplines).toHaveLength(2);

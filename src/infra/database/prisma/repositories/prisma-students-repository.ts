@@ -11,7 +11,7 @@ export class PrismaStudentsRepository implements StudentsRepository {
   async findById(studentId: string): Promise<Student | null> {
     const student = await this.prisma.student.findUnique({
       where: {
-        registration: studentId,
+        id: studentId,
       },
       include: {
         user: true,
@@ -63,7 +63,7 @@ export class PrismaStudentsRepository implements StudentsRepository {
 
     const studentUpdated = await this.prisma.student.update({
       where: {
-        registration: raw.registration,
+        id: raw.id,
       },
       include: {
         user: true,

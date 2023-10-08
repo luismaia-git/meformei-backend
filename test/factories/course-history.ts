@@ -12,13 +12,13 @@ export function makeCourseHistory(
 ) {
   return CourseHistory.create({
     studentRegistration: 'studentRegistration',
-    createdAt: 'createdAt',
+    createdAt: new Date(),
     daysWeek: ['SEG, QUA, QUI'],
     discipline: makeDiscipline(overrideDiscipline),
-    endTime: 'endTime',
+    endTime: new Date(),
     hours: 64,
     semester: 1,
-    startTime: 'startTime',
+    startTime: new Date(),
     status: 'INPROGRESS',
     ...override,
   });

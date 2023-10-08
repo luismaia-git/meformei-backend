@@ -1,8 +1,11 @@
-import { FindByEmailAndUserNameRequest } from '@infra/database/prisma/repositories/prisma-students-repository';
+
 import { Student } from 'src/application/entities/student/student';
 import { StudentsRepository } from 'src/application/repositories/students-repository';
 
 export class InMemoryStudentsRepository implements StudentsRepository {
+  findByEmail(email: string): Promise<Student> {
+    throw new Error('Method not implemented.');
+  }
   public students: Student[] = [];
 
   async findById(studentId: string): Promise<Student | null> {
@@ -85,4 +88,9 @@ export class InMemoryStudentsRepository implements StudentsRepository {
 
     return student;
   }
+}
+
+interface FindByEmailAndUserNameRequest {
+  email: string;
+  username: string;
 }

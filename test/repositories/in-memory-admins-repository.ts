@@ -1,8 +1,10 @@
 import { Admin } from '@application/entities/admin/admin';
 import { AdminsRepository } from '@application/repositories/admins-repository';
-import { FindByEmailAndUserNameRequest } from '@infra/database/prisma/repositories/prisma-students-repository';
 
 export class InMemoryAdminsRepository implements AdminsRepository {
+  findByEmail(email: string): Promise<Admin> {
+    throw new Error('Method not implemented.');
+  }
   public admins: Admin[] = [];
 
   async findById(adminId: string): Promise<Admin | null> {
@@ -86,4 +88,10 @@ export class InMemoryAdminsRepository implements AdminsRepository {
 
     return admin;
   }
+}
+
+
+interface FindByEmailAndUserNameRequest {
+  email: string;
+  username: string;
 }

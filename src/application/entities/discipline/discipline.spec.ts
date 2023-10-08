@@ -12,6 +12,7 @@ describe('Discipline', () => {
       curriculumId: 'example-curriculum-id',
       prerequisiteDisciplines: [],
       bibliography: [],
+      hours: 2
     });
 
     expect(discipline).toBeTruthy();

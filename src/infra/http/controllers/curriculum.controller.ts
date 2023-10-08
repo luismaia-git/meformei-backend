@@ -156,7 +156,7 @@ export class CurriculumController {
   }
 
   @UseGuards(AuthGuard, RolesGuard)
-  @Get(':curriculumId/disciplines/to-student')
+  @Get(':curriculumId/disciplines-to-student')
   @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
     type: DisciplineToFrontResponse,
@@ -192,7 +192,7 @@ export class CurriculumController {
   }
 
   @UseGuards(AuthGuard, RolesGuard)
-  @Get(':curriculumId/disciplines/cod')
+  @Get(':curriculumId/disciplines-cod')
   @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
     type: DisciplineToFrontResponse,
@@ -208,7 +208,7 @@ export class CurriculumController {
   }
 
   @UseGuards(AuthGuard, RolesGuard)
-  @Get(':curriculumId/disciplines/required')
+  @Get(':curriculumId/disciplines-required')
   @Roles(ROLES.ADMIN, ROLES.STUDENT)
   @ApiResponse({
     type: DisciplineToFrontResponse,

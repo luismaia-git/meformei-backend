@@ -1,4 +1,3 @@
-import { makeCourse } from '@test/factories/course-factory';
 import { makeUniversity } from '@test/factories/university-factory';
 import { Student } from './student';
 
@@ -12,7 +11,7 @@ describe('Student', () => {
       registration: '0000001',
       username: 'Example username',
       city: 'example city',
-      course: makeCourse(),
+      courseName: "curso",
       enrollmentSemester: 2,
       enrollmentYear: 2021,
       lastname: 'Example lastname',

@@ -1,7 +1,5 @@
-import { makeCourse } from '@test/factories/course-factory';
 import { makeCurriculum } from '@test/factories/curriculum-factory';
 import { makeUniversity } from '@test/factories/university-factory';
-import { InMemoryCoursesRepository } from '@test/repositories/in-memory-courses-repository';
 import { InMemoryCurriculumsRepository } from '@test/repositories/in-memory-curriculums-repository';
 import { InMemoryStudentsRepository } from '@test/repositories/in-memory-students-repository';
 import { InMemoryUniversitiesRepository } from '@test/repositories/in-memory-universities-repository';
@@ -14,18 +12,12 @@ describe('Create student', () => {
     const studentsRepository = new InMemoryStudentsRepository();
     const usersRepository = new InMemoryUsersRepository();
     const curriculumsRepository = new InMemoryCurriculumsRepository();
-    const coursesRepository = new InMemoryCoursesRepository();
     const universitiesRepository = new InMemoryUniversitiesRepository();
-
-    const course = makeCourse();
-
-    coursesRepository.create(course);
-
+   
     const university = makeUniversity();
 
     universitiesRepository.create(university);
     const curriculum = makeCurriculum({
-      course: course,
       university: university,
     });
 

@@ -2,6 +2,12 @@ import { Discipline } from '@application/entities/discipline/discipline';
 import { DisciplinesRepository } from '@application/repositories/disciplines-repository';
 
 export class InMemoryDisciplinesRepository implements DisciplinesRepository {
+  createMany(disciplines: Discipline[]): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  findByCodArray(cods: string[]): Promise<Discipline[]> {
+    throw new Error('Method not implemented.');
+  }
   public disciplines: Discipline[] = [];
 
   async findById(disciplineId: string): Promise<Discipline | null> {

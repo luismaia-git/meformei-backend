@@ -28,7 +28,9 @@ export class UpdateStudent {
       { ...studentFinded._props, ...student },
       studentFinded.id,
     );
-
+    
+    console.log(data)
+    
     const studentUpdated = await this.studentsRepository.update(data);
 
     return {
