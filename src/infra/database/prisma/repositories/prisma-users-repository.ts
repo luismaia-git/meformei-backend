@@ -9,6 +9,19 @@ import { PrismaService } from '../prisma.service';
 @Injectable()
 export class PrismaUsersRepository implements UsersRepository {
   constructor(private prisma: PrismaService) {}
+  async findByEmail(email: string): Promise<User<UserProps>> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return PrismaUserMapper.toDomain(user);
+  }
 
   async findById(userId: string): Promise<User<UserProps> | null> {
     const user = await this.prisma.user.findUnique({
@@ -52,7 +65,7 @@ export class PrismaUsersRepository implements UsersRepository {
     });
   }
 
-  async save(user: User<UserProps>): Promise<void> {
+  async update(user: User<UserProps>): Promise<void> {
     const raw = PrismaUserMapper.toPrisma(user);
 
     await this.prisma.user.update({

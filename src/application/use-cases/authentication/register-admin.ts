@@ -3,9 +3,9 @@ import { User } from '@application/entities/user/user';
 import { AdminsRepository } from '@application/repositories/admins-repository';
 import { UsersRepository } from '@application/repositories/users-repository';
 import { Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { UserAlreadyExists } from '../errors/user-already-exists';
 import { EncriptionPassword } from './encription-password';
-
 interface RequestBody {
   name: string;
   lastname: string;
@@ -34,12 +34,10 @@ export class RegisterAccountAdmin {
       throw new UserAlreadyExists();
     }
 
-    const hashedPassword = await this.encriptionPassword.execute({ password });
-
     const user = User.create({
       name,
       email,
-      password: hashedPassword,
+      password,
       city,
       lastname,
       username,
@@ -50,7 +48,7 @@ export class RegisterAccountAdmin {
       {
         name,
         email,
-        password: hashedPassword,
+        password,
         city,
         lastname,
         state: state,
@@ -59,12 +57,22 @@ export class RegisterAccountAdmin {
       user.id,
     );
 
-    await this.usersRepository.create(user);
+    user.salt = await bcrypt.genSalt();
+    user.password = await this.hashPassword(
+      user.password,
+      user.salt,
+    );
+
+    user.recoverToken = null;
+
     await this.adminsRepository.create(admin);
 
     return {
       admin,
       user,
     };
+  }
+  private async hashPassword(password: string, salt: string): Promise<string> {
+    return bcrypt.hash(password, salt);
   }
 }

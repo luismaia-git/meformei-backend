@@ -52,6 +52,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { CreateStudent } from 'src/application/use-cases/student/create-student';
 import { DatabaseModule } from 'src/infra/database/database.module';
+import { AppController } from './controllers/app.controller';
 import { AuthController } from './controllers/auth.controller';
 import { CoursesController } from './controllers/course.controller';
 import { CurriculumController } from './controllers/curriculum.controller';
@@ -70,7 +71,8 @@ import { UniversitiesController } from './controllers/university.controller';
     AuthController,
     UniversitiesController,
     CoursesController,
-    CurriculumController
+    CurriculumController,
+    AppController
   ], //controllers http
   providers: [
     CreateStudent,
