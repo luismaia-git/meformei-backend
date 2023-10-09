@@ -21,7 +21,7 @@ export class UpdateCurriculum {
     request: UpdateCurriculumRequest,
   ): Promise<UpdateCurriculumResponse> {
     const { curriculum, id } = request;
-
+    console.log(id)
     const curriculumFinded = await this.curriculumsRepository.findById(id);
 
     if (!curriculumFinded) throw new CurriculumNotFound();

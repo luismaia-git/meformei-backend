@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsBoolean, IsInt, IsNotEmpty, isInt } from 'class-validator';
 
 export class CreateDisciplineBody {
   @ApiProperty({ example: 'CK0101' })
@@ -8,6 +8,7 @@ export class CreateDisciplineBody {
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsBoolean()
   optional: boolean;
 
   @ApiProperty()
@@ -23,17 +24,19 @@ export class CreateDisciplineBody {
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsInt()
   semester: number;
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsInt()
   hours: number;
 
   @ApiProperty()
   @IsNotEmpty()
   description: string;
 
-  @ApiProperty({ example: ['CK0101', 'CK0201'] })
+  @ApiProperty({ example: ['CK0101', 'CK0201'], isArray: true, type: isInt})
   @IsNotEmpty()
   prerequisites: string[];
 

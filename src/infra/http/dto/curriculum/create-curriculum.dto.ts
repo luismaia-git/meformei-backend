@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty } from 'class-validator';
 
 export class CreateCurriculumBody {
   @ApiProperty()
@@ -12,13 +12,16 @@ export class CreateCurriculumBody {
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsInt()
   requiredHours: number;
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsInt()
   optionalHours: number;
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsInt()
   extraCurricularHours: number;
 }

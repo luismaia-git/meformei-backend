@@ -77,7 +77,7 @@ export class CurriculumController {
       });
 
     return {
-      course: CurriculumViewModel.toHTTP(curriculum),
+      curriculum: CurriculumViewModel.toHTTP(curriculum),
     };
   }
 
@@ -94,7 +94,7 @@ export class CurriculumController {
       });
 
     return {
-      course: CurriculumViewModel.toHTTP(curriculum),
+      curriculum: CurriculumViewModel.toHTTP(curriculum),
     };
   }
 
