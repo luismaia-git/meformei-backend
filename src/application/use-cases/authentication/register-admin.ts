@@ -42,6 +42,8 @@ export class RegisterAccountAdmin {
       lastname,
       username,
       state: state,
+      inative: null,
+      avatar: null,
     });
 
     const admin = Admin.create(
@@ -53,6 +55,8 @@ export class RegisterAccountAdmin {
         lastname,
         state: state,
         username,
+        avatar: null,
+        inative: null,
       },
       user.id,
     );

@@ -33,6 +33,10 @@ export class PrismaAdminMapper {
         state: raw.user.state,
         lastname: raw.user.lastname,
         username: raw.user.username,
+        avatar: null,
+        inative: null,
+        recoverToken: null,
+        salt: null
       },
       new UniqueEntityID(raw.user.id),
     );

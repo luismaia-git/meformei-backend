@@ -53,6 +53,8 @@ export class RegisterAccountStudent {
       lastname,
       username,
       state: state,
+      inative: null,
+      avatar: null,
     });
 
     const student = Student.create(
@@ -70,17 +72,19 @@ export class RegisterAccountStudent {
         state: state,
         university: curriculum.university,
         username,
+        avatar: null,
+        inative: null,
       },
       user.id,
     );
 
-    user.salt = await bcrypt.genSalt();
-    user.password = await this.hashPassword(
-      user.password,
-      user.salt,
+    student.salt = await bcrypt.genSalt();
+    student.password = await this.hashPassword(
+      student.password,
+      student.salt,
     );
 
-    user.recoverToken = null;
+    student.recoverToken = null;
 
     await this.studentsRepository.create(student);
 

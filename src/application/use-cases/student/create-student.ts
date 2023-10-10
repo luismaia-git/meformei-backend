@@ -63,6 +63,8 @@ export class CreateStudent {
       lastname,
       username,
       state,
+      avatar: null,
+      inative: null
     });
 
     const student = Student.create(
@@ -80,6 +82,8 @@ export class CreateStudent {
         state: state,
         university: curriculum.university,
         username,
+        avatar: null,
+        inative:null
       },
       user.id,
     );

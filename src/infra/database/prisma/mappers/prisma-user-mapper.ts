@@ -26,6 +26,8 @@ export class PrismaUserMapper {
         state: raw.state,
         lastname: raw.lastname,
         username: raw.username,
+        avatar: null,
+        inative: null,
       },
       new UniqueEntityID(raw.id),
     );

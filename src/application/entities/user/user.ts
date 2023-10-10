@@ -9,6 +9,10 @@ export interface UserProps {
   password: string;
   state: string;
   city: string;
+  recoverToken?: string;
+  salt?: string;
+  inative: Date
+  avatar: string
 }
 
 export class User<Props extends UserProps> extends Entity<Props> {
@@ -76,4 +80,34 @@ export class User<Props extends UserProps> extends Entity<Props> {
   public get state() {
     return this.props.state;
   }
+
+  public set recoverToken(recoverToken: string) {
+    this.props.recoverToken = recoverToken;
+  }
+
+  public get recoverToken() {
+    return this.props.recoverToken;
+  }
+  public set salt(salt: string) {
+    this.props.salt = salt;
+  }
+
+  public get salt() {
+    return this.props.salt;
+  }
+  public set inative(inative: Date) {
+    this.props.inative = inative;
+  }
+
+  public get inative() {
+    return this.props.inative;
+  }
+  public set avatar(avatar: string) {
+    this.props.avatar = avatar;
+  }
+
+  public get avatar() {
+    return this.props.avatar;
+  }
+
 }

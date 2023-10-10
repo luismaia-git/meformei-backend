@@ -29,6 +29,7 @@ export class PrismaStudentMapper {
         password: student.password,
         city: student.city,
         state: student.state
+        
       }
     };
   }
@@ -59,6 +60,10 @@ export class PrismaStudentMapper {
         currentSemester: raw.currentSemester,
         enrollmentSemester: raw.enrollmentSemester,
         enrollmentYear: raw.enrollmentYear,
+        avatar: null, 
+        inative: null,
+        recoverToken: null,
+        salt: null
       },
       new UniqueEntityID(raw.user.id),
     );

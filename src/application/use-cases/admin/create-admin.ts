@@ -37,6 +37,8 @@ export class CreateAdmin {
       lastname,
       username,
       state,
+      inative: null,
+      avatar: null,
     });
 
     const admin = Admin.create(
@@ -48,6 +50,8 @@ export class CreateAdmin {
         password,
         city,
         state,
+        inative: null,
+        avatar: null,
       },
       user.id,
     );

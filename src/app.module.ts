@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { WinstonModule } from 'nest-winston';
 import { join } from 'path';
+import { AppGateway } from './app.gateway';
 import { DatabaseModule } from './infra/database/database.module';
 import { HttpModule } from './infra/http/http.module';
 @Module({
@@ -43,6 +44,7 @@ import { HttpModule } from './infra/http/http.module';
       provide: APP_INTERCEPTOR,
       useClass: LoggerInterceptor,
     },
+    AppGateway,
   ],
 })
 export class AppModule {}
