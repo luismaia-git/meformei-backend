@@ -5,7 +5,6 @@ import { UsersRepository } from '@application/repositories/users-repository';
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UserAlreadyExists } from '../errors/user-already-exists';
-import { EncriptionPassword } from './encription-password';
 interface RequestBody {
   name: string;
   lastname: string;
@@ -21,7 +20,6 @@ export class RegisterAccountAdmin {
   constructor(
     private adminsRepository: AdminsRepository,
     private usersRepository: UsersRepository,
-    private encriptionPassword: EncriptionPassword,
   ) {}
 
   async execute(request: RequestBody) {
@@ -61,14 +59,14 @@ export class RegisterAccountAdmin {
       user.id,
     );
 
-    user.salt = await bcrypt.genSalt();
-    user.password = await this.hashPassword(
-      user.password,
-      user.salt,
+    admin.salt = await bcrypt.genSalt();
+    admin.password = await this.hashPassword(
+      admin.password,
+      admin.salt,
     );
 
-    user.recoverToken = null;
-
+    admin.recoverToken = null;
+    
     await this.adminsRepository.create(admin);
 
     return {

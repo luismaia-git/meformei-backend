@@ -10,17 +10,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TypeUser {
+  ADMIN
+  STUDENT
+  ANONYMOUS
+}
+
+model AccessLogs {
+  id        String   @id @default(uuid())
+  userId    String?
+  timestamp DateTime
+  type      String
+  ipUser    String?
+  typeUser  TypeUser
+}
+
 model User {
-  id       String    @id @default(uuid())
-  name     String
-  lastname String
-  username String    @unique
-  email    String
-  password String
-  students Student[]
-  admins   Admin[]
-  city     String
-  state    String
+  id           String    @id @default(uuid())
+  name         String
+  lastname     String
+  username     String    @unique
+  email        String
+  password     String
+  students     Student[]
+  admins       Admin[]
+  city         String
+  state        String
+  salt         String?
+  recoverToken String?
+  inative      DateTime?
+  avatar       String?
+  createdAt    DateTime? @default(now())
 }
 
 model Student {

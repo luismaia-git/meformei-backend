@@ -97,12 +97,7 @@ export class PrismaAdminsRepository implements AdminsRepository {
 
     const admin = await this.prisma.admin.findFirst({
       where: {
-        OR: {
-          user: {
-            email,
-            username,
-          },
-        },
+        OR: [{user: {email, username}}]
       },
       include: {
         user: true,

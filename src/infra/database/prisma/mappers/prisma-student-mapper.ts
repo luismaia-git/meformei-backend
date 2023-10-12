@@ -28,8 +28,11 @@ export class PrismaStudentMapper {
         lastname: student.lastname,
         password: student.password,
         city: student.city,
-        state: student.state
-        
+        state: student.state,
+        avatar: student.avatar,
+        inative: student.inative,
+        recoverToken: student.recoverToken,
+        salt: student.salt
       }
     };
   }
@@ -60,10 +63,10 @@ export class PrismaStudentMapper {
         currentSemester: raw.currentSemester,
         enrollmentSemester: raw.enrollmentSemester,
         enrollmentYear: raw.enrollmentYear,
-        avatar: null, 
-        inative: null,
-        recoverToken: null,
-        salt: null
+        avatar: raw.user.avatar, 
+        inative: raw.user.inative,
+        recoverToken: raw.user.recoverToken,
+        salt: raw.user.salt
       },
       new UniqueEntityID(raw.user.id),
     );

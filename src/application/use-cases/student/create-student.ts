@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { Student } from '@application/entities/student/student';
-import { User, UserProps } from '@application/entities/user/user';
+import { User } from '@application/entities/user/user';
 import { CurriculumsRepository } from '@application/repositories/curriculums-repository';
 import { StudentsRepository } from '@application/repositories/students-repository';
 import { UsersRepository } from '@application/repositories/users-repository';
@@ -23,7 +23,7 @@ interface CreateStudentRequest {
 
 interface CreateStudentResponse {
   student: Student;
-  user: User<UserProps>;
+  user: User;
 }
 
 @Injectable()

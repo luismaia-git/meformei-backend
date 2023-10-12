@@ -13,7 +13,11 @@ export class PrismaAdminMapper {
         username: admin.username,
         password: admin.password,
         state: admin.state,
-        city: admin.city
+        city: admin.city,
+        avatar: admin.avatar,
+        inative: admin.inative,
+        recoverToken: admin.recoverToken,
+        salt: admin.salt
       },
       admin:{
         id: admin.adminId.toString(),
@@ -33,10 +37,10 @@ export class PrismaAdminMapper {
         state: raw.user.state,
         lastname: raw.user.lastname,
         username: raw.user.username,
-        avatar: null,
-        inative: null,
-        recoverToken: null,
-        salt: null
+        avatar: raw.user.avatar,
+        inative: raw.user.inative,
+        recoverToken: raw.user.recoverToken,
+        salt: raw.user.salt
       },
       new UniqueEntityID(raw.user.id),
     );

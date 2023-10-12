@@ -46,4 +46,10 @@ export class StudentHttp {
 
   @ApiProperty()
   state: string;
+
+  @ApiProperty()
+  inative: Date | null;
+
+  @ApiProperty()
+  avatar: string | null;
 }

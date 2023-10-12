@@ -1,12 +1,14 @@
+import { ChangePassword } from '@application/use-cases/authentication/change-password';
 import { CheckAdminAccountEmail } from '@application/use-cases/authentication/check-admin-account-email';
 import { CheckAdminAccountUsername } from '@application/use-cases/authentication/check-admin-account-username';
 import { CheckStudentAccountEmail } from '@application/use-cases/authentication/check-student-account-email';
 import { CheckStudentAccountByRegistration } from '@application/use-cases/authentication/check-student-account-registration';
 import { CheckStudentAccountUsername } from '@application/use-cases/authentication/check-student-account-username';
-import { EncriptionPassword } from '@application/use-cases/authentication/encription-password';
+import { ForgotPassword } from '@application/use-cases/authentication/forgot-password';
 import { Login } from '@application/use-cases/authentication/login';
 import { RegisterAccountAdmin } from '@application/use-cases/authentication/register-admin';
 import { RegisterAccountStudent } from '@application/use-cases/authentication/register-student';
+import { ResetPassword } from '@application/use-cases/authentication/reset-password';
 import { ValidToken } from '@application/use-cases/authentication/valid-token';
 import { AssociateDisciplineInStudentSemester } from '@application/use-cases/course-history/associate-discipline-in-student-semester';
 import { DisassociateDisciplineInStudentSemester } from '@application/use-cases/course-history/disassociate-discipline-in-student-semester';
@@ -83,7 +85,6 @@ import { UniversitiesController } from './controllers/university.controller';
     Login,
     RegisterAccountAdmin,
     RegisterAccountStudent,
-    EncriptionPassword,
     CreateCourse,
     ListCourses,
     FindCourse,
@@ -124,7 +125,10 @@ import { UniversitiesController } from './controllers/university.controller';
     UpdateCurriculum,
     UpdateDiscipline,
     DeleteCurriculum,
-    DeleteDiscipline
+    DeleteDiscipline,
+    ChangePassword,
+    ForgotPassword,
+    ResetPassword
   ], // casos de uso
 })
 export class HttpModule {}

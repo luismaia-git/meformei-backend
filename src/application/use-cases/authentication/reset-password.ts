@@ -1,32 +1,29 @@
 import { UsersRepository } from "@application/repositories/users-repository";
-import { MailerService } from "@nestjs-modules/mailer";
+import { ConflictException, NotAcceptableException, UnprocessableEntityException } from "@nestjs/common";
+import { ChangePassword } from "./change-password";
 interface Request {
-  userId: string
+  recoverToken: string
   password: string
+  passwordConfirmation: string
 }
 export class ResetPassword {
-  constructor(private readonly mailerService: MailerService,
-    private readonly usersRepository: UsersRepository){}
-  // async execute({password, userId}: Request){
-  //   const user = await this.usersRepository.findById(userId)
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly changePassword : ChangePassword
+    ){}
 
-  //   if(!user){
-  //     throw new NotFoundException('Não há usuário cadastrado com esse id.');
-  //   }
+    async execute({password, passwordConfirmation, recoverToken}: Request){
 
-  //   user.recoverToken = randomBytes(32).toString('hex');
+      if (password != passwordConfirmation) throw new UnprocessableEntityException('As senhas não conferem');
 
-  //   await this.usersRepository.update(user)
-    
-  //   await this.mailerService.sendMail({
-  //     to: email,
-  //     subject: "Redefinição de senha",
-  //     template: '/password-recover',
-  //     text: "Este é um teste de envio de email usando Node",
-  //     context: {
-  //         name: user.name 
-  //     }
-  // })
-    
-  // }
-}
+      const user = await this.usersRepository.findByRecoverToken(recoverToken)
+
+      if (!user) throw new NotAcceptableException('Token inválido.');
+
+      try {
+        await this.changePassword.execute({userId: user.id.toString(), newPassword: password});
+      } catch (error) {
+        throw new ConflictException("Nao foi possivel alterar a senha");
+      }
+    }
+  }

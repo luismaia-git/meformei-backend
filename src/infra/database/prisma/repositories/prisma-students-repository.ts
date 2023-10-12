@@ -121,12 +121,7 @@ export class PrismaStudentsRepository implements StudentsRepository {
     const { email, username } = request;
     const student = await this.prisma.student.findFirst({
       where: {
-        OR: {
-          user: {
-            email,
-            username,
-          },
-        },
+        OR: [{user: {email, username}}]
       },
       include: {
         user: true,

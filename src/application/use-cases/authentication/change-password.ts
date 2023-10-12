@@ -32,9 +32,11 @@ export class ChangePassword {
       to: user.email,
       subject: "Senha Alterada",
       template: '/changed-password',
-      text: "Este é um teste de envio de email usando Node",
+      text: "Sua senha foi alterada",
       context: {
-          name: user.name 
+          name: user.name,
+          urlFront: `${process.env.FRONT_WEB_URL}`,
+          email: user.email
       }
   })
     

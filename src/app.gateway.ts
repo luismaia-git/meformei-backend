@@ -1,5 +1,6 @@
 
-import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { UsersRepository } from '@application/repositories/users-repository';
+import { MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
@@ -8,33 +9,78 @@ import { Server, Socket } from 'socket.io';
   },
 })
 export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  @WebSocketServer() server: Server;
-  private userConnections = new Map<string, string>();
+  constructor(private userRepository: UsersRepository){}
+ 
+  @WebSocketServer()
+  server: Server;
+  private studentConnections = new Map<string, Socket>();
+  private adminConnections = new Map<string, Socket>();
 
-  handleConnection(client: Socket) {
-    // const userId = getUserIdFromSocket(client); // Implemente esta função para obter o ID do usuário
-    // this.userConnections.set(userId, client.id);
+  async handleConnection(client: Socket, ...args: any[]) {
+    const isAdmin = client.handshake.auth.isAdmin
+    const userId = client.handshake.auth.userId
 
-    // Atualize a contagem de usuários únicos
-    // this.updateConnectedUsersCount();
+    if(isAdmin) {
+      this.adminConnections.set(userId, client);
+    }else{
+      this.studentConnections.set(userId, client);
+    }
+
+    if(!userId) return client.disconnect(true)
+    const user = await this.userRepository.findById(userId)
+   
+    this.updateConnectedUsersCount();
+  }
+  
+  handleDisconnect(client: any) {
+    
+    const {key, isAdmin} = this.getUserIdFromSocket(client);
+    if(isAdmin){
+      this.adminConnections.delete(key);
+    }else{
+      this.studentConnections.delete(key);
+    }
+    this.updateConnectedUsersCount();
   }
 
-  handleDisconnect(client: Socket) {
-    // const userId = getUserIdFromSocket(client);
-    // this.userConnections.delete(userId);
+  @SubscribeMessage('newMessage')
+  onNewMessage(@MessageBody() body: any) {
+    this.server.emit('onMessage', {
+      msg: 'New Message',
+      content: body,
+    });
+  }
 
-    // Atualize a contagem de usuários únicos
-    // this.updateConnectedUsersCount();
+
+
+  private getUserIdFromSocket(client: Socket){
+    for (const [key, val] of this.adminConnections.entries()) {
+      if (val === client) {
+        return {
+          key,
+          isAdmin: true
+        }
+      }
+    }
+
+    for (const [key, val] of this.studentConnections.entries()) {
+      if (val === client) {
+        return {
+          key,
+          isAdmin: false
+        }
+      }
+    }
+
+    // Se o valor não for encontrado, você pode retornar null ou outra indicação de que não encontrou a chave.
+    return null;// Retorna null se não encontrar
   }
 
   private updateConnectedUsersCount() {
-    const uniqueUserCount = new Set(this.userConnections.keys()).size;
-    // this.server.emit('connectedUsers', uniqueUserCount);
-  }
+    
+    const adminConectionsCount = this.adminConnections.size;
+    const studentsConectionsCount = this.studentConnections.size;
 
-  @SubscribeMessage('message')
-  handleMessage(@MessageBody() data: string, @ConnectedSocket() client: Socket) {
-    // Handle received message
-    this.server.emit('message', data); // Broadcast the message to all connected clients
+    this.server.emit('connectedUsers', {admins: adminConectionsCount, students: studentsConectionsCount});
   }
 }

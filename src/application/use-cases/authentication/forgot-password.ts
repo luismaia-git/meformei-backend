@@ -25,7 +25,10 @@ export class ForgotPassword {
       template: '/password-recover',
       text: "Este é um teste de envio de email usando Node",
       context: {
-          name: user.name 
+          name: user.name,
+          urlFront: `${process.env.FRONT_WEB_URL}`,
+          email: user.email,
+          recoverToken: user.recoverToken
       }
   })
     

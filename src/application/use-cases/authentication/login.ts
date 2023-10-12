@@ -58,7 +58,7 @@ export class Login {
     }
 
     const admin = await this.adminsRepository.findByUserId(user.id.toString());
-
+ 
     if (admin) {
       const passwordMatch = await bcrypt.compare(password, user.password);
 

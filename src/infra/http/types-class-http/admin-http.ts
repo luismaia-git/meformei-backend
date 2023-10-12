@@ -24,4 +24,10 @@ export class AdminHttp {
 
   @ApiProperty()
   state: string;
+
+  @ApiProperty()
+  inative: Date | null;
+
+  @ApiProperty()
+  avatar: string | null;
 }
