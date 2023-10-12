@@ -1,33 +1,59 @@
-import { User, UserProps } from '@application/entities/user/user';
+import { User } from '@application/entities/user/user';
 import { UniqueEntityID } from '@core/entities/unique-entity-id';
 import { User as RawUserPrisma } from '@prisma/client';
 
 export class PrismaUserMapper {
-  static toPrisma(user: User<UserProps>) {
+  static toPrisma(user: User) {
+    const {id, name, lastname, email, password, username, avatar, city, state,inative, recoverToken, salt, createdAt } = user
     return {
-      id: user.id.toString(),
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      lastname: user.lastname,
-      username: user.username,
-      city: user.city,
-      state: user.state,
+      id: id.toString(),
+      name,
+      lastname,
+      username,
+      email,
+      password,
+      state,
+      city,
+      recoverToken,
+      salt,
+      inative,
+      avatar,
+      createdAt,
     };
   }
 
-  static toDomain(raw: RawUser): User<UserProps> {
+  static toDomain(raw: RawUser): User {
+    const {
+      id,
+      name,
+      lastname,
+      username,
+      email,
+      password,
+      state,
+      city,
+      recoverToken,
+      salt,
+      inative,
+      avatar,
+      createdAt
+    } = raw
     return User.create(
       {
-        email: raw.email,
-        name: raw.name,
-        password: raw.password,
-        city: raw.city,
-        state: raw.state,
-        lastname: raw.lastname,
-        username: raw.username,
+        name,
+        lastname,
+        username,
+        email,
+        password,
+        state,
+        city,
+        recoverToken,
+        salt,
+        inative,
+        avatar,
+        createdAt
       },
-      new UniqueEntityID(raw.id),
+      new UniqueEntityID(id),
     );
   }
 }

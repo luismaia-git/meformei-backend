@@ -1,8 +1,10 @@
+import { ChangePassword } from '@application/use-cases/authentication/change-password';
 import { CheckAdminAccountEmail } from '@application/use-cases/authentication/check-admin-account-email';
 import { CheckAdminAccountUsername } from '@application/use-cases/authentication/check-admin-account-username';
 import { CheckStudentAccountEmail } from '@application/use-cases/authentication/check-student-account-email';
 import { CheckStudentAccountByRegistration } from '@application/use-cases/authentication/check-student-account-registration';
 import { CheckStudentAccountUsername } from '@application/use-cases/authentication/check-student-account-username';
+import { ForgotPassword } from '@application/use-cases/authentication/forgot-password';
 import { Login } from '@application/use-cases/authentication/login';
 import { RegisterAccountAdmin } from '@application/use-cases/authentication/register-admin';
 import { RegisterAccountStudent } from '@application/use-cases/authentication/register-student';
@@ -11,23 +13,30 @@ import { ROLES } from '@config/constants';
 import {
   BadRequestException,
   Body,
+  ClassSerializerInterceptor,
   Controller,
   ForbiddenException,
   Get,
   Param,
+  Patch,
   Post,
   Request,
+  UnauthorizedException,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request as RequestE } from 'express';
 import { AuthGuard } from '../auth/auth-guard';
 import { GetUser } from '../auth/get-user.decorator';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
+import { ChangePasswordDto } from '../dto/auth/change-password.dto';
 import { LoginBody } from '../dto/auth/login.dto';
+import { RecoverPasswordDto } from '../dto/auth/recoverPassword.dto';
 import { RegisterAccountAdminBody } from '../dto/auth/register-account-admin.dto';
 import { RegisterAccountStudentBody } from '../dto/auth/register-account-student.dto';
+import { ResponseWithMessage } from '../dto/response-message';
 import { AdminHttp } from '../types-class-http/admin-http';
 import { StudentHttp } from '../types-class-http/student-http';
 import { AdminViewModel } from '../view-models/admin-view-model';
@@ -60,6 +69,7 @@ export class ResponseLoginAdmin {
 }
 
 @Controller('auth')
+@UseInterceptors(ClassSerializerInterceptor)
 @ApiTags('Autenticação')
 export class AuthController {
   constructor(
@@ -72,7 +82,9 @@ export class AuthController {
     private checkStudentAccountEmail: CheckStudentAccountEmail,
     private checkStudentAccountUsername: CheckStudentAccountUsername,
     private checkStudentByRegistration: CheckStudentAccountByRegistration,
-  ) {}
+    private forgotPassword: ForgotPassword,
+    private changePassword: ChangePassword
+    ) {}
 
   @Post('signin')
   @ApiResponse({ type: ResponseLoginStudent || ResponseLoginAdmin })
@@ -259,5 +271,49 @@ export class AuthController {
   @Roles(ROLES.ADMIN, ROLES.STUDENT)
   async getMe(@GetUser() user: any) {
     return user;
+  }
+
+  @ApiOkResponse({
+    description: 'Enviar email de recuperação de senha',
+    type: ResponseWithMessage,
+  })
+  @Post('/send-recover-email')
+  async sendRecoverPasswordEmail(
+    @Body() recoverPasswordDto: RecoverPasswordDto,
+  ): Promise<ResponseWithMessage> {
+
+    await this.forgotPassword.execute(recoverPasswordDto)
+    
+    return {
+      message: 'Foi enviado um email com instruções para resetar sua senha',
+    };
+  }
+
+  @ApiOkResponse({
+    description: 'Alterar a senha',
+    type: ResponseWithMessage,
+  })
+
+  @Patch(':id/change-password')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(ROLES.ADMIN, ROLES.STUDENT)
+  async changeUserPassword(
+    @Param('id') userId: string,
+    @Body() changePasswordDto: ChangePasswordDto,
+    @GetUser() user: any,
+  ): Promise<ResponseWithMessage> {
+
+    if (
+      user.id !== userId
+    )
+      throw new UnauthorizedException(
+        'Você não tem permissão para realizar esta operação',
+      );
+
+    await this.changePassword.execute({ userId, newPassword: changePasswordDto.password });
+    
+    return {
+      message: 'Senha alterada',
+    };
   }
 }

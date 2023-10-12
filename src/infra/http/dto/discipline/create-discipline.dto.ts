@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsInt, IsNotEmpty, isInt } from 'class-validator';
+import { IsBoolean, IsInt, IsNotEmpty, IsOptional, isInt } from 'class-validator';
 
 export class CreateDisciplineBody {
   @ApiProperty({ example: 'CK0101' })
@@ -37,7 +37,6 @@ export class CreateDisciplineBody {
   description: string;
 
   @ApiProperty({ example: ['CK0101', 'CK0201'], isArray: true, type: isInt})
-  @IsNotEmpty()
   prerequisites: string[];
 
   @ApiProperty({
@@ -46,7 +45,9 @@ export class CreateDisciplineBody {
       'PRESSMAN, Roger S. Engenharia de software: uma abordagem profissional. 7. ed. Porto Alegre: McGraw Hill, 2011. 771 p. ISBN: 9788563308337',
       'PÁDUA FILHO, W. Engenharia de Software: Fundamentos, Métodos e Padrões. 3. ed. Rio de Janeiro: LTC, 2009. 1248 p. ISBN 9788521616504.',
     ],
+    isArray: true
   })
+  @IsOptional()
   @IsNotEmpty()
   bibliography: string[];
 }

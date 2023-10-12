@@ -19,12 +19,24 @@
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
     "paths": {
-      "@application/*": ["./src/application/*"],
-      "@helpers/*": ["./src/helpers/*"],
-      "@infra/*": ["./src/infra/*"],
-      "@test/*": ["./test/*"],
-      "@core/*": ["./src/core/*"],
-      "@config/*": ["./src/config/*"]
+      "@application/*": [
+        "./src/application/*"
+      ],
+      "@helpers/*": [
+        "./src/helpers/*"
+      ],
+      "@infra/*": [
+        "./src/infra/*"
+      ],
+      "@test/*": [
+        "./test/*"
+      ],
+      "@core/*": [
+        "./src/core/*"
+      ],
+      "@config/*": [
+        "./src/config/*"
+      ]
     }
   }
 }

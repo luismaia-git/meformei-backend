@@ -21,6 +21,9 @@ export class StudentViewModel {
       studentId,
       university,
       username,
+      inative,
+      avatar,
+      createdAt
     } = student;
 
     return {
@@ -31,6 +34,8 @@ export class StudentViewModel {
       username,
       email,
       registration,
+      inative,
+      avatar,
       curriculumId,
       city,
       state,
@@ -39,6 +44,7 @@ export class StudentViewModel {
       enrollmentYear,
       courseName,
       university: UniversityViewModel.toHTTP(university),
+      createdAt
     };
   }
 }

@@ -3,12 +3,11 @@ import { User } from '@application/entities/user/user';
 import { CurriculumsRepository } from '@application/repositories/curriculums-repository';
 import { StudentsRepository } from '@application/repositories/students-repository';
 import { UsersRepository } from '@application/repositories/users-repository';
-import { CurriculumNotFound } from '../errors/curriculum-not-found';
-import { UserAlreadyExists } from '../errors/user-already-exists';
-
 import { CreateStudentBody } from '@infra/http/dto/student/create-student.dto';
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { CurriculumNotFound } from '../errors/curriculum-not-found';
+import { UserAlreadyExists } from '../errors/user-already-exists';
 
 @Injectable()
 export class RegisterAccountStudent {
@@ -46,16 +45,16 @@ export class RegisterAccountStudent {
       throw new CurriculumNotFound();
     }
 
-    const hashedPassword = await bcrypt.hash(password, 8);
-
     const user = User.create({
       name,
       email,
-      password: hashedPassword,
+      password,
       city,
       lastname,
       username,
       state: state,
+      inative: null,
+      avatar: null,
     });
 
     const student = Student.create(
@@ -64,7 +63,7 @@ export class RegisterAccountStudent {
         registration,
         name,
         email,
-        password: hashedPassword,
+        password,
         city,
         courseName: curriculum.courseName,
         enrollmentSemester,
@@ -73,16 +72,28 @@ export class RegisterAccountStudent {
         state: state,
         university: curriculum.university,
         username,
+        avatar: null,
+        inative: null,
       },
       user.id,
     );
 
-    await this.usersRepository.create(user);
+    student.salt = await bcrypt.genSalt();
+    student.password = await this.hashPassword(
+      student.password,
+      student.salt,
+    );
+
+    student.recoverToken = null;
+
     await this.studentsRepository.create(student);
 
     return {
       student,
       user,
     };
+  }
+  private async hashPassword(password: string, salt: string): Promise<string> {
+    return bcrypt.hash(password, salt);
   }
 }

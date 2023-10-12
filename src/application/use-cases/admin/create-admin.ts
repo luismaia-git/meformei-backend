@@ -1,5 +1,5 @@
 import { Admin } from '@application/entities/admin/admin';
-import { User, UserProps } from '@application/entities/user/user';
+import { User } from '@application/entities/user/user';
 import { AdminsRepository } from '@application/repositories/admins-repository';
 import { UsersRepository } from '@application/repositories/users-repository';
 import { Injectable } from '@nestjs/common';
@@ -16,7 +16,7 @@ interface CreateAdminRequest {
 
 interface CreateAdminResponse {
   admin: Admin;
-  user: User<UserProps>;
+  user: User;
 }
 
 @Injectable()
@@ -37,6 +37,8 @@ export class CreateAdmin {
       lastname,
       username,
       state,
+      inative: null,
+      avatar: null,
     });
 
     const admin = Admin.create(
@@ -48,6 +50,8 @@ export class CreateAdmin {
         password,
         city,
         state,
+        inative: null,
+        avatar: null,
       },
       user.id,
     );

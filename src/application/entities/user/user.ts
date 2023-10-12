@@ -1,5 +1,6 @@
 import { Entity } from '@core/entities/entity';
 import { UniqueEntityID } from '@core/entities/unique-entity-id';
+import { Optional } from '@core/types/optional';
 
 export interface UserProps {
   name: string;
@@ -9,11 +10,16 @@ export interface UserProps {
   password: string;
   state: string;
   city: string;
+  recoverToken?: string;
+  salt?: string;
+  inative: Date
+  avatar: string
+  createdAt?: Date
 }
 
-export class User<Props extends UserProps> extends Entity<Props> {
-  static create(props: UserProps, id?: UniqueEntityID) {
-    const user = new User(props, id);
+export class User extends Entity<UserProps> {
+  static create(props: Optional<UserProps, 'createdAt'>, id?: UniqueEntityID) {
+    const user = new User({...props, createdAt: props.createdAt ?? new Date()}, id);
     return user;
   }
 
@@ -76,4 +82,38 @@ export class User<Props extends UserProps> extends Entity<Props> {
   public get state() {
     return this.props.state;
   }
+
+  public set recoverToken(recoverToken: string) {
+    this.props.recoverToken = recoverToken;
+  }
+
+  public get recoverToken() {
+    return this.props.recoverToken;
+  }
+  public set salt(salt: string) {
+    this.props.salt = salt;
+  }
+
+  public get salt() {
+    return this.props.salt;
+  }
+  public set inative(inative: Date) {
+    this.props.inative = inative;
+  }
+
+  public get inative() {
+    return this.props.inative;
+  }
+  public set avatar(avatar: string) {
+    this.props.avatar = avatar;
+  }
+
+  public get avatar() {
+    return this.props.avatar;
+  }
+
+  public get createdAt(): Date {
+    return this.props.createdAt;
+  }
+
 }

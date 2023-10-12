@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import { IsDateString, IsEmail, IsEnum, IsNotEmpty } from 'class-validator';
 
 export enum EnrollmentSemester {
@@ -26,6 +27,7 @@ export class CreateStudentBody {
 
   @ApiProperty()
   @IsNotEmpty()
+  @Exclude()
   password: string;
 
   @ApiProperty({ description: 'Matricula do aluno', example: '493450' })

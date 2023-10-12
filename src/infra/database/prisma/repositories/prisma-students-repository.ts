@@ -50,12 +50,24 @@ export class PrismaStudentsRepository implements StudentsRepository {
   //   return count;
   // }
 
-  async create(student: Student): Promise<void> {
-    const {student: rawStudent} = PrismaStudentMapper.toPrisma(student);
-
-    await this.prisma.student.create({
-      data: rawStudent,
+  async create(student: Student): Promise<Student> {
+    const {student: rawStudent, user: rawUser} = PrismaStudentMapper.toPrisma(student);
+    const { id, registration, enrollmentYear, enrollmentSemester, curriculumId, currentSemester} = rawStudent
+    const studentCreated = await this.prisma.student.create({
+      data: {
+        id, registration, enrollmentYear, enrollmentSemester, currentSemester,
+        user:{ create : rawUser}, 
+        curriculum: { connect: { id: curriculumId }}},
+        include: {
+          user: true,
+          curriculum: {
+            include:{
+              university: true
+            }
+          }
+        }
     });
+    return PrismaStudentMapper.toDomain(studentCreated)
   }    
 
   async update(student: Student): Promise<Student> {
@@ -109,12 +121,7 @@ export class PrismaStudentsRepository implements StudentsRepository {
     const { email, username } = request;
     const student = await this.prisma.student.findFirst({
       where: {
-        OR: {
-          user: {
-            email,
-            username,
-          },
-        },
+        OR: [{user: {email, username}}]
       },
       include: {
         user: true,

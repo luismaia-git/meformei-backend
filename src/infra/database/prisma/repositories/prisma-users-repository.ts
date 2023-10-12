@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { User, UserProps } from 'src/application/entities/user/user';
+import { User } from 'src/application/entities/user/user';
 import { UsersRepository } from 'src/application/repositories/users-repository';
 
 import { PrismaUserMapper } from '../mappers/prisma-user-mapper';
@@ -9,8 +9,22 @@ import { PrismaService } from '../prisma.service';
 @Injectable()
 export class PrismaUsersRepository implements UsersRepository {
   constructor(private prisma: PrismaService) {}
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        email,
+      },
+    });
 
-  async findById(userId: string): Promise<User<UserProps> | null> {
+    if (!user) {
+      return null;
+    }
+
+    return PrismaUserMapper.toDomain(user);
+  }
+
+  async findById(userId: string): Promise<User | null> {
+    
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
@@ -24,27 +38,7 @@ export class PrismaUsersRepository implements UsersRepository {
     return PrismaUserMapper.toDomain(user);
   }
 
-  // async findManyByAnyId(anyId: string): Promise<User[]> {
-  //   const students = await this.prisma.student.findMany({
-  //     where: {
-  //       anyId,
-  //     },
-  //   });
-
-  //   return students.map(PrismaAdminMapper.toDomain);
-  // }
-
-  // async countManyByAnyId(anyId: string): Promise<number> {
-  //   const count = await this.prisma.student.count({
-  //     where: {
-  //       anyId,
-  //     },
-  //   });
-
-  //   return count;
-  // }
-
-  async create(user: User<UserProps>): Promise<void> {
+  async create(user: User): Promise<void> {
     const raw = PrismaUserMapper.toPrisma(user);
 
     await this.prisma.user.create({
@@ -52,7 +46,7 @@ export class PrismaUsersRepository implements UsersRepository {
     });
   }
 
-  async save(user: User<UserProps>): Promise<void> {
+  async update(user: User): Promise<void> {
     const raw = PrismaUserMapper.toPrisma(user);
 
     await this.prisma.user.update({
@@ -63,7 +57,7 @@ export class PrismaUsersRepository implements UsersRepository {
     });
   }
 
-  async list(): Promise<User<UserProps>[] | []> {
+  async list(): Promise<User[] | []> {
     const users = await this.prisma.user.findMany();
 
     return users.map(PrismaUserMapper.toDomain);
@@ -77,9 +71,20 @@ export class PrismaUsersRepository implements UsersRepository {
     });
   }
 
-  async findByUsername(username: string): Promise<User<UserProps> | null> {
+  async findByUsername(username: string): Promise<User | null> {
     const user = await this.prisma.user.findFirst({
       where: { username },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return PrismaUserMapper.toDomain(user);
+  }
+  async findByRecoverToken(recoverToken: string): Promise<User | null> {
+    const user = await this.prisma.user.findFirst({
+      where: { recoverToken },
     });
 
     if (!user) {
