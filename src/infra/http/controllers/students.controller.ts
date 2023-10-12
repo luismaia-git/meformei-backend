@@ -78,7 +78,6 @@ export class ExtraCurricularActivityResponse extends ResponseWithMessage {
 @Controller('students')
 @ApiTags('Estudantes')
 @UseGuards(AuthGuard, RolesGuard)
-@Roles(ROLES.ADMIN)
 export class StudentsController {
   constructor(
     private createStudent: CreateStudent,
@@ -99,6 +98,7 @@ export class StudentsController {
   ) {}
 
   @Get()
+  @Roles(ROLES.ADMIN)
   @ApiResponse({ type: StudentResponse, isArray: true })
   async listAllStudents() {
     const { students } = await this.listStudents.execute();
@@ -120,6 +120,7 @@ export class StudentsController {
   }
 
   @Post()
+  @Roles(ROLES.ADMIN)
   @ApiResponse({ type: StudentResponseWithMessage })
   async postStudent(@Body() createStudentBody: CreateStudentBody) {
     const { student } = await this.createStudent.execute(createStudentBody);
@@ -132,6 +133,7 @@ export class StudentsController {
   }
 
   @Patch(':id')
+  @Roles(ROLES.STUDENT)
   @ApiResponse({ type: StudentResponse && ResponseWithMessage })
   async patchStudent(
     @Body() updateStudentBody: UpdateStudentBody,
