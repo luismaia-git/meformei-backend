@@ -1,9 +1,16 @@
 import { Entity } from '@core/entities/entity';
+import { IsEnum } from 'class-validator';
 import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
 import { Discipline } from '../discipline/discipline';
 
 export type StatusType = 'DONE' | 'INPROGRESS' | 'FAILED' | 'WITHDRAWAL';
-
+enum StatusTypeEnum {
+  'DONE' , 'INPROGRESS' , 'FAILED' , 'WITHDRAWAL'
+}
+export abstract class StatusTypeClass {
+  @IsEnum(StatusTypeEnum)
+  status: string
+}
 export interface CourseHistoryProps {
   studentRegistration: string;
   discipline: Discipline;

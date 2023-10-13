@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common';
 
 import { CourseHistory } from '@application/entities/course-history/course-history';
 import { CourseHistoriesRepository } from '@application/repositories/course-histories-repository';
+import { UpdateDisciplineInStudentSemester } from '@infra/http/dto/course-history/update-discipline-in-student-semester.dto';
 import { CourseHistoryNotFound } from '../errors/course-history-not-found';
 
 interface UpdateCourseHistoryRequest {
   id: string;
-  courseHistory: CourseHistory;
+  courseHistory: UpdateDisciplineInStudentSemester;
 }
 interface UpdateCourseHistoryResponse {
   courseHistory: CourseHistory;

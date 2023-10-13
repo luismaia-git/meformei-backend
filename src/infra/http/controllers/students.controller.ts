@@ -1,6 +1,6 @@
 import {
   CourseHistory,
-  StatusType,
+  StatusTypeClass
 } from '@application/entities/course-history/course-history';
 import { AssociateDisciplineInStudentSemester } from '@application/use-cases/course-history/associate-discipline-in-student-semester';
 import { DisassociateDisciplineInStudentSemester } from '@application/use-cases/course-history/disassociate-discipline-in-student-semester';
@@ -9,6 +9,7 @@ import { FindCourseHistoryByStudentRegistrationBySemesterByDisciplineId } from '
 import { FindDisciplinesHistoryByStudentRegistration } from '@application/use-cases/course-history/find-disciplines-history-by-student-registration';
 import { FindDisciplinesHistoryByStudentRegistrationBySemester } from '@application/use-cases/course-history/find-disciplines-history-by-student-registration-semester';
 import { ListDisciplinesHistoryTodo } from '@application/use-cases/course-history/list-disciplines-history-to-do';
+import { UpdateCourseHistory } from '@application/use-cases/course-history/update-course-history';
 import { CreateExtraCurricularActivity } from '@application/use-cases/extracurricular-activities/create-extracurricular-activity';
 import { DeleteExtraCurricular } from '@application/use-cases/extracurricular-activities/delete-extracurricular-activity';
 import { FindExtraCurricularActivityByStudent } from '@application/use-cases/extracurricular-activities/find-extracurricular-activity-by-student';
@@ -35,6 +36,7 @@ import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { AssociateDisciplineInStudentSemesterBody } from '../dto/course-history/associate-discipline-in-student-semester.dto';
 import { FindDisciplinesTodoBody } from '../dto/course-history/findDisciplinesTodo.dto';
+import { UpdateDisciplineInStudentSemester } from '../dto/course-history/update-discipline-in-student-semester.dto';
 import { CreateExtraCurricularActivityBody } from '../dto/extra-curricular-activity/create-extra-curricular-activity.dto';
 import { ResponseWithMessage } from '../dto/response-message';
 import { CreateStudentBody } from '../dto/student/create-student.dto';
@@ -72,7 +74,7 @@ export class CourseHistoryToFrontResponse {
 
 export class ExtraCurricularActivityResponse extends ResponseWithMessage {
   @ApiProperty({ isArray: true, type: ExtraCurricularActivityHttp })
-  disciplineHistory: ExtraCurricularActivityHttp[];
+  extraCurricularActivities: ExtraCurricularActivityHttp[];
 }
 
 @Controller('students')
@@ -95,11 +97,12 @@ export class StudentsController {
     private deleteExtraCurricular: DeleteExtraCurricular,
     private findExtraCurricularActivityByStudent: FindExtraCurricularActivityByStudent,
     private listDisciplinesHistoryTodo: ListDisciplinesHistoryTodo,
+    private updateCourseHistory : UpdateCourseHistory
   ) {}
 
   @Get()
   @Roles(ROLES.ADMIN)
-  @ApiResponse({ type: StudentResponse, isArray: true })
+  @ApiResponse({ type: StudentResponse, isArray: true, description: "Lista os estudantes cadastrados no sistema" })
   async listAllStudents() {
     const { students } = await this.listStudents.execute();
 
@@ -109,7 +112,7 @@ export class StudentsController {
   }
 
   @Get(':id')
-  @ApiResponse({ type: StudentResponseWithMessage })
+  @ApiResponse({ type: StudentResponseWithMessage, description: "Procura por um estudante" })
   async getStudent(@Param('id') id: string) {
     const { student } = await this.findStudent.execute({ studentId: id });
 
@@ -121,7 +124,7 @@ export class StudentsController {
 
   @Post()
   @Roles(ROLES.ADMIN)
-  @ApiResponse({ type: StudentResponseWithMessage })
+  @ApiResponse({ type: StudentResponseWithMessage, description: "Cria um estudante (ADMIN)" })
   async postStudent(@Body() createStudentBody: CreateStudentBody) {
     const { student } = await this.createStudent.execute(createStudentBody);
 
@@ -134,7 +137,7 @@ export class StudentsController {
 
   @Patch(':id')
   @Roles(ROLES.STUDENT)
-  @ApiResponse({ type: StudentResponse && ResponseWithMessage })
+  @ApiResponse({ type: StudentResponse && ResponseWithMessage, description: "Atualiza dados do Estudante" })
   async patchStudent(
     @Body() updateStudentBody: UpdateStudentBody,
     @Param('id') id: string,
@@ -155,7 +158,7 @@ export class StudentsController {
 
   @Post(':studentRegistration/semester/:semester')
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
-  @ApiResponse({ type: CourseHistoryToFrontResponse })
+  @ApiResponse({type: CourseHistoryToFrontResponse,  description: "Associa disciplina(s) no historico do estudante"})
   async addDisciplineInSemester(
     @Body() request: AssociateDisciplineInStudentSemesterBody,
     @Param('studentRegistration') studentRegistration: string,
@@ -181,6 +184,7 @@ export class StudentsController {
   }
 
   @Delete(':studentRegistration/semester/:semester/disciplines/:disciplineId')
+  @ApiResponse({type: ToFront, isArray: true , description: "Dessasocia disciplina no historico do estudante"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async disassociateDisciplineInSemester(
     @Param('studentRegistration') studentRegistration: string,
@@ -203,6 +207,7 @@ export class StudentsController {
   }
 
   @Get(':studentRegistration/semester/:semester/disciplines')
+  @ApiResponse({type: ToFront, isArray: true , description: "Procura por disciplinas no historico do estudante pelo semestre"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async findDisciplinesBySemester(
     @Param('studentRegistration') studentRegistration: string,
@@ -221,6 +226,7 @@ export class StudentsController {
 
   @Get(':studentRegistration/disciplines')
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
+  @ApiResponse({type: ToFront, isArray:true,  description: "Procura por disciplina(s) no historico do estudante pelo Id do estudante"})
   async findDisciplinesByStudent(
     @Param('studentRegistration') studentRegistration: string,
   ) {
@@ -234,7 +240,8 @@ export class StudentsController {
     };
   }
 
-  @Post(':studentRegistration/disciplines/todo')
+  @Get(':studentRegistration/disciplines/todo')
+  @ApiResponse({type: ToFront, isArray: true , description: "Procura por disciplinas no historico do estudante que ele ainda precisa fazer."})
   async findDisciplinesTodoByStudent(
     @Param('studentRegistration') studentRegistration: string,
     @Body() body: FindDisciplinesTodoBody,
@@ -250,16 +257,17 @@ export class StudentsController {
   }
 
   @Get(':studentRegistration/disciplines/status/:status')
+  @ApiResponse({type: ToFront, isArray: true , description: "Procura por disciplinas no historico do estudante pelo status"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async findDisciplinesByStatusAndStudent(
     @Param('studentRegistration') studentRegistration: string,
-    @Param('status') status: StatusType,
+    @Param() statusType: StatusTypeClass,
   ) {
     if (
-      status !== 'DONE' &&
-      status !== 'INPROGRESS' &&
-      status !== 'FAILED' &&
-      status !== 'WITHDRAWAL'
+      statusType.status !== 'DONE' &&
+      statusType.status !== 'INPROGRESS' &&
+      statusType.status !== 'FAILED' &&
+      statusType.status !== 'WITHDRAWAL'
     ) {
       throw new ForbiddenException(
         "Status must be 'DONE' or 'INPROGRESS ' or 'WITHDRAWAL or FAILED'",
@@ -268,7 +276,7 @@ export class StudentsController {
     const { courseHistory } =
       await this.findCourseHistoryByStatusAndStudentRegistration.execute({
         studentRegistration,
-        status,
+        status: statusType.status,
       });
 
     return {
@@ -276,11 +284,27 @@ export class StudentsController {
     };
   }
 
+  @Patch('courseHistory/:courseHistoryId')
+  @ApiResponse({type: ToFront, isArray: true , description: "Atualiza dados de uma associação de uma disciplina"})
+  @Roles(ROLES.STUDENT, ROLES.ADMIN)
+  async updateDisciplinesByStatusAndStudent(
+    @Param('courseHistoryId') courseHistoryId: string,
+    @Body() request : UpdateDisciplineInStudentSemester,
+  ) {
+
+   const {courseHistory} = await this.updateCourseHistory.execute({id: courseHistoryId, courseHistory: request})
+    
+   
+    return {
+      disciplineHistory: CourseHistoryViewModel.toHTTP(courseHistory),
+    };
+  }
+
   //extracurricularactivity
 
   @Post(':studentRegistration/extracurricular')
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
-  @ApiResponse({ type: ExtraCurricularActivityResponse })
+  @ApiResponse({ type: ExtraCurricularActivityResponse, description: "Registra uma atividade extra curricular de um estudante" })
   async addExtracurricularActivity(
     @Body() body: CreateExtraCurricularActivityBody,
     @Param('studentRegistration') studentRegistration: string,
@@ -293,13 +317,14 @@ export class StudentsController {
 
     return {
       message: 'Atividade extra curricular criada com sucesso!',
-      disciplineHistory: ExtraCurricularActivityViewModel.toHTTP(
+      extraCurricular: ExtraCurricularActivityViewModel.toHTTP(
         extraCurricularActivity,
       ),
     };
   }
 
   @Delete(':studentRegistration/extracurricular/:extracurricularId')
+  @ApiResponse({type: ResponseWithMessage && ExtraCurricularActivityHttp, description: "Deleta uma atividade extra curricular de estudante"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async removeExtracurricularActivity(
     @Param('extracurricularId') extracurricularId: string,
@@ -310,11 +335,12 @@ export class StudentsController {
 
     return {
       message: 'Atividade extra curricular deletada com sucesso!',
-      discipline: ExtraCurricularActivityViewModel.toHTTP(extraCurricular),
+      extraCurricular: ExtraCurricularActivityViewModel.toHTTP(extraCurricular),
     };
   }
 
   @Get(':studentRegistration/extracurricular')
+  @ApiResponse({type: ExtraCurricularActivityHttp, isArray: true, description: "Procura as atividades extra curriculares de estudante"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async findExtracurricularActivitiesBySemester(
     @Param('studentRegistration') studentRegistration: string,

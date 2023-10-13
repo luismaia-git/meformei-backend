@@ -1,6 +1,6 @@
 import { StatusType } from '@application/entities/course-history/course-history';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEnum, IsOptional } from 'class-validator';
 
 export enum Semester {
   FIRST = 1,
@@ -24,13 +24,10 @@ export enum StatusCourseHistory {
   WITHDRAWAL = 'WITHDRAWAL',
 }
 
-export class AssociateDiscipline {
+export class UpdateDisciplineInStudentSemester {
+  
   @ApiProperty()
-  @IsNotEmpty()
-  public disciplineId: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsEnum(StatusCourseHistory)
   status: StatusType;
 
@@ -40,24 +37,20 @@ export class AssociateDiscipline {
   semester: number;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   startTime: Date;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   endTime: Date;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   hours: number;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   daysWeek: string[];
 }
 
-export class AssociateDisciplineInStudentSemesterBody {
-  @IsNotEmpty()
-  @ApiProperty({ isArray: true, type: AssociateDiscipline })
-  disciplines: AssociateDiscipline[];
-}
+

@@ -17,6 +17,7 @@ import { FindCourseHistoryByStudentRegistrationBySemesterByDisciplineId } from '
 import { FindDisciplinesHistoryByStudentRegistration } from '@application/use-cases/course-history/find-disciplines-history-by-student-registration';
 import { FindDisciplinesHistoryByStudentRegistrationBySemester } from '@application/use-cases/course-history/find-disciplines-history-by-student-registration-semester';
 import { ListDisciplinesHistoryTodo } from '@application/use-cases/course-history/list-disciplines-history-to-do';
+import { UpdateCourseHistory } from '@application/use-cases/course-history/update-course-history';
 import { CreateCourse } from '@application/use-cases/course/create-course';
 import { FindCourse } from '@application/use-cases/course/find-course';
 import { ListCourses } from '@application/use-cases/course/list-courses';
@@ -128,7 +129,8 @@ import { UniversitiesController } from './controllers/university.controller';
     DeleteDiscipline,
     ChangePassword,
     ForgotPassword,
-    ResetPassword
+    ResetPassword,
+    UpdateCourseHistory
   ], // casos de uso
 })
 export class HttpModule {}
