@@ -17,10 +17,6 @@ export class Curriculum extends Entity<CurriculumProps> {
     return curriculum;
   }
 
-  public get _props() {
-    return this.props;
-  }
-
   public set courseName(course: string) {
     this.props.courseName = course;
   }
@@ -67,5 +63,16 @@ export class Curriculum extends Entity<CurriculumProps> {
 
   public get extraCurricularHours() {
     return this.props.extraCurricularHours;
+  }
+
+  public update(updateData: Partial<Curriculum>) {
+   
+    if (Object.keys(updateData).length === 0) {
+      return; // Não há dados para atualizar
+    }
+
+    const { id, ...updatedProps } = updateData;
+
+    Object.assign(this.props, updatedProps);
   }
 }

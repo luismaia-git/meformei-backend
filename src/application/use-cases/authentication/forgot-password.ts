@@ -14,16 +14,16 @@ export class ForgotPassword {
     if(!user){
       throw new NotFoundException('Não há usuário cadastrado com esse email.');
     }
-
-    user.recoverToken = crypto.randomBytes(32).toString('hex');
-
-    await this.usersRepository.update(user)
+    
+    user.update({recoverToken: crypto.randomBytes(32).toString('hex')})
+  
+    await this.usersRepository.save(user)
     
     await this.mailerService.sendMail({
       to: email,
       subject: "Redefinição de senha",
       template: '/password-recover',
-      text: "Este é um teste de envio de email usando Node",
+      text: "Solicitação de redefinição de senha",
       context: {
           name: user.name,
           urlFront: `${process.env.FRONT_WEB_URL}`,

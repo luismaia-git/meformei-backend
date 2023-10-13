@@ -6,7 +6,7 @@ export class PrismaExtraCurricularMapper {
   static toPrisma(extraCurricular: ExtraCurricular) {
     return {
       id: extraCurricular.id.toString(),
-      studentRegistration: extraCurricular.studentRegistration,
+      studentId: extraCurricular.studentId,
       extraCurricularName: extraCurricular.title,
       startDate: extraCurricular.startDate,
       endDate: extraCurricular.endDate,
@@ -32,7 +32,7 @@ export class PrismaExtraCurricularMapper {
         institutionName: raw.institutionName,
         situation: raw.situation,
         startDate: raw.startDate,
-        studentRegistration: raw.studentRegistration,
+        studentId: raw.studentId,
         institutionCnpj: raw.institutionCnpj,
         institutionCountry: raw.institutionCountry,
         participationType: raw.participationType,

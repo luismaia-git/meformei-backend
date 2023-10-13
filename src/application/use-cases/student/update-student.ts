@@ -24,12 +24,9 @@ export class UpdateStudent {
 
     if (!studentFinded) throw new StudentNotFound();
 
-    const data = Student.create(
-      { ...studentFinded._props, ...student },
-      studentFinded.id,
-    );
-    
-    const studentUpdated = await this.studentsRepository.update(data);
+    studentFinded.update(student)  
+
+    const studentUpdated = await this.studentsRepository.save(studentFinded);
 
     return {
       student: studentUpdated,

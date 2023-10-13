@@ -5,10 +5,8 @@ export abstract class DisciplinesRepository {
   abstract findById(disciplineId: string): Promise<Discipline | null>;
   abstract findByCod(cod: string): Promise<Discipline | null>;
   abstract findByCodArray(cods: string[]): Promise<Discipline[] | null>;
-  abstract update(discipline: Discipline): Promise<Discipline>;
+  abstract save(discipline: Discipline): Promise<Discipline>;
   abstract delete(disciplineId: string): Promise<void>;
   abstract list(): Promise<Discipline[] | []>;
   abstract findByCurriculum(curriculumId: string): Promise<Discipline[] | []>;
-  // abstract countManyByAnyId(anyId: string): Promise<number>;
-  // abstract findManyByAnyId(anyId: string): Promise<Admin[]>;
 }

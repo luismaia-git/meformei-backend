@@ -19,21 +19,18 @@ export class UpdateAdmin {
   constructor(private adminsRepository: AdminsRepository) {}
 
   async execute(request: UpdateAdminRequest): Promise<UpdateAdminResponse> {
-    const { admin, id } = request;
+    const { admin: body, id } = request;
 
-    const adminFinded = await this.adminsRepository.findById(id);
+    const admin = await this.adminsRepository.findById(id);
 
-    if (!adminFinded) throw new AdminNotFound();
+    if (!admin) throw new AdminNotFound();
 
-    const data = Admin.create(
-      { ...adminFinded._props, ...admin },
-      adminFinded.id,
-    );
+    admin.update(body)
 
-    const adminUpdated = await this.adminsRepository.update(data);
+    await this.adminsRepository.save(admin);
 
     return {
-      admin: adminUpdated,
+      admin,
     };
   }
 }

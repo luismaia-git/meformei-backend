@@ -20,21 +20,17 @@ export class UpdateCurriculum {
   async execute(
     request: UpdateCurriculumRequest,
   ): Promise<UpdateCurriculumResponse> {
-    const { curriculum, id } = request;
-    console.log(id)
-    const curriculumFinded = await this.curriculumsRepository.findById(id);
+    const { curriculum: body, id } = request;
+    const curriculum = await this.curriculumsRepository.findById(id);
 
-    if (!curriculumFinded) throw new CurriculumNotFound();
+    if (!curriculum) throw new CurriculumNotFound();
 
-    const data = Curriculum.create(
-      { ...curriculumFinded._props, ...curriculum },
-      curriculumFinded.id,
-    );
+    curriculum.update(body)
 
-    const curriculumUpdated = await this.curriculumsRepository.update(data);
+    await this.curriculumsRepository.save(curriculum);
 
     return {
-      curriculum: curriculumUpdated,
+      curriculum,
     };
   }
 }

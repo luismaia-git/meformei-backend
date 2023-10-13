@@ -9,13 +9,13 @@ export class PrismaCourseHistoryMapper {
   static toPrisma(courseHistory: CourseHistory): RawCourseHistoryPrisma {
     return {
       id: courseHistory.id.toValue(),
-      studentRegistration: courseHistory.studentRegistration,
+      studentId: courseHistory.studentId,
       disciplineId: courseHistory.discipline.id.toValue(),
       status: courseHistory.status,
       createdAt: courseHistory.createdAt,
       semester: courseHistory.semester,
       startTime: courseHistory.startTime,
-      endTime: courseHistory.endTime,
+      endTime:courseHistory.endTime,
       hours: courseHistory.hours,
       daysWeek: courseHistory.daysWeek,
     };
@@ -24,7 +24,7 @@ export class PrismaCourseHistoryMapper {
   static toDomain(raw: RawCourseHistory): CourseHistory {
     return CourseHistory.create(
       {
-        studentRegistration: raw.studentRegistration,
+        studentId: raw.studentId,
         discipline: Discipline.create(
           {
             cod: raw.discipline.cod,
@@ -61,3 +61,5 @@ type RawCourseHistory = RawCourseHistoryPrisma & {
     prerequisitesDisciplines: DisciplinePrisma[];
   };
 };
+
+

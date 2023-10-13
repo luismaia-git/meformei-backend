@@ -8,6 +8,41 @@ import { PrismaService } from '../prisma.service';
 export class PrismaUniversitiesRepository implements UniversitiesRepository {
   constructor(private prisma: PrismaService) {}
 
+  async findByName(name: string): Promise<University | null> {
+    const university = await this.prisma.university.findUnique({
+      where: {
+        name,
+      },
+      include: {
+        curriculums: true,
+      },
+    });
+
+    if (!university) {
+      return null;
+    }
+
+    return PrismaUniversityMapper.toDomain(university);
+  }
+
+  async findByAbv(abv: string): Promise<University | null> {
+    
+    const university = await this.prisma.university.findUnique({
+      where: {
+        abv,
+      },
+      include: {
+        curriculums: true,
+      },
+    });
+
+    if (!university) {
+      return null;
+    }
+
+    return PrismaUniversityMapper.toDomain(university);
+  }
+
   async findById(universityId: string): Promise<University | null> {
     const university = await this.prisma.university.findUnique({
       where: {
@@ -79,16 +114,7 @@ export class PrismaUniversitiesRepository implements UniversitiesRepository {
     });
   }
 
-  async save(university: University): Promise<void> {
-    const raw = PrismaUniversityMapper.toPrisma(university);
 
-    await this.prisma.university.update({
-      where: {
-        id: raw.id,
-      },
-      data: raw,
-    });
-  }
 
   async list(): Promise<University[]> {
     const universities = await this.prisma.university.findMany({
@@ -108,7 +134,7 @@ export class PrismaUniversitiesRepository implements UniversitiesRepository {
     });
   }
 
-  async update(university: University): Promise<University> {
+  async save(university: University): Promise<University> {
     const raw = PrismaUniversityMapper.toPrisma(university);
     const uni = await this.prisma.university.update({
       where: { id: university.id.toString() },
@@ -117,4 +143,6 @@ export class PrismaUniversitiesRepository implements UniversitiesRepository {
     });
     return PrismaUniversityMapper.toDomain(uni);
   }
+
+  
 }

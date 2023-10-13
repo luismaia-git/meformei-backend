@@ -16,7 +16,7 @@ export class ExtraCurricularActivityViewModel {
       participationType,
       situation,
       startDate,
-      studentRegistration,
+      studentId,
       title,
     } = extraCurricular;
 
@@ -32,7 +32,7 @@ export class ExtraCurricularActivityViewModel {
       participationType,
       situation,
       startDate,
-      studentRegistration,
+      studentId,
       title,
     };
   }

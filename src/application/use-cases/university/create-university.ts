@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { University } from '@application/entities/curriculum/university';
 import { UniversitiesRepository } from '@application/repositories/universities-repository';
+import { AtributeAlreadyUsed } from '../errors/atribute-already-user';
 
 interface CreateUniversityRequest {
   name: string;
@@ -22,6 +23,18 @@ export class CreateUniversity {
     request: CreateUniversityRequest,
   ): Promise<CreateUniversityResponse> {
     const { name, abv, city, state } = request;
+
+    const nameIsAlreadyUsed = await this.universitiesRepository.findByName(name)
+    
+    if(nameIsAlreadyUsed) {
+      throw new AtributeAlreadyUsed('name')
+    }
+
+    const abvIsAlreadyUser = await this.universitiesRepository.findByAbv(abv)
+    
+    if(abvIsAlreadyUser) {
+      throw new AtributeAlreadyUsed('abv')
+    }
 
     const university = University.create({
       name,

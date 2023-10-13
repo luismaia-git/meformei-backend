@@ -22,11 +22,13 @@ export class ChangePassword {
     if(!user){
       throw new UserNotFound();
     }
-
-    user.salt = await bcrypt.genSalt();
-    user.password = await this.hashPassword(newPassword, user.salt);
-    user.recoverToken = null;
-    await this.usersRepository.update(user)  
+    user.update({
+      salt : await bcrypt.genSalt(),
+      password : await this.hashPassword(newPassword, user.salt),
+      recoverToken : null
+    })
+    
+    await this.usersRepository.save(user)  
     
     await this.mailerService.sendMail({
       to: user.email,

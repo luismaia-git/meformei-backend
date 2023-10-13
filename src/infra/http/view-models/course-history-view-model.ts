@@ -1,4 +1,4 @@
-import { CourseHistory } from '@application/entities/course-history/course-history';
+import { CourseHistory, StatusTypeClass } from '@application/entities/course-history/course-history';
 import { ApiProperty } from '@nestjs/swagger';
 import { DisciplineViewModel } from './discipline-view-model';
 
@@ -15,7 +15,7 @@ export class CourseHistoryViewModel {
       semester,
       startTime,
       status,
-      studentRegistration,
+      studentId,
     } = courseHistory;
 
     return {
@@ -28,7 +28,7 @@ export class CourseHistoryViewModel {
       semester,
       startTime,
       status,
-      studentRegistration,
+      studentId,
     };
   }
 
@@ -55,11 +55,13 @@ export class CourseHistoryViewModel {
           delete disc.semester;
           const discipline: DisciplineToFront = {
             ...disc,
+            courseHistoryId: ch.id.toString(),
             workload: ch.hours,
-            start: ch.startTime.getHours(),
-            end: ch.endTime.getHours(),
+            start: ch.startTime,
+            end: ch.endTime,
             daysWeek: ch.daysWeek,
             bibliography: ch.discipline.bibliography,
+            status: ch.status,
           };
 
           return discipline;
@@ -87,9 +89,15 @@ export function findFirstOccurrences(objects: CourseHistory[]): number[] {
   return firstOccurrences;
 }
 
+type StatusType = 'DONE' | 'INPROGRESS' | 'FAILED' | 'WITHDRAWAL';
+
 export abstract class DisciplineToFront {
   @ApiProperty()
   id: string;
+
+  @ApiProperty({ type: String })
+  courseHistoryId: string
+
   @ApiProperty()
   name: string;
   @ApiProperty()
@@ -108,16 +116,21 @@ export abstract class DisciplineToFront {
   workload: number;
 
   @ApiProperty()
-  start: number;
+  start: string;
 
   @ApiProperty()
-  end: number;
+  end: string;
 
   @ApiProperty({ type: String, isArray: true })
   daysWeek: string[];
 
   @ApiProperty({ type: String, isArray: true })
   bibliography: string[];
+
+  @ApiProperty({type: StatusTypeClass})
+  status: StatusType;
+
+ 
 }
 
 export abstract class ToFront {

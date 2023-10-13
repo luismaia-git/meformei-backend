@@ -108,20 +108,20 @@ model Discipline {
 }
 
 model CourseHistory {
-  id                  String              @id @default(uuid())
-  studentRegistration String
-  student             Student             @relation(fields: [studentRegistration], references: [registration])
-  disciplineId        String
-  discipline          Discipline          @relation(fields: [disciplineId], references: [id])
-  status              StatusCourseHistory
-  createdAt           DateTime            @default(now())
-  semester            Int
-  startTime           DateTime            @db.Time
-  endTime             DateTime            @db.Time
-  hours               Int
-  daysWeek            String[]
+  id           String              @id @default(uuid())
+  studentId    String
+  student      Student             @relation(fields: [studentId], references: [id])
+  disciplineId String
+  discipline   Discipline          @relation(fields: [disciplineId], references: [id])
+  status       StatusCourseHistory
+  createdAt    DateTime            @default(now())
+  semester     Int
+  startTime    String
+  endTime      String
+  hours        Int
+  daysWeek     String[]
 
-  @@index([studentRegistration])
+  @@index([studentId])
 }
 
 enum StatusCourseHistory {
@@ -133,8 +133,8 @@ enum StatusCourseHistory {
 
 model ExtraCurricularActivitiesHistory {
   id                  String        @id @default(uuid())
-  studentRegistration String
-  student             Student       @relation(fields: [studentRegistration], references: [registration])
+  studentId           String
+  student             Student       @relation(fields: [studentId], references: [id])
   extraCurricularName String
   startDate           DateTime      @db.Date
   endDate             DateTime      @db.Date
@@ -147,7 +147,7 @@ model ExtraCurricularActivitiesHistory {
   institutionCountry  String?
   institutionCnpj     String?
 
-  @@index([studentRegistration])
+  @@index([studentId])
 }
 
 enum SituationType {

@@ -20,21 +20,18 @@ export class UpdateDiscipline {
   async execute(
     request: UpdateDisciplineRequest,
   ): Promise<UpdateDisciplineResponse> {
-    const { discipline, id } = request;
+    const { discipline: body, id } = request;
 
-    const disciplineFinded = await this.disciplinesRepository.findById(id);
+    const discipline = await this.disciplinesRepository.findById(id);
 
-    if (!disciplineFinded) throw new DisciplineNotFound();
+    if (!discipline) throw new DisciplineNotFound();
 
-    const data = Discipline.create(
-      { ...disciplineFinded._props, ...discipline },
-      disciplineFinded.id,
-    );
+    discipline.update(body)
 
-    const disciplineUpdated = await this.disciplinesRepository.update(data);
+    await this.disciplinesRepository.save(discipline);
 
     return {
-      discipline: disciplineUpdated,
+      discipline,
     };
   }
 }

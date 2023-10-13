@@ -1,4 +1,5 @@
 import { Entity } from '@core/entities/entity';
+import { Optional } from '@core/types/optional';
 import { IsEnum } from 'class-validator';
 import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
 import { Discipline } from '../discipline/discipline';
@@ -12,20 +13,20 @@ export abstract class StatusTypeClass {
   status: string
 }
 export interface CourseHistoryProps {
-  studentRegistration: string;
+  studentId: string;
   discipline: Discipline;
   status: StatusType;
-  createdAt?: Date;
+  createdAt: Date;
   semester: number;
-  startTime: Date;
-  endTime: Date;
+  startTime: string;
+  endTime: string;
   hours: number;
   daysWeek: string[];
 }
 
 export class CourseHistory extends Entity<CourseHistoryProps> {
-  public _props: CourseHistoryProps;
-  static create(props: CourseHistoryProps, id?: UniqueEntityID) {
+
+  static create(props: Optional<CourseHistoryProps, 'createdAt'> , id?: UniqueEntityID) {
     const courseHistory = new CourseHistory(
       { ...props, createdAt: props.createdAt ?? new Date() },
       id,
@@ -34,12 +35,12 @@ export class CourseHistory extends Entity<CourseHistoryProps> {
     return courseHistory;
   }
 
-  public set studentRegistration(studentRegistration: string) {
-    this.props.studentRegistration = studentRegistration;
+  public set studentId(studentId: string) {
+    this.props.studentId = studentId;
   }
 
-  public get studentRegistration() {
-    return this.props.studentRegistration;
+  public get studentId() {
+    return this.props.studentId;
   }
 
   public set discipline(discipline: Discipline) {
@@ -58,9 +59,6 @@ export class CourseHistory extends Entity<CourseHistoryProps> {
     return this.props.status;
   }
 
-  public set createdAt(createdAt: Date) {
-    this.props.createdAt = createdAt;
-  }
 
   public get createdAt() {
     return this.props.createdAt;
@@ -74,7 +72,7 @@ export class CourseHistory extends Entity<CourseHistoryProps> {
     return this.props.semester;
   }
 
-  public set startTime(startTime: Date) {
+  public set startTime(startTime: string) {
     this.props.startTime = startTime;
   }
 
@@ -82,7 +80,7 @@ export class CourseHistory extends Entity<CourseHistoryProps> {
     return this.props.startTime;
   }
 
-  public set endTime(endTime: Date) {
+  public set endTime(endTime: string) {
     this.props.endTime = endTime;
   }
 
@@ -104,5 +102,16 @@ export class CourseHistory extends Entity<CourseHistoryProps> {
 
   public get daysWeek() {
     return this.props.daysWeek;
+  }
+
+  public update(updateData: Partial<CourseHistory>) {
+   
+    if (Object.keys(updateData).length === 0) {
+      return; // Não há dados para atualizar
+    }
+
+    const { id, createdAt, ...updatedProps } = updateData;
+
+    Object.assign(this.props, updatedProps);
   }
 }

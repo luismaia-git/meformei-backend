@@ -26,12 +26,15 @@ import {
   ForbiddenException,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
-  UseGuards,
+  UnauthorizedException,
+  UseGuards
 } from '@nestjs/common';
 import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth-guard';
+import { GetUser } from '../auth/get-user.decorator';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { AssociateDisciplineInStudentSemesterBody } from '../dto/course-history/associate-discipline-in-student-semester.dto';
@@ -112,6 +115,7 @@ export class StudentsController {
   }
 
   @Get(':id')
+  @Roles(ROLES.ADMIN)
   @ApiResponse({ type: StudentResponseWithMessage, description: "Procura por um estudante" })
   async getStudent(@Param('id') id: string) {
     const { student } = await this.findStudent.execute({ studentId: id });
@@ -141,7 +145,16 @@ export class StudentsController {
   async patchStudent(
     @Body() updateStudentBody: UpdateStudentBody,
     @Param('id') id: string,
+    @GetUser() user : any
   ) {
+
+    if (
+      !user?.isAdmin && user.studentId !== id
+    )
+      throw new UnauthorizedException(
+        'Você não tem permissão para realizar esta operação',
+      );
+
     const { student } = await this.updateStudent.execute({
       id,
       student: updateStudentBody,
@@ -156,15 +169,24 @@ export class StudentsController {
 
   //semester
 
-  @Post(':studentRegistration/semester/:semester')
+  @Post(':studentRegistration/courseHistory/semester/:semester')
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   @ApiResponse({type: CourseHistoryToFrontResponse,  description: "Associa disciplina(s) no historico do estudante"})
   async addDisciplineInSemester(
     @Body() request: AssociateDisciplineInStudentSemesterBody,
     @Param('studentRegistration') studentRegistration: string,
-    @Param('semester') semester: number,
+    @Param('semester', ParseIntPipe) semester: number,
+    @GetUser() user: any
   ) {
+
+    if (
+      !user?.isAdmin && user.registration !== studentRegistration
+    )
+      throw new UnauthorizedException(
+        'Você não tem permissão para realizar esta operação',
+      );
     const { disciplines } = request;
+ 
     const courseHistories: CourseHistory[] = [];
 
     for (const discipline of disciplines) {
@@ -183,35 +205,42 @@ export class StudentsController {
     };
   }
 
-  @Delete(':studentRegistration/semester/:semester/disciplines/:disciplineId')
+  @Delete(':studentRegistration/courseHistory/:courseHistoryId')
   @ApiResponse({type: ToFront, isArray: true , description: "Dessasocia disciplina no historico do estudante"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async disassociateDisciplineInSemester(
     @Param('studentRegistration') studentRegistration: string,
-    @Param('semester') semester: number,
-    @Param('disciplineId') disciplineId: string,
+    @Param('courseHistoryId') courseHistoryId: string,
+    @GetUser() user: any
   ) {
-    const { courseHistory } =
-      await this.findCourseHistoryByStudentRegistrationBySemesterByDisciplineId.execute(
-        { disciplineId, semester, studentRegistration },
+
+    if (
+      !user?.isAdmin && user.registration !== studentRegistration
+    )
+      throw new UnauthorizedException(
+        'Você não tem permissão para realizar esta operação',
       );
+    // const { courseHistory } =
+    //   await this.findCourseHistoryByStudentRegistrationBySemesterByDisciplineId.execute(
+    //     { disciplineId, semester, studentRegistration },
+    //   );
     const { courseHistory: courseHistoryDeleted } =
       await this.disassociateDisciplineInStudentSemester.execute({
-        courseHistoryId: courseHistory.id.toString(),
+        courseHistoryId: courseHistoryId,
       });
 
     return {
       message: 'Disciplina dessasociada com sucesso!',
-      discipline: CourseHistoryViewModel.toHTTP(courseHistoryDeleted),
+      courseHistory: CourseHistoryViewModel.toHTTP(courseHistoryDeleted),
     };
   }
 
-  @Get(':studentRegistration/semester/:semester/disciplines')
+  @Get(':studentRegistration/courseHistory/semester/:semester')
   @ApiResponse({type: ToFront, isArray: true , description: "Procura por disciplinas no historico do estudante pelo semestre"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async findDisciplinesBySemester(
     @Param('studentRegistration') studentRegistration: string,
-    @Param('semester') semester: number,
+    @Param('semester', ParseIntPipe) semester: number,
   ) {
     const { courseHistories } =
       await this.findDisciplinesHistoryByStudentRegistrationBySemester.execute({
@@ -224,12 +253,21 @@ export class StudentsController {
     };
   }
 
-  @Get(':studentRegistration/disciplines')
+  @Get(':studentRegistration/courseHistory')
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   @ApiResponse({type: ToFront, isArray:true,  description: "Procura por disciplina(s) no historico do estudante pelo Id do estudante"})
   async findDisciplinesByStudent(
     @Param('studentRegistration') studentRegistration: string,
+    @GetUser() user: any
   ) {
+    
+    if (
+      !user?.isAdmin && user.registration !== studentRegistration
+    )
+      throw new UnauthorizedException(
+        'Você não tem permissão para realizar esta operação',
+      );
+
     const { courseHistories } =
       await this.findDisciplinesHistoryByStudentRegistration.execute({
         studentRegistration,
@@ -240,7 +278,7 @@ export class StudentsController {
     };
   }
 
-  @Get(':studentRegistration/disciplines/todo')
+  @Get(':studentRegistration/courseHistory/todo')
   @ApiResponse({type: ToFront, isArray: true , description: "Procura por disciplinas no historico do estudante que ele ainda precisa fazer."})
   async findDisciplinesTodoByStudent(
     @Param('studentRegistration') studentRegistration: string,
@@ -256,13 +294,22 @@ export class StudentsController {
     };
   }
 
-  @Get(':studentRegistration/disciplines/status/:status')
+  @Get(':studentRegistration/courseHistory/status/:status')
   @ApiResponse({type: ToFront, isArray: true , description: "Procura por disciplinas no historico do estudante pelo status"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async findDisciplinesByStatusAndStudent(
     @Param('studentRegistration') studentRegistration: string,
     @Param() statusType: StatusTypeClass,
+    @GetUser() user: any
   ) {
+
+    if (
+      !user?.isAdmin && user.registration !== studentRegistration
+    )
+      throw new UnauthorizedException(
+        'Você não tem permissão para realizar esta operação',
+      );
+
     if (
       statusType.status !== 'DONE' &&
       statusType.status !== 'INPROGRESS' &&
@@ -284,14 +331,23 @@ export class StudentsController {
     };
   }
 
-  @Patch('courseHistory/:courseHistoryId')
-  @ApiResponse({type: ToFront, isArray: true , description: "Atualiza dados de uma associação de uma disciplina"})
+  @Patch(':studentRegistration/courseHistory/:courseHistoryId')
+  @ApiResponse({type: ToFront, isArray: true , description: "Atualiza dados de uma associação de uma disciplina de um estudante"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async updateDisciplinesByStatusAndStudent(
     @Param('courseHistoryId') courseHistoryId: string,
+    @Param('studentRegistration') studentRegistration : string,
     @Body() request : UpdateDisciplineInStudentSemester,
+    @GetUser() user: any
   ) {
 
+    if (
+      !user?.isAdmin && user.registration !== studentRegistration
+    )
+      throw new UnauthorizedException(
+        'Você não tem permissão para realizar esta operação',
+      );
+      
    const {courseHistory} = await this.updateCourseHistory.execute({id: courseHistoryId, courseHistory: request})
     
    

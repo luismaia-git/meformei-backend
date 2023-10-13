@@ -46,7 +46,7 @@ export class PrismaUsersRepository implements UsersRepository {
     });
   }
 
-  async update(user: User): Promise<void> {
+  async save(user: User): Promise<void> {
     const raw = PrismaUserMapper.toPrisma(user);
 
     await this.prisma.user.update({

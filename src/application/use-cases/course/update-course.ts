@@ -18,21 +18,18 @@ export class UpdateCourse {
   constructor(private coursesRepository: CoursesRepository) {}
 
   async execute(request: UpdateCourseRequest): Promise<UpdateCourseResponse> {
-    const { course, id } = request;
+    const { course: body, id } = request;
 
-    const courseFinded = await this.coursesRepository.findById(id);
+    const course = await this.coursesRepository.findById(id);
 
-    if (!courseFinded) throw new CourseNotFound();
+    if (!course) throw new CourseNotFound();
 
-    const data = Course.create(
-      { ...courseFinded._props, ...course },
-      courseFinded.id,
-    );
+    course.update(body)
 
-    const courseUpdated = await this.coursesRepository.update(data);
+    await this.coursesRepository.save(course);
 
     return {
-      course: courseUpdated,
+      course,
     };
   }
 }

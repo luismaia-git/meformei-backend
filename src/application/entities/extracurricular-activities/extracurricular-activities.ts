@@ -4,7 +4,7 @@ import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
 type SituationType = 'DEFERIDO' | 'INDEFERIDO' | 'SEM_RESPOSTA';
 
 export interface ExtraCurricularProps {
-  studentRegistration: string;
+  studentId: string;
   title: string;
   startDate: Date;
   endDate: Date;
@@ -24,16 +24,12 @@ export class ExtraCurricular extends Entity<ExtraCurricularProps> {
     return extraCurricular;
   }
 
-  public get _props() {
-    return this.props;
+  public set studentId(studentId: string) {
+    this.props.studentId = studentId;
   }
 
-  public set studentRegistration(studentRegistration: string) {
-    this.props.studentRegistration = studentRegistration;
-  }
-
-  public get studentRegistration() {
-    return this.props.studentRegistration;
+  public get studentId() {
+    return this.props.studentId;
   }
 
   public set title(title: string) {
@@ -122,5 +118,14 @@ export class ExtraCurricular extends Entity<ExtraCurricularProps> {
 
   public get institutionCnpj() {
     return this.props.institutionCnpj;
+  }
+
+  public update(updateData: Partial<ExtraCurricular>) {
+   
+    if (Object.keys(updateData).length === 0) {
+      return; // Não há dados para atualizar
+    }
+    const { id, ...updatedProps } = updateData;
+    Object.assign(this.props, updatedProps);
   }
 }

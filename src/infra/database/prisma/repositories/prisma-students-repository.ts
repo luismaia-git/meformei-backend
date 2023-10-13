@@ -30,26 +30,6 @@ export class PrismaStudentsRepository implements StudentsRepository {
     return PrismaStudentMapper.toDomain(student);
   }
 
-  // async findManyByAnyId(anyId: string): Promise<Student[]> {
-  //   const students = await this.prisma.student.findMany({
-  //     where: {
-  //       anyId,
-  //     },
-  //   });
-
-  //   return students.map(PrismaStudentMapper.toDomain);
-  // }
-
-  // async countManyByAnyId(anyId: string): Promise<number> {
-  //   const count = await this.prisma.student.count({
-  //     where: {
-  //       anyId,
-  //     },
-  //   });
-
-  //   return count;
-  // }
-
   async create(student: Student): Promise<Student> {
     const {student: rawStudent, user: rawUser} = PrismaStudentMapper.toPrisma(student);
     const { id, registration, enrollmentYear, enrollmentSemester, curriculumId, currentSemester} = rawStudent
@@ -70,7 +50,7 @@ export class PrismaStudentsRepository implements StudentsRepository {
     return PrismaStudentMapper.toDomain(studentCreated)
   }    
 
-  async update(student: Student): Promise<Student> {
+  async save(student: Student): Promise<Student> {
     const { user: rawUser, student: rawStudent} = PrismaStudentMapper.toPrisma(student);
     const studentUpdated = await this.prisma.student.update({
       where: {
@@ -183,6 +163,26 @@ export class PrismaStudentsRepository implements StudentsRepository {
   async findByEmail(email: string): Promise<Student | null> {
     const student = await this.prisma.student.findFirst({
       where: { user: { email } },
+      include: {
+        user: true,
+        curriculum: {
+          include: {
+            university: true,
+          },
+        },
+      },
+    });
+
+    if (!student) {
+      return null;
+    }
+
+    return PrismaStudentMapper.toDomain(student);
+  }
+
+  async findByRegistration(registration: string): Promise<Student | null> {
+    const student = await this.prisma.student.findFirst({
+      where: { registration },
       include: {
         user: true,
         curriculum: {

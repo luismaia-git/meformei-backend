@@ -147,7 +147,7 @@ export class PrismaDisciplinesRepository implements DisciplinesRepository {
     });
   }
 
-  async update(discipline: Discipline): Promise<Discipline> {
+  async save(discipline: Discipline): Promise<Discipline> {
     const raw = PrismaDisciplineMapper.toPrisma(discipline);
 
     const disciplineFinded = await this.prisma.discipline.update({

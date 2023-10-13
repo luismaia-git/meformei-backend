@@ -33,7 +33,7 @@ export class PrismaExtraCurricularRepository
     });
   }
 
-  async update(exc: ExtraCurricular): Promise<ExtraCurricular> {
+  async save(exc: ExtraCurricular): Promise<ExtraCurricular> {
     const raw = PrismaExtraCurricularMapper.toPrisma(exc);
 
     const excFinded = await this.prisma.extraCurricularActivitiesHistory.update(
@@ -61,12 +61,12 @@ export class PrismaExtraCurricularRepository
     });
   }
 
-  async findByStudentRegistration(
-    studentRegistration: string,
+  async findByStudentId(
+    studentId: string,
   ): Promise<ExtraCurricular[] | []> {
     const exc = await this.prisma.extraCurricularActivitiesHistory.findMany({
       where: {
-        studentRegistration: studentRegistration,
+        studentId,
       },
     });
 

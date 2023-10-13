@@ -19,9 +19,6 @@ export class Discipline extends Entity<DisciplineProps> {
     return discipline;
   }
 
-  public get _props() {
-    return this.props;
-  }
 
   public set description(description: string) {
     this.props.description = description;
@@ -113,5 +110,16 @@ export class Discipline extends Entity<DisciplineProps> {
     this.props.bibliography = this.props.bibliography.filter(
       (bh, i) => i != index,
     );
+  }
+
+  public update(updateData: Partial<Discipline>) {
+   
+    if (Object.keys(updateData).length === 0) {
+      return; // Não há dados para atualizar
+    }
+
+    const { id, ...updatedProps } = updateData;
+
+    Object.assign(this.props, updatedProps);
   }
 }

@@ -32,7 +32,8 @@ export class PrismaStudentMapper {
         avatar: student.avatar,
         inative: student.inative,
         recoverToken: student.recoverToken,
-        salt: student.salt
+        salt: student.salt,
+        createdAt: student.createdAt
       }
     };
   }
@@ -66,7 +67,8 @@ export class PrismaStudentMapper {
         avatar: raw.user.avatar, 
         inative: raw.user.inative,
         recoverToken: raw.user.recoverToken,
-        salt: raw.user.salt
+        salt: raw.user.salt,
+        createdAt: raw.user.createdAt
       },
       new UniqueEntityID(raw.user.id),
     );

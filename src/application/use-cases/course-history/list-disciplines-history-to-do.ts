@@ -4,6 +4,8 @@ import { CourseHistory } from '@application/entities/course-history/course-histo
 import { Discipline } from '@application/entities/discipline/discipline';
 import { CourseHistoriesRepository } from '@application/repositories/course-histories-repository';
 import { DisciplinesRepository } from '@application/repositories/disciplines-repository';
+import { StudentsRepository } from '@application/repositories/students-repository';
+import { StudentNotFound } from '../errors/student-not-found';
 
 interface ListCourseHistoriesResponse {
   disciplinesTodo: Discipline[];
@@ -19,10 +21,18 @@ export class ListDisciplinesHistoryTodo {
   constructor(
     private courseHistoriesRepository: CourseHistoriesRepository,
     private disciplinesRepository: DisciplinesRepository,
+    private studentsRepository: StudentsRepository,
   ) {}
 
   async execute(req: Request): Promise<ListCourseHistoriesResponse> {
     const { curriculumId, studentRegistration } = req;
+
+    const student = await this.studentsRepository.findByRegistration(studentRegistration);
+
+    if (!student) {
+      throw new StudentNotFound();
+    }
+
     const disciplinesByCurriculum =
       await this.disciplinesRepository.findByCurriculum(curriculumId);
 
@@ -31,7 +41,7 @@ export class ListDisciplinesHistoryTodo {
     );
 
     const courseHistories = await this.courseHistoriesRepository.findByStudent(
-      studentRegistration,
+      student.studentId.toString(),
     );
 
     const disciplinesDone = courseHistories.map(

@@ -2,11 +2,11 @@ import { ExtraCurricular } from '@application/entities/extracurricular-activitie
 
 export abstract class ExtraCurricularRepository {
   abstract create(extraCurricular: ExtraCurricular): Promise<void>;
-  abstract update(extraCurricular: ExtraCurricular): Promise<ExtraCurricular>;
+  abstract save(extraCurricular: ExtraCurricular): Promise<ExtraCurricular>;
   abstract delete(extraCurricularId: string): Promise<void>;
   abstract list(): Promise<ExtraCurricular[] | []>;
   abstract findById(extraCurricularId: string): Promise<ExtraCurricular | null>;
-  abstract findByStudentRegistration(
-    studentRegistration: string,
+  abstract findByStudentId(
+    studentId: string,
   ): Promise<ExtraCurricular[] | []>;
 }

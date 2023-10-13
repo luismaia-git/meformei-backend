@@ -12,10 +12,6 @@ export class Course extends Entity<CourseProps> {
     return course;
   }
 
-  public get _props() {
-    return this.props;
-  }
-
   public set name(name: string) {
     this.props.name = name;
   }
@@ -24,11 +20,18 @@ export class Course extends Entity<CourseProps> {
     return this.props.name;
   }
 
-  // public set curriculums(curriculums:  Curriculum[]) {
-  //   this.props.curriculums = curriculums;
-  // }
-
   public get curriculums() {
     return this.props.curriculums;
+  }
+
+  public update(updateData: Partial<Course>) {
+   
+    if (Object.keys(updateData).length === 0) {
+      return; // Não há dados para atualizar
+    }
+
+    const { id, ...updatedProps } = updateData;
+
+    Object.assign(this.props, updatedProps);
   }
 }

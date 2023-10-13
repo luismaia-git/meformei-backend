@@ -15,25 +15,25 @@ export abstract class CourseHistoriesRepository {
     req: FindByStatusAndStudent,
   ): Promise<CourseHistory[] | []>;
   abstract findByStudent(
-    studentRegistration: string,
+    studentId: string,
   ): Promise<CourseHistory[] | []>;
-  abstract update(courseHistory: CourseHistory): Promise<CourseHistory>;
+  abstract save(courseHistory: CourseHistory): Promise<CourseHistory>;
   abstract delete(courseHistoryId: string): Promise<void>;
   abstract list(): Promise<CourseHistory[] | []>;
 }
 
 export type FindByStudentAndSemesterAndDiscipline = {
-  studentRegistration: string;
+  studentId: string;
   semester: number;
   disciplineId: string;
 };
 
 export type FindByStudentAndSemester = {
-  studentRegistration: string;
+  studentId: string;
   semester: number;
 };
 
 export type FindByStatusAndStudent = {
-  studentRegistration: string;
+  studentId: string;
   status: StatusType;
 };

@@ -1,7 +1,8 @@
 import { StatusType } from '@application/entities/course-history/course-history';
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { IsEnum, IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsEnum, IsNotEmpty, ValidateNested } from 'class-validator';
+import { IsHHMMFormat } from './IsHHmm';
 
 export enum Semester {
   FIRST = 1,
@@ -35,23 +36,17 @@ export class AssociateDiscipline {
   @IsEnum(StatusCourseHistory)
   status: StatusType;
 
-  
-
   @ApiProperty({example: "12:00"})
   @IsNotEmpty()
-  @Transform((value) => {
-    const timeString = `${new Date().toLocaleDateString()} ${value}:00`;
-    return new Date(timeString);
-  })
-  startTime: Date;
+  @Type(() => String)
+  @IsHHMMFormat() 
+  startTime: string;
 
   @ApiProperty({example: "14:00"})
   @IsNotEmpty()
-  @Transform((value) => {
-    const timeString = `${new Date().toLocaleDateString()} ${value}:00`;
-    return new Date(timeString);
-  })
-  endTime: Date;
+  @Type(() => String)
+  @IsHHMMFormat() 
+  endTime: string;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -63,7 +58,10 @@ export class AssociateDiscipline {
 }
 
 export class AssociateDisciplineInStudentSemesterBody {
-  @IsNotEmpty()
+  @IsArray()
+  @IsNotEmpty({each:true})
   @ApiProperty({ isArray: true, type: AssociateDiscipline })
+  @ValidateNested({ each: true }) 
+  @Type(() => AssociateDiscipline)
   disciplines: AssociateDiscipline[];
 }

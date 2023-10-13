@@ -10,7 +10,7 @@ import { AdminsRepository } from 'src/application/repositories/admins-repository
 import { StudentsRepository } from 'src/application/repositories/students-repository';
 import { PrismaService } from './prisma/prisma.service';
 import { PrismaAdminsRepository } from './prisma/repositories/prisma-admins-repository';
-import { PrismaCourseHistoryRepository } from './prisma/repositories/prisma-course-history-reporsitory';
+import { PrismaCourseHistoryRepository } from './prisma/repositories/prisma-course-history-repository';
 import { PrismaCoursesRepository } from './prisma/repositories/prisma-course-repository';
 import { PrismaCurriculumsRepository } from './prisma/repositories/prisma-curriculums-repository';
 import { PrismaDisciplinesRepository } from './prisma/repositories/prisma-disciplines-repository';

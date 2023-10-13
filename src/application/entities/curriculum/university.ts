@@ -15,10 +15,6 @@ export class University extends Entity<UniversityProps> {
     return university;
   }
 
-  public get _props() {
-    return this.props;
-  }
-
   public set name(name: string) {
     this.props.name = name;
   }
@@ -51,11 +47,19 @@ export class University extends Entity<UniversityProps> {
     return this.props.state;
   }
 
-  // public set curriculums(curriculums: string[]) {
-  //   this.props.curriculums = curriculums;
-  // }
 
   public get curriculums() {
     return this.props.curriculums;
+  }
+
+  public update(updateData: Partial<University>) {
+   
+    if (Object.keys(updateData).length === 0) {
+      return; // Não há dados para atualizar
+    }
+
+    const { id, ...updatedProps } = updateData;
+
+    Object.assign(this.props, updatedProps);
   }
 }

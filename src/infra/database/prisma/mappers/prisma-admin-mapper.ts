@@ -17,7 +17,8 @@ export class PrismaAdminMapper {
         avatar: admin.avatar,
         inative: admin.inative,
         recoverToken: admin.recoverToken,
-        salt: admin.salt
+        salt: admin.salt,
+        createdAt: admin.createdAt
       },
       admin:{
         id: admin.adminId.toString(),
@@ -40,7 +41,8 @@ export class PrismaAdminMapper {
         avatar: raw.user.avatar,
         inative: raw.user.inative,
         recoverToken: raw.user.recoverToken,
-        salt: raw.user.salt
+        salt: raw.user.salt,
+        createdAt: raw.user.createdAt
       },
       new UniqueEntityID(raw.user.id),
     );

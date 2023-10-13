@@ -17,6 +17,8 @@ describe('Student', () => {
       lastname: 'Example lastname',
       state: 'Example state',
       university: makeUniversity(),
+      avatar:'',
+      inative: null,
     });
 
     expect(student).toBeTruthy();

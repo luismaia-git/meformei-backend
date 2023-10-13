@@ -20,18 +20,15 @@ export class UpdateUniversity {
   async execute(
     request: UpdateUniversityRequest,
   ): Promise<UpdateUniversityResponse> {
-    const { university, id } = request;
+    const { university : body, id } = request;
 
-    const universityFinded = await this.universitiesRepository.findById(id);
+    const university = await this.universitiesRepository.findById(id);
 
-    if (!universityFinded) throw new UniversityNotFound();
+    if (!university) throw new UniversityNotFound();
+    
+    university.update(body)
 
-    const data = University.create(
-      { ...universityFinded._props, ...university },
-      universityFinded.id,
-    );
-
-    const universityUpdated = await this.universitiesRepository.update(data);
+    const universityUpdated = await this.universitiesRepository.save(university);
 
     return {
       university: universityUpdated,

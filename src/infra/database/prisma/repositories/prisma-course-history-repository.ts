@@ -15,11 +15,11 @@ export class PrismaCourseHistoryRepository
 {
   constructor(private prisma: PrismaService) {}
   async findByStudent(
-    studentRegistration: string,
+    studentId: string,
   ): Promise<CourseHistory[] | []> {
     const courseHistory = await this.prisma.courseHistory.findMany({
       where: {
-        studentRegistration,
+        studentId,
       },
       include: {
         discipline: { include: { prerequisitesDisciplines: true } },
@@ -48,12 +48,12 @@ export class PrismaCourseHistoryRepository
   async findByStudentAndSemesterAndDiscipline(
     req: FindByStudentAndSemesterAndDiscipline,
   ): Promise<CourseHistory> {
-    const { disciplineId, semester, studentRegistration } = req;
+    const { disciplineId, semester, studentId } = req;
     const courseHistory = await this.prisma.courseHistory.findFirst({
       where: {
         disciplineId,
         semester,
-        studentRegistration,
+        studentId,
       },
       include: {
         discipline: { include: { prerequisitesDisciplines: true } },
@@ -70,11 +70,11 @@ export class PrismaCourseHistoryRepository
   async findByStudentAndSemester(
     req: FindByStudentAndSemester,
   ): Promise<CourseHistory[] | []> {
-    const { semester, studentRegistration } = req;
+    const { semester, studentId } = req;
     const courseHistories = await this.prisma.courseHistory.findMany({
       where: {
         semester,
-        studentRegistration,
+        studentId,
       },
       include: {
         discipline: { include: { prerequisitesDisciplines: true } },
@@ -91,10 +91,10 @@ export class PrismaCourseHistoryRepository
   async findByStatusAndStudent(
     request: FindByStatusAndStudent,
   ): Promise<CourseHistory[] | []> {
-    const { status, studentRegistration } = request;
+    const { status, studentId } = request;
     const courseHistory = await this.prisma.courseHistory.findMany({
       where: {
-        studentRegistration,
+        studentId,
         status,
       },
     });
@@ -104,12 +104,13 @@ export class PrismaCourseHistoryRepository
 
   async create(courseHistory: CourseHistory): Promise<void> {
     const raw = PrismaCourseHistoryMapper.toPrisma(courseHistory);
+   
     await this.prisma.courseHistory.create({
       data: raw,
     });
   }
 
-  async update(courseHistory: CourseHistory): Promise<CourseHistory> {
+  async save(courseHistory: CourseHistory): Promise<CourseHistory> {
     const raw = PrismaCourseHistoryMapper.toPrisma(courseHistory);
 
     const courseHistoryFinded = await this.prisma.courseHistory.update({

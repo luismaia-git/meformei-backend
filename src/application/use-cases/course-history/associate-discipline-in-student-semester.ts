@@ -15,8 +15,8 @@ interface CreateCourseHistoryRequest {
   disciplineId: string;
   status: StatusType;
   semester: number;
-  startTime: Date;
-  endTime: Date;
+  startTime: string;
+  endTime: string;
   hours: number;
   daysWeek: string[];
 }
@@ -46,8 +46,8 @@ export class AssociateDisciplineInStudentSemester {
       hours,
       daysWeek,
     } = request;
-
-    const student = await this.studentsRepository.findById(studentRegistration);
+    
+    const student = await this.studentsRepository.findByRegistration(studentRegistration);
 
     if (!student) {
       throw new StudentNotFound();
@@ -60,7 +60,7 @@ export class AssociateDisciplineInStudentSemester {
     }
 
     const courseHistory = CourseHistory.create({
-      studentRegistration,
+      studentId: student.studentId.toString(),
       discipline,
       status,
       semester,
@@ -69,7 +69,7 @@ export class AssociateDisciplineInStudentSemester {
       hours,
       daysWeek,
     });
-
+  
     await this.courseHistoriesRepository.create(courseHistory);
 
     return {

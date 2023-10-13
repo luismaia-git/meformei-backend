@@ -14,7 +14,7 @@ export interface UserProps {
   salt?: string;
   inative: Date
   avatar: string
-  createdAt?: Date
+  createdAt: Date
 }
 
 export class User extends Entity<UserProps> {
@@ -114,6 +114,19 @@ export class User extends Entity<UserProps> {
 
   public get createdAt(): Date {
     return this.props.createdAt;
+  }
+
+  public update(updateData: Partial<User>) {
+   
+    if (Object.keys(updateData).length === 0) {
+      return; // Não há dados para atualizar
+    }
+
+    // Garanta que o id não seja atualizado
+    const { id, createdAt, ...updatedProps } = updateData;
+
+    // Atualize as propriedades restantes
+    Object.assign(this.props, updatedProps);
   }
 
 }

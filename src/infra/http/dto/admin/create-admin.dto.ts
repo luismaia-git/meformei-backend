@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class CreateAdminBody {
@@ -21,6 +22,7 @@ export class CreateAdminBody {
 
   @ApiProperty()
   @IsNotEmpty()
+  @Exclude()
   password: string;
 
   @ApiProperty()

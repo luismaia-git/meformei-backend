@@ -20,25 +20,21 @@ export class UpdateCourseHistory {
   async execute(
     request: UpdateCourseHistoryRequest,
   ): Promise<UpdateCourseHistoryResponse> {
-    const { courseHistory, id } = request;
+    const { courseHistory: body, id } = request;
 
-    const courseHistoryFinded = await this.courseHistoriesRepository.findById(
+    const courseHistory = await this.courseHistoriesRepository.findById(
       id,
     );
 
-    if (!courseHistoryFinded) throw new CourseHistoryNotFound();
+    if (!courseHistory) throw new CourseHistoryNotFound();
 
-    const data = CourseHistory.create(
-      { ...courseHistoryFinded._props, ...courseHistory },
-      courseHistoryFinded.id,
-    );
-
-    const courseHistoryUpdated = await this.courseHistoriesRepository.update(
-      data,
+    courseHistory.update(body)
+    await this.courseHistoriesRepository.save(
+      courseHistory,
     );
 
     return {
-      courseHistory: courseHistoryUpdated,
+      courseHistory,
     };
   }
 }

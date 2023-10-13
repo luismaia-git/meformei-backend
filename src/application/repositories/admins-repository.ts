@@ -2,7 +2,7 @@ import { Admin } from '../entities/admin/admin';
 
 export abstract class AdminsRepository {
   abstract create(admin: Admin): Promise<Admin>;
-  abstract update(admin: Admin): Promise<Admin>;
+  abstract save(admin: Admin): Promise<Admin>;
   abstract delete(adminId: string): Promise<void>;
   abstract list(): Promise<Admin[] | []>;
   abstract findById(adminId: string): Promise<Admin | null>;

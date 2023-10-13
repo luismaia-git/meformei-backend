@@ -83,12 +83,12 @@ export class CreateStudent {
         university: curriculum.university,
         username,
         avatar: null,
-        inative:null
+        inative:null,
+        createdAt: null,
       },
       user.id,
     );
 
-    await this.usersRepository.create(user);
     await this.studentsRepository.create(student);
 
     return {

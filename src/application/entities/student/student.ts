@@ -1,5 +1,6 @@
 import { Entity } from '@core/entities/entity';
 import { UniqueEntityID } from '@core/entities/unique-entity-id';
+import { Optional } from '@core/types/optional';
 import { University } from '../curriculum/university';
 import { UserProps } from '../user/user';
 
@@ -15,11 +16,12 @@ export interface StudentProps extends UserProps {
 }
 
 export class Student extends Entity<StudentProps>{
-  static create(props: StudentProps, id?: UniqueEntityID) {
+  static create(props: Optional<StudentProps, 'createdAt'>, id?: UniqueEntityID) {
     const student = new Student(
       {
         ...props,
         studentId: props.studentId ?? new UniqueEntityID(),
+        createdAt: props.createdAt ?? new Date(),
         currentSemester: CurrentSemesterCalculator(
           props.enrollmentYear,
           props.enrollmentSemester,
@@ -30,9 +32,9 @@ export class Student extends Entity<StudentProps>{
     return student;
   }
 
-  public get _props() {
-    return this.props;
-  }
+  // public get _props() {
+  //   return this.props;
+  // }
 
   public set name(name: string) {
     this.props.name = name;
@@ -186,6 +188,20 @@ export class Student extends Entity<StudentProps>{
   public get university() {
     return this.props.university;
   }
+
+  public update(updateData: Partial<Student>) {
+   
+    if (Object.keys(updateData).length === 0) {
+      return; // Não há dados para atualizar
+    }
+
+    const { id, createdAt, ...updatedProps } = updateData;
+
+    Object.assign(this.props, updatedProps);
+  }
+
+
+
 }
 
 function CurrentSemesterCalculator(

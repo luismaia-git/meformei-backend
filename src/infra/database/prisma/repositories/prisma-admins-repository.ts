@@ -59,7 +59,7 @@ export class PrismaAdminsRepository implements AdminsRepository {
     return PrismaAdminMapper.toDomain(adminCreated)
   }
 
-  async update(admin: Admin): Promise<Admin> {
+  async save(admin: Admin): Promise<Admin> {
     const { user: rawUser, admin: rawAdmin} = PrismaAdminMapper.toPrisma(admin);
 
     const adminFinded = await this.prisma.admin.update({

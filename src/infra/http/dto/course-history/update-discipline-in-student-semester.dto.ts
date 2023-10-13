@@ -1,7 +1,7 @@
 import { StatusType } from '@application/entities/course-history/course-history';
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
 import { IsEnum, IsOptional } from 'class-validator';
+import { IsHHMMFormat } from './IsHHmm';
 
 export enum Semester {
   FIRST = 1,
@@ -39,19 +39,13 @@ export class UpdateDisciplineInStudentSemester {
 
   @ApiProperty({example: "12:00"})
   @IsOptional()
-  @Transform((value) => {
-    const timeString = `${new Date().toLocaleDateString()} ${value}:00`;
-    return new Date(timeString);
-  })
-  startTime: Date;
+  @IsHHMMFormat() 
+  startTime: string;
 
   @ApiProperty({example: "14:00"})
   @IsOptional()
-  @Transform((value) => {
-    const timeString = `${new Date().toLocaleDateString()} ${value}:00`;
-    return new Date(timeString);
-  })
-  endTime: Date;
+  @IsHHMMFormat() 
+  endTime: string;
 
   @ApiProperty()
   @IsOptional()
