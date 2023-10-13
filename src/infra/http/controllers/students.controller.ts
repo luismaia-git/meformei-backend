@@ -170,7 +170,7 @@ export class StudentsController {
     @Param('id') id: string,
     @GetUser() user: any,
   ) {
-    if (!user?.isAdmin && user.studentId !== id)
+    if (!user?.roles.includes('admin') && user.studentId !== id)
       throw new UnauthorizedException(
         'Você não tem permissão para realizar esta operação',
       );
@@ -201,7 +201,7 @@ export class StudentsController {
     @Param('semester', ParseIntPipe) semester: number,
     @GetUser() user: any,
   ) {
-    if (!user?.isAdmin && user.registration !== studentId)
+    if (!user?.roles.includes('admin') && user.registration !== studentId)
       throw new UnauthorizedException(
         'Você não tem permissão para realizar esta operação',
       );
@@ -237,7 +237,7 @@ export class StudentsController {
     @Param('courseHistoryId') courseHistoryId: string,
     @GetUser() user: any,
   ) {
-    if (!user?.isAdmin && user.registration !== studentId)
+    if (!user?.roles.includes('admin') && user.registration !== studentId)
       throw new UnauthorizedException(
         'Você não tem permissão para realizar esta operação',
       );
@@ -341,7 +341,7 @@ export class StudentsController {
     @Param() statusType: StatusTypeClass,
     @GetUser() user: any,
   ) {
-    if (!user?.isAdmin && user.registration !== studentId)
+    if (!user?.roles.includes('admin') && user.registration !== studentId)
       throw new UnauthorizedException(
         'Você não tem permissão para realizar esta operação',
       );
@@ -381,7 +381,7 @@ export class StudentsController {
     @Body() request: UpdateDisciplineInStudentSemester,
     @GetUser() user: any,
   ) {
-    if (!user?.isAdmin && user.registration !== studentId)
+    if (!user?.roles.includes('admin') && user.registration !== studentId)
       throw new UnauthorizedException(
         'Você não tem permissão para realizar esta operação',
       );
