@@ -13,6 +13,7 @@ import { CreateExtraCurricularActivity } from '@application/use-cases/extracurri
 import { DeleteExtraCurricular } from '@application/use-cases/extracurricular-activities/delete-extracurricular-activity';
 import { FindExtraCurricularActivityByStudent } from '@application/use-cases/extracurricular-activities/find-extracurricular-activity-by-student';
 import { CreateStudent } from '@application/use-cases/student/create-student';
+import { DeleteStudent } from '@application/use-cases/student/delete-student';
 import { FindStudent } from '@application/use-cases/student/find-student';
 import { ListStudents } from '@application/use-cases/student/list-students';
 import { UpdateStudent } from '@application/use-cases/student/update-student';
@@ -97,6 +98,7 @@ export class StudentsController {
     private findExtraCurricularActivityByStudent: FindExtraCurricularActivityByStudent,
     private listDisciplinesHistoryTodo: ListDisciplinesHistoryTodo,
     private updateCourseHistory: UpdateCourseHistory,
+    private deleteStudent: DeleteStudent
   ) {}
 
   @Get()
@@ -114,13 +116,25 @@ export class StudentsController {
     };
   }
 
-  @Get(':id')
+  @Delete(':studentId')
+  async removeStudent(
+    @Param('studentId') studentId:string
+  ){
+    const student = await this.deleteStudent.execute({studentId})
+
+    return {
+      message: 'Estudante deletado com sucesso!',
+      student: StudentViewModel.toHTTP(student.student),
+    };
+  }
+
+  @Get(':studentId')
   @Roles(ROLES.ADMIN)
   @ApiResponse({
     type: StudentResponseWithMessage,
     description: 'Procura por um estudante',
   })
-  async getStudent(@Param('id') id: string) {
+  async getStudent(@Param('studentId') id: string) {
     const { student } = await this.findStudent.execute({ studentId: id });
 
     return {
@@ -277,7 +291,8 @@ export class StudentsController {
     @Param('studentId') studentId: string,
     @GetUser() user: any,
   ) {
-    if (!user?.isAdmin && user.registration !== studentId)
+    
+    if (!user?.roles.includes('admin') && user.registration !== studentId)
       throw new UnauthorizedException(
         'Você não tem permissão para realizar esta operação',
       );
