@@ -286,6 +286,7 @@ export class AuthController {
   async sendRecoverPasswordEmail(
     @Body() recoverPasswordDto: RecoverPasswordDto,
   ): Promise<ResponseWithMessage> {
+    console.log(recoverPasswordDto)
     await this.forgotPassword.execute(recoverPasswordDto);
 
     return {
