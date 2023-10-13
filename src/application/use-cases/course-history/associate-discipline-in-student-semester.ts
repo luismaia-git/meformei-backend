@@ -11,7 +11,7 @@ import { DisciplineNotFound } from '../errors/discipline-not-found';
 import { StudentNotFound } from '../errors/student-not-found';
 
 interface CreateCourseHistoryRequest {
-  studentRegistration: string;
+  studentId: string;
   disciplineId: string;
   status: StatusType;
   semester: number;
@@ -37,7 +37,7 @@ export class AssociateDisciplineInStudentSemester {
     request: CreateCourseHistoryRequest,
   ): Promise<CreateCourseHistoryResponse> {
     const {
-      studentRegistration,
+      studentId,
       disciplineId,
       status,
       semester,
@@ -47,7 +47,7 @@ export class AssociateDisciplineInStudentSemester {
       daysWeek,
     } = request;
     
-    const student = await this.studentsRepository.findByRegistration(studentRegistration);
+    const student = await this.studentsRepository.findById(studentId);
 
     if (!student) {
       throw new StudentNotFound();

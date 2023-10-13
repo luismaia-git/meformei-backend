@@ -10,14 +10,14 @@ import { StudentNotFound } from '../errors/student-not-found';
 
 interface FindCourseHistoryRequest {
   status: StatusType;
-  studentRegistration: string;
+  studentId: string;
 }
 interface FindCourseHistoryResponse {
   courseHistory: CourseHistory[];
 }
 
 @Injectable()
-export class FindCourseHistoryByStatusAndStudentRegistration {
+export class FindCourseHistoryByStatusAndStudentId {
   constructor(
     private courseHistoriesRepository: CourseHistoriesRepository,
     private studentsRepository: StudentsRepository
@@ -26,8 +26,8 @@ export class FindCourseHistoryByStatusAndStudentRegistration {
   async execute(
     request: FindCourseHistoryRequest,
   ): Promise<FindCourseHistoryResponse> {
-    const { status, studentRegistration } = request;
-    const student = await this.studentsRepository.findByRegistration(studentRegistration);
+    const { status, studentId } = request;
+    const student = await this.studentsRepository.findById(studentId);
 
     if (!student) {
       throw new StudentNotFound();

@@ -6,7 +6,7 @@ import { StudentsRepository } from '@application/repositories/students-repositor
 import { StudentNotFound } from '../errors/student-not-found';
 
 interface Request {
-  studentRegistration: string;
+  studentId: string;
 }
 interface Response {
   extraCurricularActivities: ExtraCurricular[];
@@ -19,9 +19,9 @@ export class FindExtraCurricularActivityByStudent {
     private studentsRepository: StudentsRepository) {}
 
   async execute(request: Request): Promise<Response> {
-    const { studentRegistration } = request;
+    const { studentId } = request;
 
-    const student = await this.studentsRepository.findByRegistration(studentRegistration);
+    const student = await this.studentsRepository.findById(studentId);
 
     if (!student) {
       throw new StudentNotFound();

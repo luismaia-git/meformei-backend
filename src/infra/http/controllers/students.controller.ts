@@ -4,17 +4,15 @@ import {
 } from '@application/entities/course-history/course-history';
 import { AssociateDisciplineInStudentSemester } from '@application/use-cases/course-history/associate-discipline-in-student-semester';
 import { DisassociateDisciplineInStudentSemester } from '@application/use-cases/course-history/disassociate-discipline-in-student-semester';
-import { FindCourseHistoryByStatusAndStudentRegistration } from '@application/use-cases/course-history/find-course-history-by-status';
-import { FindCourseHistoryByStudentRegistrationBySemesterByDisciplineId } from '@application/use-cases/course-history/find-course-history-by-student-registration-semester-discipline-id';
-import { FindDisciplinesHistoryByStudentRegistration } from '@application/use-cases/course-history/find-disciplines-history-by-student-registration';
-import { FindDisciplinesHistoryByStudentRegistrationBySemester } from '@application/use-cases/course-history/find-disciplines-history-by-student-registration-semester';
+import { FindCourseHistoryByStatusAndStudentId } from '@application/use-cases/course-history/find-course-history-by-status';
+import { FindDisciplinesHistoryByStudentId } from '@application/use-cases/course-history/find-disciplines-history-by-student';
+import { FindDisciplinesHistoryByStudentIdBySemester } from '@application/use-cases/course-history/find-disciplines-history-by-student-semester';
 import { ListDisciplinesHistoryTodo } from '@application/use-cases/course-history/list-disciplines-history-to-do';
 import { UpdateCourseHistory } from '@application/use-cases/course-history/update-course-history';
 import { CreateExtraCurricularActivity } from '@application/use-cases/extracurricular-activities/create-extracurricular-activity';
 import { DeleteExtraCurricular } from '@application/use-cases/extracurricular-activities/delete-extracurricular-activity';
 import { FindExtraCurricularActivityByStudent } from '@application/use-cases/extracurricular-activities/find-extracurricular-activity-by-student';
 import { CreateStudent } from '@application/use-cases/student/create-student';
-import { DeleteStudent } from '@application/use-cases/student/delete-student';
 import { FindStudent } from '@application/use-cases/student/find-student';
 import { ListStudents } from '@application/use-cases/student/list-students';
 import { UpdateStudent } from '@application/use-cases/student/update-student';
@@ -88,14 +86,12 @@ export class StudentsController {
     private createStudent: CreateStudent,
     private listStudents: ListStudents,
     private findStudent: FindStudent,
-    private deleteStudent: DeleteStudent,
     private updateStudent: UpdateStudent,
     private associateDisciplineInStudentSemester: AssociateDisciplineInStudentSemester,
     private disassociateDisciplineInStudentSemester: DisassociateDisciplineInStudentSemester,
-    private findCourseHistoryByStudentRegistrationBySemesterByDisciplineId: FindCourseHistoryByStudentRegistrationBySemesterByDisciplineId,
-    private findDisciplinesHistoryByStudentRegistrationBySemester: FindDisciplinesHistoryByStudentRegistrationBySemester,
-    private findDisciplinesHistoryByStudentRegistration: FindDisciplinesHistoryByStudentRegistration,
-    private findCourseHistoryByStatusAndStudentRegistration: FindCourseHistoryByStatusAndStudentRegistration,
+    private findDisciplinesHistoryByStudentIdBySemester: FindDisciplinesHistoryByStudentIdBySemester,
+    private findDisciplinesHistoryByStudentId: FindDisciplinesHistoryByStudentId,
+    private findCourseHistoryByStatusAndStudentId: FindCourseHistoryByStatusAndStudentId,
     private createExtracurricularActivity: CreateExtraCurricularActivity,
     private deleteExtraCurricular: DeleteExtraCurricular,
     private findExtraCurricularActivityByStudent: FindExtraCurricularActivityByStudent,
@@ -169,18 +165,18 @@ export class StudentsController {
 
   //semester
 
-  @Post(':studentRegistration/courseHistory/semester/:semester')
+  @Post(':studentId/courseHistory/semester/:semester')
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   @ApiResponse({type: CourseHistoryToFrontResponse,  description: "Associa disciplina(s) no historico do estudante"})
   async addDisciplineInSemester(
     @Body() request: AssociateDisciplineInStudentSemesterBody,
-    @Param('studentRegistration') studentRegistration: string,
+    @Param('studentId') studentId: string,
     @Param('semester', ParseIntPipe) semester: number,
     @GetUser() user: any
   ) {
 
     if (
-      !user?.isAdmin && user.registration !== studentRegistration
+      !user?.isAdmin && user.registration !== studentId
     )
       throw new UnauthorizedException(
         'Você não tem permissão para realizar esta operação',
@@ -194,7 +190,7 @@ export class StudentsController {
         await this.associateDisciplineInStudentSemester.execute({
           ...discipline,
           semester: semester,
-          studentRegistration: studentRegistration,
+          studentId: studentId,
         });
       courseHistories.push(courseHistory);
     }
@@ -205,24 +201,24 @@ export class StudentsController {
     };
   }
 
-  @Delete(':studentRegistration/courseHistory/:courseHistoryId')
+  @Delete(':studentId/courseHistory/:courseHistoryId')
   @ApiResponse({type: ToFront, isArray: true , description: "Dessasocia disciplina no historico do estudante"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async disassociateDisciplineInSemester(
-    @Param('studentRegistration') studentRegistration: string,
+    @Param('studentId') studentId: string,
     @Param('courseHistoryId') courseHistoryId: string,
     @GetUser() user: any
   ) {
 
     if (
-      !user?.isAdmin && user.registration !== studentRegistration
+      !user?.isAdmin && user.registration !== studentId
     )
       throw new UnauthorizedException(
         'Você não tem permissão para realizar esta operação',
       );
     // const { courseHistory } =
     //   await this.findCourseHistoryByStudentRegistrationBySemesterByDisciplineId.execute(
-    //     { disciplineId, semester, studentRegistration },
+    //     { disciplineId, semester, studentId },
     //   );
     const { courseHistory: courseHistoryDeleted } =
       await this.disassociateDisciplineInStudentSemester.execute({
@@ -235,17 +231,17 @@ export class StudentsController {
     };
   }
 
-  @Get(':studentRegistration/courseHistory/semester/:semester')
+  @Get(':studentId/courseHistory/semester/:semester')
   @ApiResponse({type: ToFront, isArray: true , description: "Procura por disciplinas no historico do estudante pelo semestre"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async findDisciplinesBySemester(
-    @Param('studentRegistration') studentRegistration: string,
+    @Param('studentId') studentId: string,
     @Param('semester', ParseIntPipe) semester: number,
   ) {
     const { courseHistories } =
-      await this.findDisciplinesHistoryByStudentRegistrationBySemester.execute({
+      await this.findDisciplinesHistoryByStudentIdBySemester.execute({
         semester,
-        studentRegistration,
+        studentId,
       });
 
     return {
@@ -253,24 +249,24 @@ export class StudentsController {
     };
   }
 
-  @Get(':studentRegistration/courseHistory')
+  @Get(':studentId/courseHistory')
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   @ApiResponse({type: ToFront, isArray:true,  description: "Procura por disciplina(s) no historico do estudante pelo Id do estudante"})
   async findDisciplinesByStudent(
-    @Param('studentRegistration') studentRegistration: string,
+    @Param('studentId') studentId: string,
     @GetUser() user: any
   ) {
     
     if (
-      !user?.isAdmin && user.registration !== studentRegistration
+      !user?.isAdmin && user.registration !== studentId
     )
       throw new UnauthorizedException(
         'Você não tem permissão para realizar esta operação',
       );
 
     const { courseHistories } =
-      await this.findDisciplinesHistoryByStudentRegistration.execute({
-        studentRegistration,
+      await this.findDisciplinesHistoryByStudentId.execute({
+        studentId,
       });
 
     return {
@@ -278,14 +274,14 @@ export class StudentsController {
     };
   }
 
-  @Get(':studentRegistration/courseHistory/todo')
+  @Get(':studentId/courseHistory/todo')
   @ApiResponse({type: ToFront, isArray: true , description: "Procura por disciplinas no historico do estudante que ele ainda precisa fazer."})
   async findDisciplinesTodoByStudent(
-    @Param('studentRegistration') studentRegistration: string,
+    @Param('studentId') studentId: string,
     @Body() body: FindDisciplinesTodoBody,
   ) {
     const { disciplinesTodo } = await this.listDisciplinesHistoryTodo.execute({
-      studentRegistration,
+      studentId,
       curriculumId: body.curriculumId,
     });
 
@@ -294,17 +290,17 @@ export class StudentsController {
     };
   }
 
-  @Get(':studentRegistration/courseHistory/status/:status')
+  @Get(':studentId/courseHistory/status/:status')
   @ApiResponse({type: ToFront, isArray: true , description: "Procura por disciplinas no historico do estudante pelo status"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async findDisciplinesByStatusAndStudent(
-    @Param('studentRegistration') studentRegistration: string,
+    @Param('studentId') studentId: string,
     @Param() statusType: StatusTypeClass,
     @GetUser() user: any
   ) {
 
     if (
-      !user?.isAdmin && user.registration !== studentRegistration
+      !user?.isAdmin && user.registration !== studentId
     )
       throw new UnauthorizedException(
         'Você não tem permissão para realizar esta operação',
@@ -321,8 +317,8 @@ export class StudentsController {
       );
     }
     const { courseHistory } =
-      await this.findCourseHistoryByStatusAndStudentRegistration.execute({
-        studentRegistration,
+      await this.findCourseHistoryByStatusAndStudentId.execute({
+        studentId,
         status: statusType.status,
       });
 
@@ -331,18 +327,18 @@ export class StudentsController {
     };
   }
 
-  @Patch(':studentRegistration/courseHistory/:courseHistoryId')
+  @Patch(':studentId/courseHistory/:courseHistoryId')
   @ApiResponse({type: ToFront, isArray: true , description: "Atualiza dados de uma associação de uma disciplina de um estudante"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async updateDisciplinesByStatusAndStudent(
     @Param('courseHistoryId') courseHistoryId: string,
-    @Param('studentRegistration') studentRegistration : string,
+    @Param('studentId') studentId : string,
     @Body() request : UpdateDisciplineInStudentSemester,
     @GetUser() user: any
   ) {
 
     if (
-      !user?.isAdmin && user.registration !== studentRegistration
+      !user?.isAdmin && user.registration !== studentId
     )
       throw new UnauthorizedException(
         'Você não tem permissão para realizar esta operação',
@@ -358,17 +354,17 @@ export class StudentsController {
 
   //extracurricularactivity
 
-  @Post(':studentRegistration/extracurricular')
+  @Post(':studentId/extracurricular')
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   @ApiResponse({ type: ExtraCurricularActivityResponse, description: "Registra uma atividade extra curricular de um estudante" })
   async addExtracurricularActivity(
     @Body() body: CreateExtraCurricularActivityBody,
-    @Param('studentRegistration') studentRegistration: string,
+    @Param('studentId') studentId: string,
   ) {
     const { extraCurricularActivity } =
       await this.createExtracurricularActivity.execute({
         ...body,
-        studentRegistration,
+        studentId,
       });
 
     return {
@@ -379,7 +375,7 @@ export class StudentsController {
     };
   }
 
-  @Delete(':studentRegistration/extracurricular/:extracurricularId')
+  @Delete(':studentId/extracurricular/:extracurricularId')
   @ApiResponse({type: ResponseWithMessage && ExtraCurricularActivityHttp, description: "Deleta uma atividade extra curricular de estudante"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async removeExtracurricularActivity(
@@ -395,15 +391,15 @@ export class StudentsController {
     };
   }
 
-  @Get(':studentRegistration/extracurricular')
+  @Get(':studentId/extracurricular')
   @ApiResponse({type: ExtraCurricularActivityHttp, isArray: true, description: "Procura as atividades extra curriculares de estudante"})
   @Roles(ROLES.STUDENT, ROLES.ADMIN)
   async findExtracurricularActivitiesBySemester(
-    @Param('studentRegistration') studentRegistration: string,
+    @Param('studentId') studentId: string,
   ) {
     const { extraCurricularActivities } =
       await this.findExtraCurricularActivityByStudent.execute({
-        studentRegistration,
+        studentId,
       });
 
     return {

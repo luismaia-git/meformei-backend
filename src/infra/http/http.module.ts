@@ -12,10 +12,10 @@ import { ResetPassword } from '@application/use-cases/authentication/reset-passw
 import { ValidToken } from '@application/use-cases/authentication/valid-token';
 import { AssociateDisciplineInStudentSemester } from '@application/use-cases/course-history/associate-discipline-in-student-semester';
 import { DisassociateDisciplineInStudentSemester } from '@application/use-cases/course-history/disassociate-discipline-in-student-semester';
-import { FindCourseHistoryByStatusAndStudentRegistration } from '@application/use-cases/course-history/find-course-history-by-status';
-import { FindCourseHistoryByStudentRegistrationBySemesterByDisciplineId } from '@application/use-cases/course-history/find-course-history-by-student-registration-semester-discipline-id';
-import { FindDisciplinesHistoryByStudentRegistration } from '@application/use-cases/course-history/find-disciplines-history-by-student-registration';
-import { FindDisciplinesHistoryByStudentRegistrationBySemester } from '@application/use-cases/course-history/find-disciplines-history-by-student-registration-semester';
+import { FindCourseHistoryByStatusAndStudentId } from '@application/use-cases/course-history/find-course-history-by-status';
+import { FindCourseHistoryByStudentRegistrationBySemesterByDisciplineId } from '@application/use-cases/course-history/find-course-history-by-student-semester-discipline-id';
+import { FindDisciplinesHistoryByStudentId } from '@application/use-cases/course-history/find-disciplines-history-by-student';
+import { FindDisciplinesHistoryByStudentIdBySemester } from '@application/use-cases/course-history/find-disciplines-history-by-student-semester';
 import { ListDisciplinesHistoryTodo } from '@application/use-cases/course-history/list-disciplines-history-to-do';
 import { UpdateCourseHistory } from '@application/use-cases/course-history/update-course-history';
 import { CreateCourse } from '@application/use-cases/course/create-course';
@@ -109,9 +109,9 @@ import { UniversitiesController } from './controllers/university.controller';
     AssociateDisciplineInStudentSemester,
     DisassociateDisciplineInStudentSemester,
     FindCourseHistoryByStudentRegistrationBySemesterByDisciplineId,
-    FindDisciplinesHistoryByStudentRegistrationBySemester,
-    FindDisciplinesHistoryByStudentRegistration,
-    FindCourseHistoryByStatusAndStudentRegistration,
+    FindDisciplinesHistoryByStudentIdBySemester,
+    FindDisciplinesHistoryByStudentId,
+    FindCourseHistoryByStatusAndStudentId,
     CreateExtraCurricularActivity,
     DeleteExtraCurricular,
     FindExtraCurricularActivityByStudent,

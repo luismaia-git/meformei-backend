@@ -13,7 +13,7 @@ interface ListCourseHistoriesResponse {
 
 interface Request {
   curriculumId: string;
-  studentRegistration: string;
+  studentId: string;
 }
 
 @Injectable()
@@ -25,9 +25,9 @@ export class ListDisciplinesHistoryTodo {
   ) {}
 
   async execute(req: Request): Promise<ListCourseHistoriesResponse> {
-    const { curriculumId, studentRegistration } = req;
+    const { curriculumId, studentId } = req;
 
-    const student = await this.studentsRepository.findByRegistration(studentRegistration);
+    const student = await this.studentsRepository.findById(studentId);
 
     if (!student) {
       throw new StudentNotFound();

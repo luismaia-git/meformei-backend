@@ -6,23 +6,23 @@ import { StudentsRepository } from '@application/repositories/students-repositor
 import { StudentNotFound } from '../errors/student-not-found';
 
 interface FindCourseHistoryRequest {
-  studentRegistration: string;
+  studentId: string;
 }
 interface FindCourseHistoryResponse {
   courseHistories: CourseHistory[];
 }
 
 @Injectable()
-export class FindDisciplinesHistoryByStudentRegistration {
+export class FindDisciplinesHistoryByStudentId {
   constructor(private courseHistoriesRepository: CourseHistoriesRepository,
     private studentsRepository: StudentsRepository) {}
 
   async execute(
     request: FindCourseHistoryRequest,
   ): Promise<FindCourseHistoryResponse> {
-    const { studentRegistration } = request;
+    const { studentId } = request;
 
-    const student = await this.studentsRepository.findByRegistration(studentRegistration);
+    const student = await this.studentsRepository.findById(studentId);
 
     if (!student) {
       throw new StudentNotFound();

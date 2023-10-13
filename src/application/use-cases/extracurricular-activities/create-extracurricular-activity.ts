@@ -14,7 +14,7 @@ interface CreateExtraCurricularActivityResponse {
 
 
 export interface RequestCreateExtraCurricularActivity {
-  studentRegistration: string;
+  studentId: string;
   title: string;
   startDate: Date;
   endDate: Date;
@@ -39,7 +39,7 @@ export class CreateExtraCurricularActivity {
     request: RequestCreateExtraCurricularActivity,
   ): Promise<CreateExtraCurricularActivityResponse> {
 
-    const student = await this.studentsRepository.findByRegistration(request.studentRegistration);
+    const student = await this.studentsRepository.findById(request.studentId);
 
     if (!student) {
       throw new StudentNotFound();
