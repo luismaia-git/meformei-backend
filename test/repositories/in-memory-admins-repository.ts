@@ -90,7 +90,6 @@ export class InMemoryAdminsRepository implements AdminsRepository {
   }
 }
 
-
 interface FindByEmailAndUserNameRequest {
   email: string;
   username: string;

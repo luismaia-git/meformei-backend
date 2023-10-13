@@ -36,16 +36,16 @@ export class AssociateDiscipline {
   @IsEnum(StatusCourseHistory)
   status: StatusType;
 
-  @ApiProperty({example: "12:00"})
+  @ApiProperty({ example: '12:00' })
   @IsNotEmpty()
   @Type(() => String)
-  @IsHHMMFormat() 
+  @IsHHMMFormat()
   startTime: string;
 
-  @ApiProperty({example: "14:00"})
+  @ApiProperty({ example: '14:00' })
   @IsNotEmpty()
   @Type(() => String)
-  @IsHHMMFormat() 
+  @IsHHMMFormat()
   endTime: string;
 
   @ApiProperty()
@@ -59,9 +59,9 @@ export class AssociateDiscipline {
 
 export class AssociateDisciplineInStudentSemesterBody {
   @IsArray()
-  @IsNotEmpty({each:true})
+  @IsNotEmpty({ each: true })
   @ApiProperty({ isArray: true, type: AssociateDiscipline })
-  @ValidateNested({ each: true }) 
+  @ValidateNested({ each: true })
   @Type(() => AssociateDiscipline)
   disciplines: AssociateDiscipline[];
 }

@@ -26,7 +26,6 @@ export enum StatusCourseHistory {
 }
 
 export class UpdateDisciplineInStudentSemester {
-  
   @ApiProperty()
   @IsOptional()
   @IsEnum(StatusCourseHistory)
@@ -37,14 +36,14 @@ export class UpdateDisciplineInStudentSemester {
   @IsEnum(Semester)
   semester: number;
 
-  @ApiProperty({example: "12:00"})
+  @ApiProperty({ example: '12:00' })
   @IsOptional()
-  @IsHHMMFormat() 
+  @IsHHMMFormat()
   startTime: string;
 
-  @ApiProperty({example: "14:00"})
+  @ApiProperty({ example: '14:00' })
   @IsOptional()
-  @IsHHMMFormat() 
+  @IsHHMMFormat()
   endTime: string;
 
   @ApiProperty()
@@ -55,5 +54,3 @@ export class UpdateDisciplineInStudentSemester {
   @IsOptional()
   daysWeek: string[];
 }
-
-

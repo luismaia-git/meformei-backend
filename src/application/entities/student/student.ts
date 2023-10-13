@@ -15,8 +15,11 @@ export interface StudentProps extends UserProps {
   university: University;
 }
 
-export class Student extends Entity<StudentProps>{
-  static create(props: Optional<StudentProps, 'createdAt'>, id?: UniqueEntityID) {
+export class Student extends Entity<StudentProps> {
+  static create(
+    props: Optional<StudentProps, 'createdAt'>,
+    id?: UniqueEntityID,
+  ) {
     const student = new Student(
       {
         ...props,
@@ -190,7 +193,6 @@ export class Student extends Entity<StudentProps>{
   }
 
   public update(updateData: Partial<Student>) {
-   
     if (Object.keys(updateData).length === 0) {
       return; // Não há dados para atualizar
     }
@@ -199,9 +201,6 @@ export class Student extends Entity<StudentProps>{
 
     Object.assign(this.props, updatedProps);
   }
-
-
-
 }
 
 function CurrentSemesterCalculator(

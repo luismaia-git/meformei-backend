@@ -14,9 +14,7 @@ export abstract class CourseHistoriesRepository {
   abstract findByStatusAndStudent(
     req: FindByStatusAndStudent,
   ): Promise<CourseHistory[] | []>;
-  abstract findByStudent(
-    studentId: string,
-  ): Promise<CourseHistory[] | []>;
+  abstract findByStudent(studentId: string): Promise<CourseHistory[] | []>;
   abstract save(courseHistory: CourseHistory): Promise<CourseHistory>;
   abstract delete(courseHistoryId: string): Promise<void>;
   abstract list(): Promise<CourseHistory[] | []>;

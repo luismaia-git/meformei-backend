@@ -25,7 +25,7 @@ export class UpdateCurriculum {
 
     if (!curriculum) throw new CurriculumNotFound();
 
-    curriculum.update(body)
+    curriculum.update(body);
 
     await this.curriculumsRepository.save(curriculum);
 

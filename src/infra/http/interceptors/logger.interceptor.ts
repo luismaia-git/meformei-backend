@@ -22,17 +22,17 @@ export class LoggerInterceptor implements NestInterceptor {
     delete body.passwordConfirmation;
     const user = (req as any).user;
     const userEmail = user ? user.email : null;
-    // this.logger.info('Log:', {
-    //   timestamp: new Date().toISOString(),
-    //   method: req.method,
-    //   route: req.route.path,
-    //   data: {
-    //     body: body,
-    //     query: req.query,
-    //     params: req.params,
-    //   },
-    //   from: req.ip,
-    //   madeBy: userEmail,
-    // });
+    this.logger.info('Log:', {
+      timestamp: new Date().toISOString(),
+      method: req.method,
+      route: req.route.path,
+      data: {
+        body: body,
+        query: req.query,
+        params: req.params,
+      },
+      from: req.ip,
+      madeBy: userEmail,
+    });
   }
 }

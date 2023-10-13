@@ -6,11 +6,14 @@ import { Discipline } from '../discipline/discipline';
 
 export type StatusType = 'DONE' | 'INPROGRESS' | 'FAILED' | 'WITHDRAWAL';
 enum StatusTypeEnum {
-  'DONE' , 'INPROGRESS' , 'FAILED' , 'WITHDRAWAL'
+  'DONE',
+  'INPROGRESS',
+  'FAILED',
+  'WITHDRAWAL',
 }
 export abstract class StatusTypeClass {
   @IsEnum(StatusTypeEnum)
-  status: string
+  status: string;
 }
 export interface CourseHistoryProps {
   studentId: string;
@@ -25,8 +28,10 @@ export interface CourseHistoryProps {
 }
 
 export class CourseHistory extends Entity<CourseHistoryProps> {
-
-  static create(props: Optional<CourseHistoryProps, 'createdAt'> , id?: UniqueEntityID) {
+  static create(
+    props: Optional<CourseHistoryProps, 'createdAt'>,
+    id?: UniqueEntityID,
+  ) {
     const courseHistory = new CourseHistory(
       { ...props, createdAt: props.createdAt ?? new Date() },
       id,
@@ -58,7 +63,6 @@ export class CourseHistory extends Entity<CourseHistoryProps> {
   public get status() {
     return this.props.status;
   }
-
 
   public get createdAt() {
     return this.props.createdAt;
@@ -105,7 +109,6 @@ export class CourseHistory extends Entity<CourseHistoryProps> {
   }
 
   public update(updateData: Partial<CourseHistory>) {
-   
     if (Object.keys(updateData).length === 0) {
       return; // Não há dados para atualizar
     }

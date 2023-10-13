@@ -263,5 +263,4 @@ export class UniversitiesController {
       curriculum: CurriculumViewModel.toHTTP(curriculum),
     };
   }
-
 }

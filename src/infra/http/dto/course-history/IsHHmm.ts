@@ -15,7 +15,7 @@ export class IsHHMMFormatConstraint implements ValidatorConstraintInterface {
 }
 
 export function IsHHMMFormat(validationOptions?: ValidationOptions) {
-  return (object: Object, propertyName: string) => {
+  return (object: NonNullable<unknown>, propertyName: string) => {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,

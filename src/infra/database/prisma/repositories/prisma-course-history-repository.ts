@@ -14,9 +14,7 @@ export class PrismaCourseHistoryRepository
   implements CourseHistoriesRepository
 {
   constructor(private prisma: PrismaService) {}
-  async findByStudent(
-    studentId: string,
-  ): Promise<CourseHistory[] | []> {
+  async findByStudent(studentId: string): Promise<CourseHistory[] | []> {
     const courseHistory = await this.prisma.courseHistory.findMany({
       where: {
         studentId,
@@ -104,7 +102,7 @@ export class PrismaCourseHistoryRepository
 
   async create(courseHistory: CourseHistory): Promise<void> {
     const raw = PrismaCourseHistoryMapper.toPrisma(courseHistory);
-   
+
     await this.prisma.courseHistory.create({
       data: raw,
     });

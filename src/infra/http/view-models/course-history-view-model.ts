@@ -1,4 +1,7 @@
-import { CourseHistory, StatusTypeClass } from '@application/entities/course-history/course-history';
+import {
+  CourseHistory,
+  StatusTypeClass,
+} from '@application/entities/course-history/course-history';
 import { ApiProperty } from '@nestjs/swagger';
 import { DisciplineViewModel } from './discipline-view-model';
 
@@ -96,7 +99,7 @@ export abstract class DisciplineToFront {
   id: string;
 
   @ApiProperty({ type: String })
-  courseHistoryId: string
+  courseHistoryId: string;
 
   @ApiProperty()
   name: string;
@@ -127,10 +130,8 @@ export abstract class DisciplineToFront {
   @ApiProperty({ type: String, isArray: true })
   bibliography: string[];
 
-  @ApiProperty({type: StatusTypeClass})
+  @ApiProperty({ type: StatusTypeClass })
   status: StatusType;
-
- 
 }
 
 export abstract class ToFront {

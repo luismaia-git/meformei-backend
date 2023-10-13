@@ -15,7 +15,7 @@ export class PrismaCourseHistoryMapper {
       createdAt: courseHistory.createdAt,
       semester: courseHistory.semester,
       startTime: courseHistory.startTime,
-      endTime:courseHistory.endTime,
+      endTime: courseHistory.endTime,
       hours: courseHistory.hours,
       daysWeek: courseHistory.daysWeek,
     };
@@ -61,5 +61,3 @@ type RawCourseHistory = RawCourseHistoryPrisma & {
     prerequisitesDisciplines: DisciplinePrisma[];
   };
 };
-
-

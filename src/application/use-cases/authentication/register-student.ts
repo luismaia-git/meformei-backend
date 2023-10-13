@@ -32,9 +32,10 @@ export class RegisterAccountStudent {
       state,
     } = request;
 
-    const UserAlreadyExist = await this.usersRepository.findByUsername(username)
+    const UserAlreadyExist = await this.usersRepository.findByUsername(
+      username,
+    );
 
-    
     if (UserAlreadyExist) {
       throw new UserAlreadyExists();
     }
@@ -79,10 +80,7 @@ export class RegisterAccountStudent {
     );
 
     student.salt = await bcrypt.genSalt();
-    student.password = await this.hashPassword(
-      student.password,
-      student.salt,
-    );
+    student.password = await this.hashPassword(student.password, student.salt);
 
     student.recoverToken = null;
 

@@ -25,7 +25,7 @@ export class UpdateAdmin {
 
     if (!admin) throw new AdminNotFound();
 
-    admin.update(body)
+    admin.update(body);
 
     await this.adminsRepository.save(admin);
 

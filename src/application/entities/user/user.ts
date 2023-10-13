@@ -12,14 +12,17 @@ export interface UserProps {
   city: string;
   recoverToken?: string;
   salt?: string;
-  inative: Date
-  avatar: string
-  createdAt: Date
+  inative: Date;
+  avatar: string;
+  createdAt: Date;
 }
 
 export class User extends Entity<UserProps> {
   static create(props: Optional<UserProps, 'createdAt'>, id?: UniqueEntityID) {
-    const user = new User({...props, createdAt: props.createdAt ?? new Date()}, id);
+    const user = new User(
+      { ...props, createdAt: props.createdAt ?? new Date() },
+      id,
+    );
     return user;
   }
 
@@ -117,7 +120,6 @@ export class User extends Entity<UserProps> {
   }
 
   public update(updateData: Partial<User>) {
-   
     if (Object.keys(updateData).length === 0) {
       return; // Não há dados para atualizar
     }
@@ -128,5 +130,4 @@ export class User extends Entity<UserProps> {
     // Atualize as propriedades restantes
     Object.assign(this.props, updatedProps);
   }
-
 }

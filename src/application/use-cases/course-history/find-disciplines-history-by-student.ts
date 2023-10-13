@@ -14,8 +14,10 @@ interface FindCourseHistoryResponse {
 
 @Injectable()
 export class FindDisciplinesHistoryByStudentId {
-  constructor(private courseHistoriesRepository: CourseHistoriesRepository,
-    private studentsRepository: StudentsRepository) {}
+  constructor(
+    private courseHistoriesRepository: CourseHistoriesRepository,
+    private studentsRepository: StudentsRepository,
+  ) {}
 
   async execute(
     request: FindCourseHistoryRequest,

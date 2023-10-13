@@ -4,7 +4,19 @@ import { ApiProperty } from '@nestjs/swagger';
 export class AdminViewModel {
   @ApiProperty()
   static toHTTP(admin: Admin) {
-    const { email, id, name, city, state, lastname, username, adminId, inative, avatar, createdAt } = admin;
+    const {
+      email,
+      id,
+      name,
+      city,
+      state,
+      lastname,
+      username,
+      adminId,
+      inative,
+      avatar,
+      createdAt,
+    } = admin;
 
     return {
       id: id.toValue(),
@@ -17,7 +29,7 @@ export class AdminViewModel {
       username,
       city,
       state,
-      createdAt
+      createdAt,
     };
   }
 }

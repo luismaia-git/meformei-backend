@@ -12,32 +12,39 @@ import { AppGateway } from './app.gateway';
 import { DatabaseModule } from './infra/database/database.module';
 import { HttpModule } from './infra/http/http.module';
 @Module({
-  imports: [HttpModule, DatabaseModule,  WinstonModule.forRoot(winstonConfig), SendGridModule.forRoot({
-    apikey: process.env.SENDGRID_API_KEY,
-  }), MailerModule.forRootAsync({
-    imports: [ConfigModule],
-    useFactory: async (config: ConfigService) => ({
-      transport: {
-        host: config.get('EMAIL_HOST'),
-        secure: false,
-        auth: {
-          user: config.get('EMAIL_USER'),
-          pass: config.get('SENDGRID_API_KEY'),
-        },
-      },
-      defaults: {
-        from: config.get('FROM_EMAIL')
-      },
-      template: {
-        dir: join(__dirname, './utils/templates'),
-        adapter: new HandlebarsAdapter(),
-        options: {
-          strict: true
-        }
-      }
+  imports: [
+    HttpModule,
+    DatabaseModule,
+    WinstonModule.forRoot(winstonConfig),
+    SendGridModule.forRoot({
+      apikey: process.env.SENDGRID_API_KEY,
     }),
-    inject: [ConfigService]
-  }), ConfigModule.forRoot()],
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (config: ConfigService) => ({
+        transport: {
+          host: config.get('EMAIL_HOST'),
+          secure: false,
+          auth: {
+            user: config.get('EMAIL_USER'),
+            pass: config.get('SENDGRID_API_KEY'),
+          },
+        },
+        defaults: {
+          from: config.get('FROM_EMAIL'),
+        },
+        template: {
+          dir: join(__dirname, './utils/templates'),
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+      }),
+      inject: [ConfigService],
+    }),
+    ConfigModule.forRoot(),
+  ],
   controllers: [],
   providers: [
     {

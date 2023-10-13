@@ -13,7 +13,7 @@ describe('Create student', () => {
     const usersRepository = new InMemoryUsersRepository();
     const curriculumsRepository = new InMemoryCurriculumsRepository();
     const universitiesRepository = new InMemoryUniversitiesRepository();
-   
+
     const university = makeUniversity();
 
     universitiesRepository.create(university);

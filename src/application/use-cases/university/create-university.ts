@@ -24,16 +24,18 @@ export class CreateUniversity {
   ): Promise<CreateUniversityResponse> {
     const { name, abv, city, state } = request;
 
-    const nameIsAlreadyUsed = await this.universitiesRepository.findByName(name)
-    
-    if(nameIsAlreadyUsed) {
-      throw new AtributeAlreadyUsed('name')
+    const nameIsAlreadyUsed = await this.universitiesRepository.findByName(
+      name,
+    );
+
+    if (nameIsAlreadyUsed) {
+      throw new AtributeAlreadyUsed('name');
     }
 
-    const abvIsAlreadyUser = await this.universitiesRepository.findByAbv(abv)
-    
-    if(abvIsAlreadyUser) {
-      throw new AtributeAlreadyUsed('abv')
+    const abvIsAlreadyUser = await this.universitiesRepository.findByAbv(abv);
+
+    if (abvIsAlreadyUser) {
+      throw new AtributeAlreadyUsed('abv');
     }
 
     const university = University.create({

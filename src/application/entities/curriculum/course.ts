@@ -25,7 +25,6 @@ export class Course extends Entity<CourseProps> {
   }
 
   public update(updateData: Partial<Course>) {
-   
     if (Object.keys(updateData).length === 0) {
       return; // Não há dados para atualizar
     }

@@ -22,16 +22,12 @@ export class UpdateCourseHistory {
   ): Promise<UpdateCourseHistoryResponse> {
     const { courseHistory: body, id } = request;
 
-    const courseHistory = await this.courseHistoriesRepository.findById(
-      id,
-    );
+    const courseHistory = await this.courseHistoriesRepository.findById(id);
 
     if (!courseHistory) throw new CourseHistoryNotFound();
 
-    courseHistory.update(body)
-    await this.courseHistoriesRepository.save(
-      courseHistory,
-    );
+    courseHistory.update(body);
+    await this.courseHistoriesRepository.save(courseHistory);
 
     return {
       courseHistory,

@@ -23,7 +23,7 @@ export class StudentViewModel {
       username,
       inative,
       avatar,
-      createdAt
+      createdAt,
     } = student;
 
     return {
@@ -44,7 +44,7 @@ export class StudentViewModel {
       enrollmentYear,
       courseName,
       university: UniversityViewModel.toHTTP(university),
-      createdAt
+      createdAt,
     };
   }
 }

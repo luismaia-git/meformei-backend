@@ -4,7 +4,21 @@ import { User as RawUserPrisma } from '@prisma/client';
 
 export class PrismaUserMapper {
   static toPrisma(user: User) {
-    const {id, name, lastname, email, password, username, avatar, city, state,inative, recoverToken, salt, createdAt } = user
+    const {
+      id,
+      name,
+      lastname,
+      email,
+      password,
+      username,
+      avatar,
+      city,
+      state,
+      inative,
+      recoverToken,
+      salt,
+      createdAt,
+    } = user;
     return {
       id: id.toString(),
       name,
@@ -36,8 +50,8 @@ export class PrismaUserMapper {
       salt,
       inative,
       avatar,
-      createdAt
-    } = raw
+      createdAt,
+    } = raw;
     return User.create(
       {
         name,
@@ -51,7 +65,7 @@ export class PrismaUserMapper {
         salt,
         inative,
         avatar,
-        createdAt
+        createdAt,
       },
       new UniqueEntityID(id),
     );

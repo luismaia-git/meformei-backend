@@ -8,14 +8,17 @@ export interface AdminProps extends UserProps {
 }
 
 export class Admin extends Entity<AdminProps> {
-  static create(props:  Optional<AdminProps, 'createdAt'>, id?: UniqueEntityID) {
+  static create(props: Optional<AdminProps, 'createdAt'>, id?: UniqueEntityID) {
     const admin = new Admin(
-      { ...props, adminId: props.adminId ?? new UniqueEntityID(), createdAt: props.createdAt ?? new Date() },
+      {
+        ...props,
+        adminId: props.adminId ?? new UniqueEntityID(),
+        createdAt: props.createdAt ?? new Date(),
+      },
       id,
     );
     return admin;
   }
-
 
   public set name(name: string) {
     this.props.name = name;
@@ -115,7 +118,6 @@ export class Admin extends Entity<AdminProps> {
   }
 
   public update(updateData: Partial<Admin>) {
-   
     if (Object.keys(updateData).length === 0) {
       return; // Não há dados para atualizar
     }

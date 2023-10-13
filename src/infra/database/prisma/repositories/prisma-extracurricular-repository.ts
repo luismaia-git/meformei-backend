@@ -61,9 +61,7 @@ export class PrismaExtraCurricularRepository
     });
   }
 
-  async findByStudentId(
-    studentId: string,
-  ): Promise<ExtraCurricular[] | []> {
+  async findByStudentId(studentId: string): Promise<ExtraCurricular[] | []> {
     const exc = await this.prisma.extraCurricularActivitiesHistory.findMany({
       where: {
         studentId,

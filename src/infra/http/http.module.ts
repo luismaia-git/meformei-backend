@@ -75,7 +75,7 @@ import { UniversitiesController } from './controllers/university.controller';
     UniversitiesController,
     CoursesController,
     CurriculumController,
-    AppController
+    AppController,
   ], //controllers http
   providers: [
     CreateStudent,
@@ -130,7 +130,7 @@ import { UniversitiesController } from './controllers/university.controller';
     ChangePassword,
     ForgotPassword,
     ResetPassword,
-    UpdateCourseHistory
+    UpdateCourseHistory,
   ], // casos de uso
 })
 export class HttpModule {}

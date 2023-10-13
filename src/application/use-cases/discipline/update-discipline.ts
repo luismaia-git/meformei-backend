@@ -26,7 +26,7 @@ export class UpdateDiscipline {
 
     if (!discipline) throw new DisciplineNotFound();
 
-    discipline.update(body)
+    discipline.update(body);
 
     await this.disciplinesRepository.save(discipline);
 

@@ -64,7 +64,7 @@ export class CreateStudent {
       username,
       state,
       avatar: null,
-      inative: null
+      inative: null,
     });
 
     const student = Student.create(
@@ -83,7 +83,7 @@ export class CreateStudent {
         university: curriculum.university,
         username,
         avatar: null,
-        inative:null,
+        inative: null,
         createdAt: null,
       },
       user.id,

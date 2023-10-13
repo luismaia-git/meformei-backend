@@ -20,7 +20,7 @@ export class PrismaStudentMapper {
         enrollmentSemester: student.enrollmentSemester,
         currentSemester: student.currentSemester,
       },
-      user:{
+      user: {
         id: student.id.toString(),
         email: student.email,
         name: student.name,
@@ -33,8 +33,8 @@ export class PrismaStudentMapper {
         inative: student.inative,
         recoverToken: student.recoverToken,
         salt: student.salt,
-        createdAt: student.createdAt
-      }
+        createdAt: student.createdAt,
+      },
     };
   }
 
@@ -64,11 +64,11 @@ export class PrismaStudentMapper {
         currentSemester: raw.currentSemester,
         enrollmentSemester: raw.enrollmentSemester,
         enrollmentYear: raw.enrollmentYear,
-        avatar: raw.user.avatar, 
+        avatar: raw.user.avatar,
         inative: raw.user.inative,
         recoverToken: raw.user.recoverToken,
         salt: raw.user.salt,
-        createdAt: raw.user.createdAt
+        createdAt: raw.user.createdAt,
       },
       new UniqueEntityID(raw.user.id),
     );

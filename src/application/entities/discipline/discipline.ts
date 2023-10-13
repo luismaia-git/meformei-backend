@@ -19,7 +19,6 @@ export class Discipline extends Entity<DisciplineProps> {
     return discipline;
   }
 
-
   public set description(description: string) {
     this.props.description = description;
   }
@@ -113,7 +112,6 @@ export class Discipline extends Entity<DisciplineProps> {
   }
 
   public update(updateData: Partial<Discipline>) {
-   
     if (Object.keys(updateData).length === 0) {
       return; // Não há dados para atualizar
     }

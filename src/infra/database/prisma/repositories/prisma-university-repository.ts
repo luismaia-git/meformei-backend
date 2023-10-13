@@ -26,7 +26,6 @@ export class PrismaUniversitiesRepository implements UniversitiesRepository {
   }
 
   async findByAbv(abv: string): Promise<University | null> {
-    
     const university = await this.prisma.university.findUnique({
       where: {
         abv,
@@ -114,8 +113,6 @@ export class PrismaUniversitiesRepository implements UniversitiesRepository {
     });
   }
 
-
-
   async list(): Promise<University[]> {
     const universities = await this.prisma.university.findMany({
       include: {
@@ -143,6 +140,4 @@ export class PrismaUniversitiesRepository implements UniversitiesRepository {
     });
     return PrismaUniversityMapper.toDomain(uni);
   }
-
-  
 }

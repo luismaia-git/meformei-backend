@@ -18,15 +18,14 @@ export class UpdateExtraCurricularActivity {
   constructor(private extraCurricularRepository: ExtraCurricularRepository) {}
 
   async execute(request: Request): Promise<Response> {
-    const { extraCurricularActivity : body, id } = request;
+    const { extraCurricularActivity: body, id } = request;
 
     const extraCurricularActivity =
       await this.extraCurricularRepository.findById(id);
 
-    if (!extraCurricularActivity)
-      throw new ExtraCurricularActivityNotFound();
+    if (!extraCurricularActivity) throw new ExtraCurricularActivityNotFound();
 
-    extraCurricularActivity.update(body)
+    extraCurricularActivity.update(body);
 
     const extraCurricularActivityUpdated =
       await this.extraCurricularRepository.save(extraCurricularActivity);

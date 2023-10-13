@@ -19,14 +19,16 @@ interface FindCourseHistoryResponse {
 export class FindCourseHistoryByStudentRegistrationBySemesterByDisciplineId {
   constructor(
     private courseHistoriesRepository: CourseHistoriesRepository,
-    private studentsRepository: StudentsRepository
-    ) {}
+    private studentsRepository: StudentsRepository,
+  ) {}
 
   async execute(
     request: FindCourseHistoryRequest,
   ): Promise<FindCourseHistoryResponse> {
     const { disciplineId, semester, studentRegistration } = request;
-    const student = await this.studentsRepository.findByRegistration(studentRegistration);
+    const student = await this.studentsRepository.findByRegistration(
+      studentRegistration,
+    );
 
     if (!student) {
       throw new StudentNotFound();

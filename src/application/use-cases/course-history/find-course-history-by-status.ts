@@ -20,8 +20,8 @@ interface FindCourseHistoryResponse {
 export class FindCourseHistoryByStatusAndStudentId {
   constructor(
     private courseHistoriesRepository: CourseHistoriesRepository,
-    private studentsRepository: StudentsRepository
-    ) {}
+    private studentsRepository: StudentsRepository,
+  ) {}
 
   async execute(
     request: FindCourseHistoryRequest,

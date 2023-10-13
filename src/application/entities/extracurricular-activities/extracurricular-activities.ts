@@ -121,7 +121,6 @@ export class ExtraCurricular extends Entity<ExtraCurricularProps> {
   }
 
   public update(updateData: Partial<ExtraCurricular>) {
-   
     if (Object.keys(updateData).length === 0) {
       return; // Não há dados para atualizar
     }

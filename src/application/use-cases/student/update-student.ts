@@ -24,7 +24,7 @@ export class UpdateStudent {
 
     if (!studentFinded) throw new StudentNotFound();
 
-    studentFinded.update(student)  
+    studentFinded.update(student);
 
     const studentUpdated = await this.studentsRepository.save(studentFinded);
 

@@ -25,9 +25,10 @@ export class RegisterAccountAdmin {
   async execute(request: RequestBody) {
     const { lastname, username, email, name, password, city, state } = request;
 
-    const UserAlreadyExist = await this.usersRepository.findByUsername(username)
+    const UserAlreadyExist = await this.usersRepository.findByUsername(
+      username,
+    );
 
-    
     if (UserAlreadyExist) {
       throw new UserAlreadyExists();
     }
@@ -60,13 +61,10 @@ export class RegisterAccountAdmin {
     );
 
     admin.salt = await bcrypt.genSalt();
-    admin.password = await this.hashPassword(
-      admin.password,
-      admin.salt,
-    );
+    admin.password = await this.hashPassword(admin.password, admin.salt);
 
     admin.recoverToken = null;
-    
+
     await this.adminsRepository.create(admin);
 
     return {

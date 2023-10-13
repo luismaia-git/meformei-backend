@@ -24,7 +24,7 @@ export class UpdateCourse {
 
     if (!course) throw new CourseNotFound();
 
-    course.update(body)
+    course.update(body);
 
     await this.coursesRepository.save(course);
 

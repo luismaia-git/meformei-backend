@@ -15,13 +15,13 @@ export abstract class Entity<Props> {
 
   public equals(entity: Entity<any>) {
     if (entity === this) {
-      return true
+      return true;
     }
 
     if (entity.id === this._id) {
-      return true
+      return true;
     }
 
-    return false
+    return false;
   }
 }

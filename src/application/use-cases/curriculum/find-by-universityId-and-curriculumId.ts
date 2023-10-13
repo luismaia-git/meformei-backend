@@ -37,9 +37,9 @@ export class FindCurriculumsByUniversityIdAndCurriculumId {
         universityId,
       });
 
-    if(!curriculum){
-      throw new NotFoundException()
-    }  
+    if (!curriculum) {
+      throw new NotFoundException();
+    }
 
     return {
       curriculum,

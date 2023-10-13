@@ -11,13 +11,13 @@ describe('Student', () => {
       registration: '0000001',
       username: 'Example username',
       city: 'example city',
-      courseName: "curso",
+      courseName: 'curso',
       enrollmentSemester: 2,
       enrollmentYear: 2021,
       lastname: 'Example lastname',
       state: 'Example state',
       university: makeUniversity(),
-      avatar:'',
+      avatar: '',
       inative: null,
     });
 

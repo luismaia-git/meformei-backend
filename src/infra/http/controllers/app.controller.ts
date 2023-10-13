@@ -1,11 +1,5 @@
-
-
 import { ROLES } from '@config/constants';
-import {
-  Controller,
-  Get,
-  UseGuards
-} from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth-guard';
 import { Roles } from '../auth/roles.decorator';
@@ -16,13 +10,9 @@ import { RolesGuard } from '../auth/roles.guard';
 @Roles(ROLES.ADMIN)
 @UseGuards(AuthGuard, RolesGuard)
 export class AppController {
-  constructor(
-   
-  ) {}
-
   @Get()
   async root(): Promise<void> {
-    return null
+    return null;
     // await this.sendGrid.send({
     //   to: "luismaia1407@gmail.com",
     //   from: {name: "Meformei", email: process.env.FROM_EMAIL},
@@ -30,6 +20,5 @@ export class AppController {
     //   text: "Este é um teste de envio de email usando Node",
     //   html: "<strong>Este é um teste de envio de email usando Node</strong>",
     // });
+  }
 }
-}
-

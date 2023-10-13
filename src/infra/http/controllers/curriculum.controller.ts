@@ -17,7 +17,7 @@ import {
   Param,
   Patch,
   Post,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth-guard';
@@ -44,7 +44,6 @@ abstract class DisciplineResponse extends ResponseWithMessage {
   discipline: DisciplineHttp;
 }
 
-
 export abstract class DisciplineToFrontResponse {
   @ApiProperty({ isArray: true, type: ToFront })
   disciplines: ToFront[];
@@ -62,7 +61,7 @@ export class CurriculumController {
     private updateCurriculum: UpdateCurriculum,
     private deleteCurriculum: DeleteCurriculum,
     private deleteDiscipline: DeleteDiscipline,
-    private updateDisciplineById: UpdateDiscipline
+    private updateDisciplineById: UpdateDiscipline,
   ) {}
 
   @UseGuards(AuthGuard, RolesGuard)
@@ -71,10 +70,9 @@ export class CurriculumController {
   async getCurriculumCourseByCurriculumId(
     @Param('curriculumId') curriculumId: string,
   ) {
-    const { curriculum } =
-      await this.findCurriculumById.execute({
-        curriculumId,
-      });
+    const { curriculum } = await this.findCurriculumById.execute({
+      curriculumId,
+    });
 
     return {
       curriculum: CurriculumViewModel.toHTTP(curriculum),
@@ -86,12 +84,12 @@ export class CurriculumController {
   @Roles(ROLES.ADMIN, ROLES.STUDENT)
   async updateCurriculumCourseByCurriculumId(
     @Param('curriculumId') curriculumId: string,
-    @Body() updateBody: UpdateCurriculumBody, 
+    @Body() updateBody: UpdateCurriculumBody,
   ) {
-    const { curriculum } =
-      await this.updateCurriculum.execute({
-        id: curriculumId, curriculum: updateBody,
-      });
+    const { curriculum } = await this.updateCurriculum.execute({
+      id: curriculumId,
+      curriculum: updateBody,
+    });
 
     return {
       curriculum: CurriculumViewModel.toHTTP(curriculum),
@@ -187,7 +185,7 @@ export class CurriculumController {
       curriculumId,
     });
     return {
-      disciplines: disciplines.map(DisciplineViewModel.toHTTP) ,
+      disciplines: disciplines.map(DisciplineViewModel.toHTTP),
     };
   }
 
@@ -242,10 +240,13 @@ export class CurriculumController {
   @UseGuards(AuthGuard, RolesGuard)
   @Patch('disciplines/:disciplineId')
   @Roles(ROLES.ADMIN, ROLES.STUDENT)
-  async updatesDisciplineById(@Param('disciplineId') disciplineId: string,
-  @Body() updateBody: UpdateDisciplineBody,) {
+  async updatesDisciplineById(
+    @Param('disciplineId') disciplineId: string,
+    @Body() updateBody: UpdateDisciplineBody,
+  ) {
     const { discipline } = await this.updateDisciplineById.execute({
-      id: disciplineId, discipline: updateBody
+      id: disciplineId,
+      discipline: updateBody,
     });
     return {
       discipline: DisciplineViewModel.toHTTP(discipline),

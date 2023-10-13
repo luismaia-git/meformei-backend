@@ -25,7 +25,12 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOkResponse,
+  ApiProperty,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Request as RequestE } from 'express';
 import { AuthGuard } from '../auth/auth-guard';
 import { GetUser } from '../auth/get-user.decorator';
@@ -83,8 +88,8 @@ export class AuthController {
     private checkStudentAccountUsername: CheckStudentAccountUsername,
     private checkStudentByRegistration: CheckStudentAccountByRegistration,
     private forgotPassword: ForgotPassword,
-    private changePassword: ChangePassword
-    ) {}
+    private changePassword: ChangePassword,
+  ) {}
 
   @Post('signin')
   @ApiResponse({ type: ResponseLoginStudent || ResponseLoginAdmin })
@@ -281,9 +286,8 @@ export class AuthController {
   async sendRecoverPasswordEmail(
     @Body() recoverPasswordDto: RecoverPasswordDto,
   ): Promise<ResponseWithMessage> {
+    await this.forgotPassword.execute(recoverPasswordDto);
 
-    await this.forgotPassword.execute(recoverPasswordDto)
-    
     return {
       message: 'Foi enviado um email com instruções para resetar sua senha',
     };
@@ -293,7 +297,6 @@ export class AuthController {
     description: 'Alterar a senha',
     type: ResponseWithMessage,
   })
-
   @Patch(':id/change-password')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(ROLES.ADMIN, ROLES.STUDENT)
@@ -302,16 +305,16 @@ export class AuthController {
     @Body() changePasswordDto: ChangePasswordDto,
     @GetUser() user: any,
   ): Promise<ResponseWithMessage> {
-
-    if (
-      user.id !== userId
-    )
+    if (user.id !== userId)
       throw new UnauthorizedException(
         'Você não tem permissão para realizar esta operação',
       );
 
-    await this.changePassword.execute({ userId, newPassword: changePasswordDto.password });
-    
+    await this.changePassword.execute({
+      userId,
+      newPassword: changePasswordDto.password,
+    });
+
     return {
       message: 'Senha alterada',
     };

@@ -47,13 +47,11 @@ export class University extends Entity<UniversityProps> {
     return this.props.state;
   }
 
-
   public get curriculums() {
     return this.props.curriculums;
   }
 
   public update(updateData: Partial<University>) {
-   
     if (Object.keys(updateData).length === 0) {
       return; // Não há dados para atualizar
     }

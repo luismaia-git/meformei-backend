@@ -16,7 +16,8 @@ interface Response {
 export class FindExtraCurricularActivityByStudent {
   constructor(
     private extraCurricularRepository: ExtraCurricularRepository,
-    private studentsRepository: StudentsRepository) {}
+    private studentsRepository: StudentsRepository,
+  ) {}
 
   async execute(request: Request): Promise<Response> {
     const { studentId } = request;
@@ -26,7 +27,7 @@ export class FindExtraCurricularActivityByStudent {
     if (!student) {
       throw new StudentNotFound();
     }
-    
+
     const extraCurricularActivities =
       await this.extraCurricularRepository.findByStudentId(
         student.studentId.toString(),

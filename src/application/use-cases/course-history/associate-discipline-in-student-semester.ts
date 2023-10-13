@@ -46,7 +46,7 @@ export class AssociateDisciplineInStudentSemester {
       hours,
       daysWeek,
     } = request;
-    
+
     const student = await this.studentsRepository.findById(studentId);
 
     if (!student) {
@@ -69,7 +69,7 @@ export class AssociateDisciplineInStudentSemester {
       hours,
       daysWeek,
     });
-  
+
     await this.courseHistoriesRepository.create(courseHistory);
 
     return {
