@@ -1,7 +1,7 @@
 import { StatusType } from '@application/entities/course-history/course-history';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEnum, IsNotEmpty } from 'class-validator';
 
 export enum Semester {
   FIRST = 1,
@@ -35,10 +35,7 @@ export class AssociateDiscipline {
   @IsEnum(StatusCourseHistory)
   status: StatusType;
 
-  @ApiProperty()
-  @IsOptional()
-  @IsEnum(Semester)
-  semester: number;
+  
 
   @ApiProperty({example: "12:00"})
   @IsNotEmpty()
