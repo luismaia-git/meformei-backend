@@ -9,7 +9,9 @@ import { PrismaService } from '../prisma.service';
 @Injectable()
 export class PrismaUsersRepository implements UsersRepository {
   constructor(private prisma: PrismaService) {}
+  
   async findByEmail(email: string): Promise<User> {
+   
     const user = await this.prisma.user.findFirst({
       where: {
         email,
@@ -82,9 +84,11 @@ export class PrismaUsersRepository implements UsersRepository {
     return PrismaUserMapper.toDomain(user);
   }
   async findByRecoverToken(recoverToken: string): Promise<User | null> {
+    
     const user = await this.prisma.user.findFirst({
       where: { recoverToken },
     });
+
 
     if (!user) {
       return null;

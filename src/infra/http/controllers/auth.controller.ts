@@ -8,6 +8,7 @@ import { ForgotPassword } from '@application/use-cases/authentication/forgot-pas
 import { Login } from '@application/use-cases/authentication/login';
 import { RegisterAccountAdmin } from '@application/use-cases/authentication/register-admin';
 import { RegisterAccountStudent } from '@application/use-cases/authentication/register-student';
+import { ResetPassword } from '@application/use-cases/authentication/reset-password';
 import { ValidToken } from '@application/use-cases/authentication/valid-token';
 import { ROLES } from '@config/constants';
 import {
@@ -89,6 +90,7 @@ export class AuthController {
     private checkStudentByRegistration: CheckStudentAccountByRegistration,
     private forgotPassword: ForgotPassword,
     private changePassword: ChangePassword,
+    private resetPassword: ResetPassword
   ) {}
 
   @Post('signin')
@@ -286,11 +288,11 @@ export class AuthController {
   async sendRecoverPasswordEmail(
     @Body() recoverPasswordDto: RecoverPasswordDto,
   ): Promise<ResponseWithMessage> {
-    console.log(recoverPasswordDto)
+  
     await this.forgotPassword.execute(recoverPasswordDto);
 
     return {
-      message: 'Foi enviado um email com instruções para resetar sua senha',
+      message: 'Foi enviado um email para você com instruções para resetar sua senha',
     };
   }
 
@@ -317,7 +319,28 @@ export class AuthController {
     });
 
     return {
-      message: 'Senha alterada',
+      message: 'Senha alterada com sucesso',
+    };
+  }
+
+  @ApiOkResponse({
+    description: 'Alterar a senha',
+    type: ResponseWithMessage,
+  })
+  @Post('reset-password/:token')
+  async resetUserPassword(
+    @Param('token') token: string,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ): Promise<ResponseWithMessage> {
+   
+
+    await this.resetPassword.execute({
+      recoverToken: token,
+      ...changePasswordDto
+    });
+
+    return {
+      message: 'Senha alterada com sucesso',
     };
   }
 }

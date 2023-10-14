@@ -1,6 +1,7 @@
 import { UsersRepository } from '@application/repositories/users-repository';
 import { MailerService } from '@nestjs-modules/mailer';
 
+import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UserNotFound } from '../errors/user-not-found';
 
@@ -9,6 +10,7 @@ interface Request {
   newPassword: string;
 }
 
+@Injectable()
 export class ChangePassword {
   constructor(
     private readonly mailerService: MailerService,
@@ -26,12 +28,12 @@ export class ChangePassword {
       recoverToken: null,
     });
 
-    await this.usersRepository.save(user);
+    console.log(user.email)
 
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Senha Alterada',
-      template: '/changed-password',
+      template: 'changed-password',
       text: 'Sua senha foi alterada',
       context: {
         name: user.name,
@@ -39,6 +41,8 @@ export class ChangePassword {
         email: user.email,
       },
     });
+
+    await this.usersRepository.save(user);
   }
   private async hashPassword(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);

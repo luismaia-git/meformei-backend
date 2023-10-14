@@ -7,7 +7,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { WinstonModule } from 'nest-winston';
-import { join } from 'path';
+import { resolve } from 'path';
 import { AppGateway } from './app.gateway';
 import { DatabaseModule } from './infra/database/database.module';
 import { HttpModule } from './infra/http/http.module';
@@ -34,10 +34,11 @@ import { HttpModule } from './infra/http/http.module';
           from: config.get('FROM_EMAIL'),
         },
         template: {
-          dir: join(__dirname, './utils/templates'),
+          dir: resolve(__dirname, '..', 'templates'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
+            extName: '.hbs',
           },
         },
       }),
