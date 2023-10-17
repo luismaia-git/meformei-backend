@@ -14,19 +14,11 @@ export class InMemoryCoursesRepository implements CoursesRepository {
     return course;
   }
 
-  // async findManyByAnyId(AnyId: string): Promise<Curriculum[]> {
-  //   return this.universitys.filter((course) => course.AnyId === AnyId);
-  // }
-
-  // async countManyByAnyId(AnyId: string): Promise<number> {
-  //   return this.universitys.filter((course) => course.AnyId === AnyId).length;
-  // }
-
   async create(course: Course) {
     this.courses.push(course);
   }
 
-  async update(course: Course): Promise<Course> {
+  async save(course: Course): Promise<Course> {
     const index = this.courses.findIndex((item) => item.id === course.id);
 
     if (index >= 0) {

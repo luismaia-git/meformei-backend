@@ -36,19 +36,12 @@ export class InMemoryCurriculumsRepository implements CurriculumsRepository {
     return curriculum;
   }
 
-  // async findManyByAnyId(AnyId: string): Promise<Curriculum[]> {
-  //   return this.curriculums.filter((curriculum) => curriculum.AnyId === AnyId);
-  // }
-
-  // async countManyByAnyId(AnyId: string): Promise<number> {
-  //   return this.curriculums.filter((curriculum) => curriculum.AnyId === AnyId).length;
-  // }
 
   async create(curriculum: Curriculum) {
     this.curriculums.push(curriculum);
   }
 
-  async update(curriculum: Curriculum): Promise<Curriculum> {
+  async save(curriculum: Curriculum): Promise<Curriculum> {
     const index = this.curriculums.findIndex(
       (item) => item.id === curriculum.id,
     );

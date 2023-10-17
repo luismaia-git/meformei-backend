@@ -4,6 +4,17 @@ import { ExtraCurricularRepository } from '@application/repositories/extracurric
 export class InMemoryExtraCurricularRepository
   implements ExtraCurricularRepository
 {
+  async findByStudentId(studentId: string): Promise<ExtraCurricular[] | []> {
+    const exc = this.extraCurricularActivities.filter(
+      (item) => item.studentId.toString() === studentId,
+    );
+
+    if (!exc) {
+      return null;
+    }
+
+    return exc;
+  }
   public extraCurricularActivities: ExtraCurricular[] = [];
 
   async findById(extraCurricularId: string): Promise<ExtraCurricular | null> {
@@ -22,7 +33,7 @@ export class InMemoryExtraCurricularRepository
     studentRegistration: string,
   ): Promise<ExtraCurricular[] | []> {
     const exc = this.extraCurricularActivities.filter(
-      (item) => item.studentRegistration.toString() === studentRegistration,
+      (item) => item.studentId.toString() === studentRegistration,
     );
 
     if (!exc) {
@@ -32,19 +43,12 @@ export class InMemoryExtraCurricularRepository
     return exc;
   }
 
-  // async findManyByAnyId(AnyId: string): Promise<ExtraCurricular[]> {
-  //   return this.extraCurricularActivities.filter((curriculum) => curriculum.AnyId === AnyId);
-  // }
-
-  // async countManyByAnyId(AnyId: string): Promise<number> {
-  //   return this.extraCurricularActivities.filter((curriculum) => curriculum.AnyId === AnyId).length;
-  // }
 
   async create(extraCurricular: ExtraCurricular) {
     this.extraCurricularActivities.push(extraCurricular);
   }
 
-  async update(extraCurricular: ExtraCurricular): Promise<ExtraCurricular> {
+  async save(extraCurricular: ExtraCurricular): Promise<ExtraCurricular> {
     const index = this.extraCurricularActivities.findIndex(
       (item) => item.id === extraCurricular.id,
     );

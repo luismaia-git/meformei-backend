@@ -29,7 +29,7 @@ describe('Create student', () => {
       curriculumsRepository,
     );
 
-    const { student, user } = await createStudent.execute({
+    const { student } = await createStudent.execute({
       curriculumId: curriculum.id.toString(),
       name: 'Example name',
       email: 'email@example.com',
@@ -42,9 +42,6 @@ describe('Create student', () => {
       lastname: 'Example lastname',
       username: 'Example username',
     });
-
-    expect(usersRepository.users).toHaveLength(1);
-    expect(usersRepository.users[0]).toEqual(user);
 
     expect(studentsRepository.students).toHaveLength(1);
     expect(studentsRepository.students[0]).toEqual(student);

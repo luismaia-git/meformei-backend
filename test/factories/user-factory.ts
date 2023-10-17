@@ -11,6 +11,8 @@ export function makeUser(override: Override = {}) {
     lastname: 'example lastname',
     state: 'example state',
     username: 'example username',
+    avatar: 'Example',
+    inative: null,
     ...override,
   });
 }

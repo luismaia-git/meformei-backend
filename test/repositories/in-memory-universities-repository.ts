@@ -2,6 +2,31 @@ import { University } from '@application/entities/curriculum/university';
 import { UniversitiesRepository } from '@application/repositories/universities-repository';
 
 export class InMemoryUniversitiesRepository implements UniversitiesRepository {
+ 
+  async findByName(name: string): Promise<University> {
+    const university = this.universities.find(
+      (item) => item.name.toString() === name,
+    );
+
+    if (!university) {
+      return null;
+    }
+
+    return university;
+  }
+
+  async findByAbv(abv: string): Promise<University> {
+    const university = this.universities.find(
+      (item) => item.abv.toString() === abv,
+    );
+
+    if (!university) {
+      return null;
+    }
+
+    return university;
+  }
+
   public universities: University[] = [];
 
   async findById(universityId: string): Promise<University | null> {
@@ -16,19 +41,11 @@ export class InMemoryUniversitiesRepository implements UniversitiesRepository {
     return university;
   }
 
-  // async findManyByAnyId(AnyId: string): Promise<Curriculum[]> {
-  //   return this.universitys.filter((university) => university.AnyId === AnyId);
-  // }
-
-  // async countManyByAnyId(AnyId: string): Promise<number> {
-  //   return this.universitys.filter((university) => university.AnyId === AnyId).length;
-  // }
-
   async create(university: University) {
     this.universities.push(university);
   }
 
-  async update(university: University): Promise<University> {
+  async save(university: University): Promise<University> {
     const index = this.universities.findIndex(
       (item) => item.id === university.id,
     );

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { SituationType } from '@prisma/client';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, Max, Min } from 'class-validator';
 
 export class CreateExtraCurricularActivityBody {
   @ApiProperty()
@@ -17,6 +17,8 @@ export class CreateExtraCurricularActivityBody {
 
   @ApiProperty()
   @IsNotEmpty()
+  @Min(0)
+  @Max(10000)
   hours: number;
 
   @ApiProperty()

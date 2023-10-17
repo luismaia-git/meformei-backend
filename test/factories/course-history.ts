@@ -11,14 +11,14 @@ export function makeCourseHistory(
   overrideDiscipline: Override = {},
 ) {
   return CourseHistory.create({
-    studentRegistration: 'studentRegistration',
+    studentId: 'studentId',
     createdAt: new Date(),
     daysWeek: ['SEG, QUA, QUI'],
     discipline: makeDiscipline(overrideDiscipline),
-    endTime: new Date(),
+    endTime: "endTime",
     hours: 64,
     semester: 1,
-    startTime: new Date(),
+    startTime: "startTime",
     status: 'INPROGRESS',
     ...override,
   });

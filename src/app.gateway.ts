@@ -39,12 +39,17 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleDisconnect(client: any) {
-    const { key, isAdmin } = this.getUserIdFromSocket(client);
-    if (isAdmin) {
-      this.adminConnections.delete(key);
-    } else {
-      this.studentConnections.delete(key);
+    const data = this.getUserIdFromSocket(client);
+   
+    if(data){
+      const { key, isAdmin } = data
+      if (isAdmin) {
+        this.adminConnections.delete(key);
+      } else {
+        this.studentConnections.delete(key);
+      }
     }
+      
     this.updateConnectedUsersCount();
   }
 

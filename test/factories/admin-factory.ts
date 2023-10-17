@@ -10,6 +10,8 @@ export function makeAdmin(override: Override = {}) {
     username: 'Example username',
     city: 'Example city',
     lastname: 'Example lastname',
+    avatar:'Example',
+    inative: null, 
     state: 'Example state',
     ...override,
   });

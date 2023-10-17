@@ -4,6 +4,8 @@ import {
   IsInt,
   IsNotEmpty,
   IsOptional,
+  Max,
+  Min,
   isInt,
 } from 'class-validator';
 
@@ -36,6 +38,8 @@ export class CreateDisciplineBody {
   @ApiProperty()
   @IsNotEmpty()
   @IsInt()
+  @Min(1)
+  @Max(1000)
   hours: number;
 
   @ApiProperty()

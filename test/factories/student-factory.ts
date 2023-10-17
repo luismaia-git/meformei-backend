@@ -18,6 +18,8 @@ export function makeStudent(override: Override = {}) {
     enrollmentYear: 2021,
     lastname: 'Example lastname',
     state: 'Example state',
+    inative: null,
+    avatar: 'Example',
     university: makeUniversity(),
     ...override,
   });

@@ -14,7 +14,7 @@ export function makeExtraCurricularActivity(override: Override = {}) {
     institutionName: 'example',
     situation: 'DEFERIDO',
     startDate: new Date(),
-    studentRegistration: 'example',
+    studentId: 'example',
     title: 'example',
     institutionCnpj: 'example',
     institutionCountry: 'example',

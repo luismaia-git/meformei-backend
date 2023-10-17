@@ -40,19 +40,12 @@ export class InMemoryDisciplinesRepository implements DisciplinesRepository {
     return disciplinesSearched;
   }
 
-  // async findManyByAnyId(AnyId: string): Promise<Curriculum[]> {
-  //   return this.universitys.filter((ciscipline) => ciscipline.AnyId === AnyId);
-  // }
-
-  // async countManyByAnyId(AnyId: string): Promise<number> {
-  //   return this.universitys.filter((ciscipline) => ciscipline.AnyId === AnyId).length;
-  // }
 
   async create(discipline: Discipline) {
     this.disciplines.push(discipline);
   }
 
-  async update(discipline: Discipline): Promise<Discipline> {
+  async save(discipline: Discipline): Promise<Discipline> {
     const index = this.disciplines.findIndex(
       (item) => item.id === discipline.id,
     );

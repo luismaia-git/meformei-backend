@@ -1,10 +1,29 @@
-import { User, UserProps } from 'src/application/entities/user/user';
+import { User } from 'src/application/entities/user/user';
 import { UsersRepository } from 'src/application/repositories/users-repository';
 
 export class InMemoryUsersRepository implements UsersRepository {
-  public users: User<UserProps>[] = [];
+  async findByEmail(email: string): Promise<User> {
+    const user = this.users.find((item) => item.email.toString() === email);
 
-  async findById(userId: string): Promise<User<UserProps> | null> {
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  }
+  
+  async findByRecoverToken(recoverToken: string): Promise<User> {
+    const user = this.users.find((item) => item.recoverToken.toString() === recoverToken);
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  }
+  public users: User[] = [];
+
+  async findById(userId: string): Promise<User| null> {
     const user = this.users.find((item) => item.id.toString() === userId);
 
     if (!user) {
@@ -14,19 +33,11 @@ export class InMemoryUsersRepository implements UsersRepository {
     return user;
   }
 
-  // async findManyByAnyId(AnyId: string): Promise<User[]> {
-  //   return this.users.filter((user) => user.AnyId === AnyId);
-  // }
-
-  // async countManyByAnyId(AnyId: string): Promise<number> {
-  //   return this.users.filter((user) => user.AnyId === AnyId).length;
-  // }
-
-  async create(user: User<UserProps>) {
+  async create(user: User) {
     this.users.push(user);
   }
 
-  async save(user: User<UserProps>): Promise<void> {
+  async save(user: User): Promise<void> {
     const userIndex = this.users.findIndex((item) => item.id === user.id);
 
     if (userIndex >= 0) {
@@ -34,7 +45,7 @@ export class InMemoryUsersRepository implements UsersRepository {
     }
   }
 
-  async list(): Promise<User<UserProps>[] | []> {
+  async list(): Promise<User[] | []> {
     return this.users;
   }
 
@@ -48,7 +59,7 @@ export class InMemoryUsersRepository implements UsersRepository {
     }
   }
 
-  async findByUsername(username: string): Promise<User<UserProps> | null> {
+  async findByUsername(username: string): Promise<User | null> {
     const student = this.users.find((item) => item.username == username);
     if (!student) {
       return null;

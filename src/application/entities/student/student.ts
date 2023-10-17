@@ -29,6 +29,7 @@ export class Student extends Entity<StudentProps> {
           props.enrollmentYear,
           props.enrollmentSemester,
         ),
+          
       },
       id,
     );

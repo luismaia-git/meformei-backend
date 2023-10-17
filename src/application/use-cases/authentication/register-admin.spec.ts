@@ -2,19 +2,16 @@ import { makeAdmin } from '@test/factories/admin-factory';
 import { InMemoryAdminsRepository } from '@test/repositories/in-memory-admins-repository';
 import { InMemoryUsersRepository } from '@test/repositories/in-memory-users-repository';
 import { UserAlreadyExists } from '../errors/user-already-exists';
-import { EncriptionPassword } from './encription-password';
 import { RegisterAccountAdmin } from './register-admin';
 
 describe('Register admin', () => {
   it('should be able to register a admin', async () => {
     const adminsRepository = new InMemoryAdminsRepository();
     const usersRepository = new InMemoryUsersRepository();
-    const encriptionPassword = new EncriptionPassword();
 
     const registerAdmin = new RegisterAccountAdmin(
       adminsRepository,
       usersRepository,
-      encriptionPassword,
     );
 
     const Admin = makeAdmin();
@@ -35,7 +32,6 @@ describe('Register admin', () => {
   it('should not be able to create a admin if existing a admin with username match', async () => {
     const adminsRepository = new InMemoryAdminsRepository();
     const usersRepository = new InMemoryUsersRepository();
-    const encriptionPassword = new EncriptionPassword();
 
     const Admin = makeAdmin();
 
@@ -44,7 +40,6 @@ describe('Register admin', () => {
     const registerAdmin = new RegisterAccountAdmin(
       adminsRepository,
       usersRepository,
-      encriptionPassword,
     );
 
     expect(() => {
