@@ -1,3 +1,4 @@
+import { UpdateAdmin } from '@application/use-cases/admin/update-admin';
 import { ChangePassword } from '@application/use-cases/authentication/change-password';
 import { CheckAdminAccountEmail } from '@application/use-cases/authentication/check-admin-account-email';
 import { CheckAdminAccountUsername } from '@application/use-cases/authentication/check-admin-account-username';
@@ -37,6 +38,7 @@ import { AuthGuard } from '../auth/auth-guard';
 import { GetUser } from '../auth/get-user.decorator';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
+import { UpdateAdminBody } from '../dto/admin/update-admin.dto';
 import { ChangePasswordDto } from '../dto/auth/change-password.dto';
 import { LoginBody } from '../dto/auth/login.dto';
 import { RecoverPasswordDto } from '../dto/auth/recoverPassword.dto';
@@ -90,7 +92,8 @@ export class AuthController {
     private checkStudentByRegistration: CheckStudentAccountByRegistration,
     private forgotPassword: ForgotPassword,
     private changePassword: ChangePassword,
-    private resetPassword: ResetPassword
+    private resetPassword: ResetPassword,
+    private updateAdmin: UpdateAdmin,
   ) {}
 
   @Post('signin')
@@ -168,6 +171,22 @@ export class AuthController {
       throw new ForbiddenException('Email already used');
     }
     return true;
+  }
+
+
+  @Patch('admin/:adminId')
+  @ApiResponse({ type: Boolean })
+  async updateProfileAdmin(
+    @Body() updateAdminBody : UpdateAdminBody,
+    @Param('adminId') adminId: string
+  ) {
+    const { admin }= await this.updateAdmin.execute({id: adminId, admin: updateAdminBody})
+    
+    return {
+      message: 'Dados atualizados com sucesso!',
+
+      admin: AdminViewModel.toHTTP(admin),
+    };
   }
 
   @Get('admin/check/username/:username')

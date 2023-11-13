@@ -1,3 +1,4 @@
+import { UpdateAdmin } from '@application/use-cases/admin/update-admin';
 import { ChangePassword } from '@application/use-cases/authentication/change-password';
 import { CheckAdminAccountEmail } from '@application/use-cases/authentication/check-admin-account-email';
 import { CheckAdminAccountUsername } from '@application/use-cases/authentication/check-admin-account-username';
@@ -131,6 +132,7 @@ import { UniversitiesController } from './controllers/university.controller';
     ForgotPassword,
     ResetPassword,
     UpdateCourseHistory,
+    UpdateAdmin
   ], // casos de uso
 })
 export class HttpModule {}
